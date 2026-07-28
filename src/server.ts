@@ -19,7 +19,7 @@ import { z } from "zod";
 import { captureUIState } from "./browser.js";
 import { CaptureError, LIMITS, type CaptureResult, type ViewportName } from "./types.js";
 
-export const SERVER_NAME = "vibelens-mcp";
+export const SERVER_NAME = "vibelens";
 export const SERVER_VERSION = "1.0.0";
 export const TOOL_NAME = "inspect_localhost_ui";
 

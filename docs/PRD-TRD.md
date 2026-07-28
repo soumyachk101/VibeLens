@@ -221,7 +221,25 @@ stdio.
 
 ## 2.8 Distribution
 
-Published as `vibelens-mcp` with a `bin` entry, so every IDE config is
-`npx -y vibelens-mcp`. Chromium is a one-time `npx playwright install chromium`;
-if it is missing, the tool returns `BROWSER_NOT_INSTALLED` with that exact
-command rather than failing opaquely.
+Two channels, one codebase:
+
+1. **npm** — published as `mcp-vibelens` with a `bin` entry, so every IDE config
+   is `npx -y mcp-vibelens@1`. (`vibelens-mcp` and `vibelens` were already taken
+   on npm by unrelated packages.)
+2. **Claude Code plugin** — the repository root doubles as a plugin
+   (`.claude-plugin/plugin.json` + `.mcp.json`) and as its own marketplace
+   (`.claude-plugin/marketplace.json`), so `claude plugin marketplace add
+   soumyachk101/VibeLens` followed by `claude plugin install vibelens@vibelens`
+   installs the MCP server plus the `check-ui` and `responsive-audit` skills.
+   The plugin's `.mcp.json` launches the npm package, so npm remains the single
+   distribution artifact.
+
+Chromium is a one-time `npx playwright install chromium`; if it is missing, the
+tool returns `BROWSER_NOT_INSTALLED` with that exact command rather than failing
+opaquely.
+
+CI (`.github/workflows/ci.yml`) runs typecheck, the vitest suite against real
+Chromium, the build, and the stdio smoke test on Node 18/20/22, plus manifest
+validation. Publishing is tag-driven (`.github/workflows/release.yml`): a `v*`
+tag re-runs the full verification, refuses to continue if the tag and
+`package.json` version disagree, then publishes with npm provenance.

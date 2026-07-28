@@ -33,27 +33,37 @@ AI:   [calls inspect_localhost_ui]
 
 ## Install
 
+The fastest path, if you use Claude Code — install it as a plugin, which brings
+the MCP server *and* two ready-made skills:
+
 ```bash
-npm install -g vibelens-mcp
-npx playwright install chromium
+claude plugin marketplace add soumyachk101/VibeLens
+claude plugin install vibelens@vibelens
 ```
 
-Or run it straight from npm without installing (`npx -y vibelens-mcp`) — see the
-IDE configs below.
+For every other IDE, VibeLens is a plain MCP server on npm:
+
+```bash
+npx playwright install chromium   # one-time
+```
+
+Then add the config block for your IDE below. There is no global install step —
+`npx` fetches the package on first run.
 
 <details>
 <summary>From source</summary>
 
 ```bash
-git clone <your-repo-url> vibelens
-cd vibelens
+git clone https://github.com/soumyachk101/VibeLens.git
+cd VibeLens
 npm install
 npx playwright install chromium
-npm run build      # emits dist/
-npm test           # 63 tests, includes real browser captures
+npm run build            # emits dist/
+npm test                 # 63 tests, includes real browser captures
+node scripts/smoke.mjs   # end-to-end check over real stdio
 ```
 
-Then point your IDE at `node /absolute/path/to/vibelens/dist/index.js`.
+Then point your IDE at `node /absolute/path/to/VibeLens/dist/index.js`.
 </details>
 
 ---
@@ -67,7 +77,7 @@ VibeLens speaks MCP over stdio, so every MCP-capable client uses the same shape:
   "mcpServers": {
     "vibelens": {
       "command": "npx",
-      "args": ["-y", "vibelens-mcp"]
+      "args": ["-y", "mcp-vibelens@1"]
     }
   }
 }
@@ -75,15 +85,43 @@ VibeLens speaks MCP over stdio, so every MCP-capable client uses the same shape:
 
 ### Claude Code
 
+As a plugin (recommended — includes the `check-ui` and `responsive-audit`
+skills):
+
+```bash
+claude plugin marketplace add soumyachk101/VibeLens
+claude plugin install vibelens@vibelens
+```
+
+Or as a bare MCP server:
+
 ```bash
 # available in every project
-claude mcp add vibelens --scope user -- npx -y vibelens-mcp
+claude mcp add vibelens --scope user -- npx -y mcp-vibelens@1
 
 # or committed to the repo for your team (writes .mcp.json)
-claude mcp add vibelens --scope project -- npx -y vibelens-mcp
+claude mcp add vibelens --scope project -- npx -y mcp-vibelens@1
 ```
 
 Verify with `/mcp` inside a session — `vibelens` should be listed as connected.
+
+### OpenAI Codex (CLI and IDE extension)
+
+```bash
+codex mcp add vibelens -- npx -y mcp-vibelens@1
+```
+
+Or add it to `~/.codex/config.toml` by hand. Codex shares this config between
+the CLI and the IDE extension, so it only needs doing once:
+
+```toml
+[mcp_servers.vibelens]
+command = "npx"
+args = ["-y", "mcp-vibelens@1"]
+```
+
+Check it with `codex mcp list`. Codex only supports local stdio servers, which
+is exactly what VibeLens is.
 
 ### Cursor
 
@@ -113,7 +151,7 @@ Using the in-app menu is the safest way to open the right one.
 ```json
 {
   "servers": {
-    "vibelens": { "command": "npx", "args": ["-y", "vibelens-mcp"] }
+    "vibelens": { "command": "npx", "args": ["-y", "mcp-vibelens@1"] }
   }
 }
 ```
@@ -122,6 +160,21 @@ Using the in-app menu is the safest way to open the right one.
 
 `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS, same
 JSON block. Restart the app afterwards.
+
+---
+
+## What the plugin adds
+
+Installing via the Claude Code plugin also gives you two skills that encode the
+workflow, so you do not have to describe it every time:
+
+| Skill | What it does |
+| --- | --- |
+| `/vibelens:check-ui <url>` | Capture → read the DOM and diagnostics → locate the source → fix → **re-capture to verify**. |
+| `/vibelens:responsive-audit <url>` | Captures mobile, tablet and desktop, reports only real breakage, fixes the narrowest breakpoint first. |
+
+Both are model-invoked too: saying *"the pricing page looks broken on mobile"* is
+enough to trigger them.
 
 ---
 
@@ -257,10 +310,12 @@ Silicon laptops where each stray Chromium costs hundreds of MB of RSS.
 ## Development
 
 ```bash
-npm run dev         # run the server from source over stdio
-npm run typecheck   # tsc --noEmit
-npm test            # vitest: security, DOM, capture e2e, MCP protocol
-npm run build       # emit dist/
+npm run dev              # run the server from source over stdio
+npm run typecheck        # tsc --noEmit
+npm test                 # vitest: security, DOM, capture e2e, MCP protocol
+npm run build            # emit dist/
+node scripts/smoke.mjs   # spawn dist/ and exercise it over real stdio
+npm run validate:plugin  # claude plugin validate .
 ```
 
 Layout:
@@ -274,7 +329,12 @@ src/
 ├── security.ts   # SSRF guard (URL allowlist)
 └── types.ts      # shared types, viewport presets, payload limits
 tests/            # vitest suites (incl. real Chromium captures)
+skills/           # Claude Code plugin skills (check-ui, responsive-audit)
+scripts/          # smoke test + manifest validation used by CI
+.claude-plugin/   # plugin.json + marketplace.json
+.mcp.json         # MCP server declaration for the plugin
 docs/PRD-TRD.md   # product + technical requirements
+RELEASE.md        # release checklist
 ```
 
 ## Roadmap
