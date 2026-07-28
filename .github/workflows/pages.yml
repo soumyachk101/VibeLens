@@ -55,9 +55,9 @@ jobs:
         # The project site is served from /<repo>/, so the links need the prefix.
         run: node scripts/site/build.mjs --base /${{ github.event.repository.name }}
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site-dist
 
@@ -73,4 +73,4 @@ jobs:
       id-token: write
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
