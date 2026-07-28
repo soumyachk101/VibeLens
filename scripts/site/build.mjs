@@ -130,8 +130,13 @@ function renderMarkdown(markdown, sourcePath) {
 
   const renderer = new marked.Renderer();
 
-  renderer.heading = ({ tokens, depth }) => {
-    const text = marked.parseInline(tokens.map((t) => t.raw).join(""));
+  // Renderer methods are declared with `function` rather than arrows so `this`
+  // is the renderer: `this.parser.parseInline(tokens)` reuses the same parser
+  // and renderer for nested inline content. Re-parsing raw text with a fresh
+  // parseInline call instead recurses without terminating.
+
+  renderer.heading = function ({ tokens, depth }) {
+    const text = this.parser.parseInline(tokens);
     const plain = text.replace(/<[^>]+>/g, "");
     let id = slugify(plain);
     if (seen.has(id)) {
@@ -152,7 +157,7 @@ function renderMarkdown(markdown, sourcePath) {
     return `<h${depth} id="${id}">${text}${anchor}</h${depth}>\n`;
   };
 
-  renderer.code = ({ text, lang }) => {
+  renderer.code = function ({ text, lang }) {
     if ((lang ?? "").trim() === "mermaid") {
       hasMermaid = true;
       return `<pre class="mermaid">${escapeHtml(text)}</pre>\n`;
@@ -162,24 +167,22 @@ function renderMarkdown(markdown, sourcePath) {
     return `<div class="code-block">${langTag}<pre><code>${escapeHtml(text)}</code></pre></div>\n`;
   };
 
-  renderer.table = (token) => {
+  renderer.table = function (token) {
     const head = token.header
-      .map((cell) => `<th>${marked.parseInline(cell.tokens.map((t) => t.raw).join(""))}</th>`)
+      .map((cell) => `<th>${this.parser.parseInline(cell.tokens)}</th>`)
       .join("");
     const body = token.rows
       .map(
         (row) =>
-          `<tr>${row
-            .map((cell) => `<td>${marked.parseInline(cell.tokens.map((t) => t.raw).join(""))}</td>`)
-            .join("")}</tr>`,
+          `<tr>${row.map((cell) => `<td>${this.parser.parseInline(cell.tokens)}</td>`).join("")}</tr>`,
       )
       .join("\n");
     // Wrapped so a wide table scrolls instead of breaking the page.
     return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>\n${body}\n</tbody></table></div>\n`;
   };
 
-  renderer.link = ({ href, title, tokens }) => {
-    const text = marked.parseInline(tokens.map((t) => t.raw).join(""));
+  renderer.link = function ({ href, title, tokens }) {
+    const text = this.parser.parseInline(tokens);
     const resolved = resolveLink(href ?? "", sourcePath);
     const external = /^https?:/.test(resolved);
     const attrs = [
@@ -192,7 +195,7 @@ function renderMarkdown(markdown, sourcePath) {
     return `<a ${attrs}>${text}</a>`;
   };
 
-  renderer.image = ({ href, title, text }) => {
+  renderer.image = function ({ href, title, text }) {
     const resolved = resolveLink(href ?? "", sourcePath);
     const attrs = [
       `src="${escapeHtml(resolved)}"`,
@@ -205,7 +208,20 @@ function renderMarkdown(markdown, sourcePath) {
     return `<img ${attrs}>`;
   };
 
-  const html = marked.parse(markdown, { renderer, gfm: true, breaks: false });
+  const rendered = marked.parse(markdown, { renderer, gfm: true, breaks: false });
+
+  // Safety net. If any future markdown construct renders a link outside the
+  // renderer above, it would silently ship a .md link that 404s on the site.
+  // The link checker in check.mjs would catch it, but fixing it here keeps the
+  // build honest by default.
+  const html = rendered.replace(
+    /(href|src)="([^"]+)"/g,
+    (match, attr, value) => {
+      if (/^(https?:|mailto:|data:|#|\/)/.test(value)) return match;
+      return `${attr}="${escapeHtml(resolveLink(value, sourcePath))}"`;
+    },
+  );
+
   return { html, outline, hasMermaid };
 }
 

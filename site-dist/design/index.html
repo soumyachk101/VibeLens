@@ -109,19 +109,19 @@ specific enough to apply without further interpretation.</p>
 <p>Read the file that matches the decision in front of you. Do not read all five
 before starting; that spends context you will need for the code.</p>
 <div class="table-wrap"><table><thead><tr><th>Situation</th><th>Read</th></tr></thead><tbody>
-<tr><td>Reviewing a capture, looking for what is wrong</td><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a></td></tr>
+<tr><td>Reviewing a capture, looking for what is wrong</td><td><a href="/design/anti-slop.html">ANTI-SLOP.md</a></td></tr>
 <tr><td>Setting up a project&#39;s visual foundation from nothing</td><td>COLOR, then TYPOGRAPHY, then SPACING-LAYOUT</td></tr>
 <tr><td>One specific decision (a size, a colour, a duration)</td><td>that file&#39;s table only</td></tr>
-<tr><td>Adding or auditing animation</td><td><a href="./MOTION.md">MOTION.md</a></td></tr>
+<tr><td>Adding or auditing animation</td><td><a href="/design/motion.html">MOTION.md</a></td></tr>
 <tr><td>Deciding whether a section should be a card grid</td><td>ANTI-SLOP §10, then SPACING-LAYOUT</td></tr>
 </tbody></table></div>
 <h2 id="the-files">The files<a class="heading-anchor" href="#the-files" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>File</th><th>Contents</th><th>Use when</th></tr></thead><tbody>
-<tr><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a></td><td>The recognisable tells of machine-generated UI, why each reads that way, and the concrete correction</td><td>Reviewing any page, or before writing the first line of a new component</td></tr>
-<tr><td><a href="./TYPOGRAPHY.md">TYPOGRAPHY.md</a></td><td>Modular type scale, line-height and measure, letter-spacing, font pairing, variable fonts, loading mechanics, OpenType features, <code>text-wrap</code></td><td>Text looks flat or uniform, lines run too wide, or the page shifts on font load</td></tr>
-<tr><td><a href="./COLOR.md">COLOR.md</a></td><td>Deriving a palette from one accent, OKLCH ramps, tinted neutrals, semantic tokens over primitives, WCAG contrast, dark mode as a mapping</td><td>Choosing any colour, or checking contrast</td></tr>
-<tr><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td><td>4px spacing scale, proximity, optical alignment, grid vs flex, container queries, <code>min()</code>/<code>clamp()</code>/<code>aspect-ratio</code>/<code>gap</code>, density, named z-index</td><td>Spacing is arbitrary or uniform, or layout defaults to a card grid</td></tr>
-<tr><td><a href="./MOTION.md">MOTION.md</a></td><td>Duration bands, easing by intent, compositor-safe properties, <code>prefers-reduced-motion</code>, stagger, view transitions, what never to animate</td><td>Adding animation, or a transition feels slow, floaty or gratuitous</td></tr>
+<tr><td><a href="/design/anti-slop.html">ANTI-SLOP.md</a></td><td>The recognisable tells of machine-generated UI, why each reads that way, and the concrete correction</td><td>Reviewing any page, or before writing the first line of a new component</td></tr>
+<tr><td><a href="/design/typography.html">TYPOGRAPHY.md</a></td><td>Modular type scale, line-height and measure, letter-spacing, font pairing, variable fonts, loading mechanics, OpenType features, <code>text-wrap</code></td><td>Text looks flat or uniform, lines run too wide, or the page shifts on font load</td></tr>
+<tr><td><a href="/design/color.html">COLOR.md</a></td><td>Deriving a palette from one accent, OKLCH ramps, tinted neutrals, semantic tokens over primitives, WCAG contrast, dark mode as a mapping</td><td>Choosing any colour, or checking contrast</td></tr>
+<tr><td><a href="/design/spacing-layout.html">SPACING-LAYOUT.md</a></td><td>4px spacing scale, proximity, optical alignment, grid vs flex, container queries, <code>min()</code>/<code>clamp()</code>/<code>aspect-ratio</code>/<code>gap</code>, density, named z-index</td><td>Spacing is arbitrary or uniform, or layout defaults to a card grid</td></tr>
+<tr><td><a href="/design/motion.html">MOTION.md</a></td><td>Duration bands, easing by intent, compositor-safe properties, <code>prefers-reduced-motion</code>, stagger, view transitions, what never to animate</td><td>Adding animation, or a transition feels slow, floaty or gratuitous</td></tr>
 </tbody></table></div>
 <h2 id="ground-rules-that-apply-across-all-five">Ground rules that apply across all five<a class="heading-anchor" href="#ground-rules-that-apply-across-all-five" aria-label="Link to this section">#</a></h2>
 <ol>
@@ -152,12 +152,12 @@ it is how the original problem started. Change, re-capture, compare.</li>
 <p>Foundations first: later decisions depend on earlier ones, and retrofitting a
 scale after components exist means touching every file.</p>
 <div class="table-wrap"><table><thead><tr><th>Step</th><th>Decision</th><th>File</th></tr></thead><tbody>
-<tr><td>1</td><td>One accent hue, neutral tint, semantic token names</td><td><a href="./COLOR.md">COLOR.md</a></td></tr>
-<tr><td>2</td><td>Font stack and the ratio for the type scale</td><td><a href="./TYPOGRAPHY.md">TYPOGRAPHY.md</a></td></tr>
-<tr><td>3</td><td>Spacing base, radius scale, container widths, z-index names</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
-<tr><td>4</td><td>Named durations and easings</td><td><a href="./MOTION.md">MOTION.md</a></td></tr>
+<tr><td>1</td><td>One accent hue, neutral tint, semantic token names</td><td><a href="/design/color.html">COLOR.md</a></td></tr>
+<tr><td>2</td><td>Font stack and the ratio for the type scale</td><td><a href="/design/typography.html">TYPOGRAPHY.md</a></td></tr>
+<tr><td>3</td><td>Spacing base, radius scale, container widths, z-index names</td><td><a href="/design/spacing-layout.html">SPACING-LAYOUT.md</a></td></tr>
+<tr><td>4</td><td>Named durations and easings</td><td><a href="/design/motion.html">MOTION.md</a></td></tr>
 <tr><td>5</td><td>Build components using only tokens from 1–4</td><td>—</td></tr>
-<tr><td>6</td><td>Review against the fast pass</td><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a></td></tr>
+<tr><td>6</td><td>Review against the fast pass</td><td><a href="/design/anti-slop.html">ANTI-SLOP.md</a></td></tr>
 </tbody></table></div>
 <p>If the project already has a design system, tokens or a component library, use
 it. Do not introduce a second scale alongside an existing one — read the existing
@@ -182,14 +182,14 @@ problem and the second as an option, if at all.</li>
 place is recognisable in another. If the project already names things
 differently, follow the project.</p>
 <div class="table-wrap"><table><thead><tr><th>Prefix</th><th>Holds</th><th>Defined in</th></tr></thead><tbody>
-<tr><td><code>--surface-*</code>, <code>--text-*</code>, <code>--border-*</code></td><td>Semantic colour roles</td><td><a href="./COLOR.md">COLOR.md</a></td></tr>
-<tr><td><code>--accent*</code>, <code>--success*</code>, <code>--warning*</code>, <code>--danger*</code></td><td>Accent and status colour</td><td><a href="./COLOR.md">COLOR.md</a></td></tr>
-<tr><td><code>--text-&lt;size&gt;</code></td><td>Type scale steps</td><td><a href="./TYPOGRAPHY.md">TYPOGRAPHY.md</a></td></tr>
-<tr><td><code>--space-&lt;n&gt;</code></td><td>Spacing scale steps</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
-<tr><td><code>--radius-*</code></td><td>Radius scale</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
-<tr><td><code>--z-*</code></td><td>Named stacking levels</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
-<tr><td><code>--dur-*</code>, <code>--ease-*</code></td><td>Motion durations and curves</td><td><a href="./MOTION.md">MOTION.md</a></td></tr>
-<tr><td><code>--elev-*</code></td><td>Layered shadows</td><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a> §7</td></tr>
+<tr><td><code>--surface-*</code>, <code>--text-*</code>, <code>--border-*</code></td><td>Semantic colour roles</td><td><a href="/design/color.html">COLOR.md</a></td></tr>
+<tr><td><code>--accent*</code>, <code>--success*</code>, <code>--warning*</code>, <code>--danger*</code></td><td>Accent and status colour</td><td><a href="/design/color.html">COLOR.md</a></td></tr>
+<tr><td><code>--text-&lt;size&gt;</code></td><td>Type scale steps</td><td><a href="/design/typography.html">TYPOGRAPHY.md</a></td></tr>
+<tr><td><code>--space-&lt;n&gt;</code></td><td>Spacing scale steps</td><td><a href="/design/spacing-layout.html">SPACING-LAYOUT.md</a></td></tr>
+<tr><td><code>--radius-*</code></td><td>Radius scale</td><td><a href="/design/spacing-layout.html">SPACING-LAYOUT.md</a></td></tr>
+<tr><td><code>--z-*</code></td><td>Named stacking levels</td><td><a href="/design/spacing-layout.html">SPACING-LAYOUT.md</a></td></tr>
+<tr><td><code>--dur-*</code>, <code>--ease-*</code></td><td>Motion durations and curves</td><td><a href="/design/motion.html">MOTION.md</a></td></tr>
+<tr><td><code>--elev-*</code></td><td>Layered shadows</td><td><a href="/design/anti-slop.html">ANTI-SLOP.md</a> §7</td></tr>
 </tbody></table></div>
 <p>Two rules about tokens. A component reads semantic tokens, never primitives — so
 a theme change is a token remap rather than a component edit. And a hard-coded
