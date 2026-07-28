@@ -282,31 +282,35 @@ kbd {
 
 /* --------------------------------------------------------- 4. header ----- */
 
+/* --------------------------------------------------------- 4. header ----- */
+
 .site-header {
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  background: var(--header-bg);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  background: color-mix(in oklch, var(--bg) 82%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-soft);
+  box-shadow: 0 4px 24px -4px color-mix(in oklch, var(--text-strong) 4%, transparent);
 }
 
 .header-inner {
   display: flex;
   align-items: center;
-  gap: var(--s-4);
+  gap: var(--s-3);
   height: var(--header-h);
-  max-width: 1660px;
+  max-width: 1520px;
   margin: 0 auto;
   padding: 0 var(--s-6);
+  padding-left: max(var(--s-6), env(safe-area-inset-left));
+  padding-right: max(var(--s-6), env(safe-area-inset-right));
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--s-3);
+  gap: 10px;
   flex: none;
   font-family: var(--font-serif);
   font-size: 1.35rem;
@@ -317,122 +321,139 @@ kbd {
 }
 .brand:hover { color: var(--text-strong); }
 .brand img {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 8px;
-  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease;
 }
 .brand:hover img {
-  transform: scale(1.08) rotate(-3deg);
+  transform: scale(1.08) rotate(-4deg);
 }
 .brand b { font-weight: inherit; }
 .brand span {
   font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--terracotta);
 }
 .brand .version {
-  padding: 2px 10px;
-  border: 1px solid var(--border);
+  padding: 2px 9px;
+  border: 1px solid var(--border-soft);
   border-radius: 999px;
-  background: var(--surface-raised);
-  color: var(--text-muted);
+  background: var(--surface-sunken);
+  color: var(--text-subtle);
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0;
 }
 
-/* Primary nav: one row of sections, with the current one marked. A docs site
-   with no indication of where you are is the most common navigation failure. */
 .primary-nav {
   display: flex;
-  align-items: stretch;
-  gap: var(--s-1);
-  margin-left: var(--s-5);
-  font-size: var(--text-sm);
+  align-items: center;
+  gap: 4px;
+  margin-left: 20px;
+  font-size: 13.5px;
 }
-/* The links span the full header height so the active indicator can sit exactly
-   on the header's bottom border rather than floating below it. */
 .primary-nav a {
   position: relative;
   display: inline-flex;
   align-items: center;
-  height: var(--header-h);
-  padding: 0 var(--s-3);
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
   color: var(--text-muted);
-  font-weight: 520;
+  font-weight: 500;
   text-decoration: none;
-  transition: color var(--dur-fast) var(--ease-out);
+  transition: all var(--dur-fast) var(--ease-out);
 }
-.primary-nav a:hover { color: var(--text-strong); }
-.primary-nav a[aria-current="true"] { color: var(--text-strong); font-weight: 600; }
+.primary-nav a:hover {
+  color: var(--text-strong);
+  background: var(--surface-raised);
+}
+.primary-nav a[aria-current="true"] {
+  color: var(--text-strong);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  font-weight: 600;
+  box-shadow: var(--shadow-xs);
+}
 .primary-nav a[aria-current="true"]::after {
   content: "";
   position: absolute;
-  left: var(--s-3);
-  right: var(--s-3);
-  bottom: -1px; /* overlaps the 1px header border */
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
   height: 2px;
-  border-radius: 2px 2px 0 0;
-  background: var(--accent);
+  border-radius: 2px;
+  background: var(--terracotta);
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: var(--s-2);
+  gap: 8px;
   margin-left: auto;
 }
 
-/* The search control is shaped like the field it opens, not like a button, so
-   its purpose is legible before it is clicked. */
 .search-trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--s-2);
-  width: 232px;
-  padding: var(--s-2) var(--s-2) var(--s-2) var(--s-3);
+  gap: 8px;
+  width: 220px;
+  padding: 6px 12px;
   border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  background: var(--surface);
+  border-radius: 999px;
+  background: var(--surface-sunken);
   color: var(--text-subtle);
-  font: inherit;
-  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
   text-align: left;
   cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out);
+  transition: all var(--dur-fast) var(--ease-out);
 }
-.search-trigger:hover { border-color: var(--border-strong); color: var(--text-muted); }
-.search-trigger svg { width: 16px; height: 16px; stroke-width: 1.8; flex: none; }
+.search-trigger:hover {
+  border-color: var(--border-strong);
+  color: var(--text-muted);
+  background: var(--surface);
+}
+.search-trigger svg { width: 15px; height: 15px; stroke-width: 2; flex: none; }
 .search-trigger span { flex: 1; }
-.search-trigger kbd { flex: none; }
+.search-trigger kbd {
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-subtle);
+  flex: none;
+}
 
 .icon-button {
   display: inline-grid;
   place-items: center;
-  /* 36px is above the 24x24 WCAG 2.5.8 minimum and comfortable with a mouse. */
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   padding: 0;
   flex: none;
   border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+  border-radius: 999px;
+  background: var(--surface-sunken);
   color: var(--text-muted);
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out),
-    transform var(--dur-instant) var(--ease-out);
+  transition: all var(--dur-fast) var(--ease-out);
 }
-.icon-button:hover { color: var(--text-strong); border-color: var(--border-strong); background: var(--surface-raised); }
-.icon-button:active { transform: translateY(1px); }
-.icon-button svg { width: 17px; height: 17px; stroke-width: 1.7; }
+.icon-button:hover {
+  color: var(--text-strong);
+  border-color: var(--border-strong);
+  background: var(--surface);
+  transform: translateY(-1px);
+}
+.icon-button:active { transform: translateY(0); }
+.icon-button svg { width: 18px; height: 18px; stroke-width: 1.8; }
 [data-theme="dark"] .icon-sun { display: none; }
 [data-theme="light"] .icon-moon { display: none; }
 
@@ -1397,46 +1418,52 @@ h2:hover > .heading-anchor,
   .with-toc { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .toc { display: none; }
   .main { padding: var(--s-8) var(--s-8) var(--s-20); }
+  .search-trigger { width: 170px; }
 }
 
-@media (max-width: 1060px) {
+@media (max-width: 1024px) {
   .primary-nav { display: none; }
-  .search-trigger { width: 180px; }
-}
-
-@media (max-width: 880px) {
   .shell { grid-template-columns: minmax(0, 1fr); }
   .nav-toggle { display: inline-grid; }
-  .search-trigger { width: auto; padding: var(--s-2); }
-  .search-trigger span, .search-trigger kbd { display: none; }
   .brand .version { display: none; }
 
-  /* The sidebar becomes a drawer. It slides rather than appearing, so the
-     relationship between the toggle and the panel stays legible. */
+  /* The sidebar drawer for tablet/mobile */
   .sidebar {
     position: fixed;
     inset: var(--header-h) auto 0 0;
     z-index: var(--z-drawer);
-    width: min(320px, 84vw);
+    width: min(320px, 86vw);
     max-height: none;
     padding: var(--s-5) var(--s-4) var(--s-16);
     border-right: 1px solid var(--border);
-    background: var(--bg-alt);
+    background: var(--surface);
     box-shadow: var(--shadow-lg);
     transform: translateX(-102%);
     visibility: hidden;
     transition: transform var(--dur-base) var(--ease-out), visibility var(--dur-base);
   }
   .sidebar[data-open="true"] { transform: translateX(0); visibility: visible; }
+}
 
-  .main { padding: var(--s-6) var(--s-5) var(--s-16); }
-  .hero { padding: var(--s-12) var(--s-5) var(--s-10); }
-  .section, .figure-wide { padding-left: var(--s-5); padding-right: var(--s-5); }
-  .section { padding-top: var(--s-12); padding-bottom: var(--s-12); }
+@media (max-width: 768px) {
+  .search-trigger { width: 38px; height: 38px; padding: 0; justify-content: center; border-radius: 999px; }
+  .search-trigger span, .search-trigger kbd { display: none; }
+  
+  .main { padding: var(--s-6) var(--s-4) var(--s-16); }
+  .hero { padding: var(--s-10) var(--s-4) var(--s-8); }
+  .section, .figure-wide { padding-left: var(--s-4); padding-right: var(--s-4); }
+  .section { padding-top: var(--s-10); padding-bottom: var(--s-10); }
   .page-nav { flex-direction: column; }
   .page-head { flex-direction: column; gap: var(--s-3); }
   .edit-link { margin-top: 0; }
-  .footer-inner { flex-direction: column; align-items: flex-start; }
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: var(--s-4); }
+}
+
+@media (max-width: 480px) {
+  .header-inner { padding: 0 var(--s-3); gap: 6px; }
+  .brand { font-size: 1.18rem; gap: 6px; }
+  .brand img { width: 26px; height: 26px; }
+  .search-dialog { margin-top: var(--s-4); }
 }
 
 @media (max-width: 560px) {
