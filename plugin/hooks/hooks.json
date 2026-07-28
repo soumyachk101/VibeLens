@@ -10,6 +10,16 @@
             "command": "p=$(jq -r '.tool_input.file_path // empty' 2>/dev/null); if echo \"$p\" | grep -qiE '\\.(tsx|jsx|vue|svelte|css|scss)$'; then echo \"[vibelens] Edited $p. This frontend change is unverified until you re-run inspect_localhost_ui on the affected page with the same url, viewport, fullPage and delay as the previous capture.\"; fi; exit 0"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 5,
+            "command": "p=$(jq -r '.tool_input.file_path // empty' 2>/dev/null); echo \"$p\" | grep -qiE '\\.(tsx|jsx|vue|svelte|css|scss)$' && grep -qE '#[0-9a-fA-F]{6}|rgba?\\(|[a-z]-\\[[.#0-9]' \"$p\" 2>/dev/null && echo \"[vibelens] Raw values found in $p (six-digit hex, rgb()/rgba(), or arbitrary bracket utilities like text-[13px]) — prefer a semantic colour token or a step on the type/spacing scale.\"; exit 0"
+          }
+        ]
       }
     ]
   }

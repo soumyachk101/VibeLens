@@ -56,7 +56,6 @@ was never considered.
 **Fix.** A radius scale assigned by size — 4px badges, 6–8px inputs and buttons,
 10–14px cards, 16–20px modals, `50%` avatars. For nested elements, inner radius =
 outer radius − padding, or the corners will not look concentric.
-
 ## 3. Uniform padding, no density hierarchy
 
 **Tell.** `p-4` on every container: section padding equals card padding equals
