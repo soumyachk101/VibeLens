@@ -76,10 +76,39 @@ npm run typecheck                 # tsc --noEmit
 npm test                          # vitest run (real browser captures included)
 npm run build                     # emit dist/
 npm run dev                       # run from source over stdio
+node scripts/smoke.mjs            # spawn dist/ and drive it over real stdio
+node scripts/validate-manifests.mjs
+npm run validate:plugin           # claude plugin validate .
 ```
 
 Always run `npm run typecheck && npm test` before declaring work done. The test
 suite launches Chromium for real; a green run means the whole pipeline works.
+
+## Distribution surface
+
+This repo is three things at once. Changing one usually means changing another:
+
+| File | Role |
+| --- | --- |
+| `package.json` | npm package `mcp-vibelens` (the actual server binary) |
+| `.claude-plugin/plugin.json` | Claude Code plugin manifest |
+| `.claude-plugin/marketplace.json` | one-plugin marketplace catalog, `source: "./"` |
+| `.mcp.json` | how the plugin launches the server (`npx -y mcp-vibelens@1`) |
+| `skills/*/SKILL.md` | the two plugin skills |
+
+Rules:
+
+- **Version bumps go in `package.json` *and* `.claude-plugin/plugin.json`.**
+  Claude Code only ships an update when `plugin.json`'s `version` string
+  changes, and `scripts/validate-manifests.mjs` fails the build if they drift.
+- Never set `version` on the marketplace entry — `plugin.json` silently wins and
+  the marketplace value becomes misleading dead config.
+- Renaming the npm package means updating `.mcp.json` args and every IDE snippet
+  in `README.md`. The manifest validator checks the `.mcp.json` reference.
+- `files` in `package.json` is an allowlist: plugin and CI files deliberately do
+  not ship in the npm tarball.
+- Release steps live in `RELEASE.md`. npm publishes before the plugin, because
+  the plugin only launches the published package.
 
 ## Testing conventions
 
