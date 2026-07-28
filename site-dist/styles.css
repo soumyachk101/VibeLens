@@ -786,19 +786,23 @@ kbd {
   transition: opacity var(--dur-fast) var(--ease-out);
 }
 h2:hover > .heading-anchor,
-h3:hover > .heading-anchor,
-.heading-anchor:focus-visible { opacity: 1; }
-
 /* Code -------------------------------------------------------------------- */
 
 .prose :not(pre) > code {
-  padding: 0.12em 0.36em;
-  border: 1px solid color-mix(in oklch, var(--accent) 18%, transparent);
-  border-radius: var(--r-xs);
-  background: var(--accent-quiet);
-  color: var(--text-strong);
+  padding: 0.15em 0.42em;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface-sunken);
+  color: var(--terracotta);
   font-family: var(--font-mono);
-  font-size: 0.86em;
+  font-size: 0.85em;
+  font-weight: 500;
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.prose td code {
+  background: color-mix(in oklch, var(--surface-sunken) 80%, transparent);
 }
 
 .code-block {
@@ -848,7 +852,7 @@ h3:hover > .heading-anchor,
   tab-size: 2;
   background: transparent !important;
 }
-.code-block pre code { background: transparent; }
+.code-block pre code { background: transparent; border: none; padding: 0; }
 
 /* shiki emits both themes as CSS variables; pick one per theme. */
 [data-theme="dark"] .shiki,
@@ -859,32 +863,28 @@ h3:hover > .heading-anchor,
 .code-lang {
   position: static;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: var(--text-xs);
+  font-weight: 600;
   color: var(--text-subtle);
-  margin-left: auto;
-  margin-right: var(--s-2);
+  text-transform: lowercase;
 }
 .copy-button {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px var(--s-2);
+  justify-content: center;
+  gap: var(--s-1);
+  padding: 4px 10px;
   border: 1px solid var(--border);
-  border-radius: var(--r-xs);
+  border-radius: var(--r-sm);
   background: var(--surface);
   color: var(--text-muted);
-  font: inherit;
+  font-family: var(--font-sans);
   font-size: var(--text-2xs);
   font-weight: 600;
   cursor: pointer;
-  opacity: 0.85;
   transition: all var(--dur-fast) var(--ease-out);
 }
 .copy-button:hover {
-  opacity: 1;
-  color: var(--text-strong);
   border-color: var(--accent);
   background: var(--surface-raised);
 }
@@ -1539,8 +1539,13 @@ h3:hover > .heading-anchor,
   height: 8px;
   border-radius: 50%;
   background: var(--terracotta);
-  box-shadow: 0 0 8px var(--terracotta);
-  animation: pulse-glow 2s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.demo-run-btn[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  font-size: var(--text-xs);
 }
 
 .demo-url-prefix {
@@ -1660,7 +1665,7 @@ h3:hover > .heading-anchor,
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px stroke var(--border);
+  border-bottom: 1px solid var(--border);
   font-size: 14px;
 }
 
@@ -1676,14 +1681,17 @@ h3:hover > .heading-anchor,
 }
 
 .mock-btn-overflow {
-  width: 100%;
+  width: calc(100% + 40px);
+  margin-left: -20px;
+  margin-bottom: -16px;
   padding: 12px;
   border-radius: 999px;
   background: var(--terracotta);
   color: #fff;
   border: none;
   font-weight: 700;
-  cursor: pointer;
+  cursor: default;
+  position: relative;
 }
 
 .mock-terminal-window {
