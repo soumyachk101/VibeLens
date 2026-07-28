@@ -28,7 +28,7 @@ AI:   [calls inspect_localhost_ui]
 
 ## Requirements
 
-- Node.js 18 or newer
+- Node.js 20 or newer (Playwright 1.62 requires it)
 - Chromium for Playwright (one-time download, ~95 MB)
 
 ## Install

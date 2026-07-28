@@ -16,7 +16,8 @@ more important than features.
 
 ## Stack
 
-- Node.js ≥ 18, ESM only (`"type": "module"`)
+- Node.js ≥ 20, ESM only (`"type": "module"`). Playwright 1.62 requires >=20 and
+  vitest 4 supports ^20 || ^22 || >=24, so 20 is the floor.
 - TypeScript, `strict` (plus `noUncheckedIndexedAccess`)
 - `@modelcontextprotocol/sdk` — MCP server + stdio transport
 - `playwright` — headless Chromium

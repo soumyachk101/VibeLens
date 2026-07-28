@@ -85,7 +85,7 @@ boundary, not a missing feature.
 
 | Concern | Choice | Reason |
 | --- | --- | --- |
-| Runtime | Node.js ≥ 18, ESM | Matches the MCP SDK and every target IDE. |
+| Runtime | Node.js ≥ 20, ESM | Playwright 1.62 requires >=20; vitest 4 supports ^20 \|\| ^22 \|\| >=24. |
 | Language | TypeScript, `strict` | The tool input is model-generated; types catch shape errors early. |
 | Browser | `playwright` (Chromium) | Reliable with modern frameworks; first-class console/network events. |
 | Protocol | `@modelcontextprotocol/sdk` | Official server + stdio transport. |
@@ -242,7 +242,7 @@ tool returns `BROWSER_NOT_INSTALLED` with that exact command rather than failing
 opaquely.
 
 CI (`.github/workflows/ci.yml`) runs typecheck, the vitest suite against real
-Chromium, the build, and the stdio smoke test on Node 18/20/22, plus manifest
+Chromium, the build, and the stdio smoke test on Node 20/22/24, plus manifest
 validation. Publishing is tag-driven (`.github/workflows/release.yml`): a `v*`
 tag re-runs the full verification, refuses to continue if the tag and
 `package.json` version disagree, then publishes with npm provenance.
