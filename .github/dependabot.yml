@@ -39,6 +39,32 @@ updates:
         update-types:
           - version-update:semver-major
 
+      # The TypeScript toolchain majors are also opt-in. Verified concretely:
+      # typescript 7.0.2 with @types/node 26 fails `npm run typecheck` on this
+      # tsconfig with TS2591 ("Cannot find name 'process'"), because major
+      # TypeScript releases change module and type resolution. That is a real
+      # migration with a decision attached, not a version bump, so it belongs in
+      # its own PR rather than in the weekly batch.
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "@types/node"
+        update-types:
+          - version-update:semver-major
+
+      # vitest majors move the supported Node range (4.x is ^20 || ^22 || >=24),
+      # which interacts with the engines floor for the same reason as playwright.
+      - dependency-name: vitest
+        update-types:
+          - version-update:semver-major
+
+      # The MCP SDK defines the wire contract with every IDE. A major bump can
+      # change the tool-registration API and the content-block shape, so it is
+      # reviewed against a real client before it lands.
+      - dependency-name: "@modelcontextprotocol/sdk"
+        update-types:
+          - version-update:semver-major
+
   # GitHub Actions used by ci.yml and release.yml.
   - package-ecosystem: github-actions
     directory: "/"
