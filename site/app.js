@@ -126,25 +126,24 @@
     }
   }
 
-  // --- Click-to-Copy for Install Lines ----------------------------------------
-  const installLines = document.querySelectorAll("[data-copy-cmd], .install-line");
+  // --- Click-to-Copy for Hero Terminal & Install Lines ------------------------
+  const installLines = document.querySelectorAll("[data-copy-cmd], .hero-terminal, .install-line");
   for (const line of installLines) {
     const textToCopy = line.getAttribute("data-copy-cmd") || line.innerText.replace(/^\$\s*/, "").trim();
     if (!textToCopy) continue;
 
     line.style.cursor = "pointer";
-    line.setAttribute("title", "Click to copy command");
 
     const doCopy = async (e) => {
       e.preventDefault();
       try {
         await navigator.clipboard.writeText(textToCopy);
         showToast("Copied install command!");
-        const txtSpan = line.querySelector(".copy-txt");
+        const txtSpan = line.querySelector(".badge-txt, .copy-txt");
         if (txtSpan) txtSpan.textContent = "Copied!";
         line.classList.add("copied");
         setTimeout(() => {
-          if (txtSpan) txtSpan.textContent = "Copy";
+          if (txtSpan) txtSpan.textContent = "Click to copy";
           line.classList.remove("copied");
         }, 1800);
       } catch (err) {}

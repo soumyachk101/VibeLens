@@ -142,13 +142,11 @@
 <main class="home" id="content">
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow"><span class="pulse-dot"></span> <b>Free</b> · MIT · no telemetry</p>
-      <h1>Your AI writes the UI. <em>VibeLens lets it see it.</em></h1>
+      <p class="eyebrow"><span class="pulse-dot"></span> <b>Free & Open Source</b> · MIT · No Telemetry</p>
+      <h1>Your AI writes the UI.<br><em>VibeLens lets it see it.</em></h1>
       <p class="lede">
-        One MCP tool call returns a screenshot of your running page, the console and
-        network failures behind it, and a token-optimized DOM snapshot that keeps the
-        real ids and Tailwind classes. The model stops guessing selectors and starts
-        reading them.
+        One MCP tool call returns a desktop, tablet or mobile screenshot, console & network diagnostics,
+        and a token-optimized DOM snapshot preserving real IDs and Tailwind classes. Stop guessing selectors.
       </p>
       <div class="cta-row">
         <a class="button button-primary" href="/install.html">
@@ -160,13 +158,24 @@
           View on GitHub
         </a>
       </div>
-      <div class="install-line" data-copy-cmd="claude plugin marketplace add soumyachk101/VibeLens" title="Click to copy">
-        <span class="prompt">$</span>
-        <code>claude plugin marketplace add soumyachk101/VibeLens</code>
-        <button type="button" class="copy-cmd-btn" aria-label="Copy install command">
-          <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="15" height="15" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          <span class="copy-txt">Copy</span>
-        </button>
+
+      <div class="hero-terminal" data-copy-cmd="claude plugin marketplace add soumyachk101/VibeLens">
+        <div class="terminal-bar">
+          <div class="terminal-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="terminal-title">bash — install plugin</span>
+          <div class="terminal-copy-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span class="badge-txt">Click to copy</span>
+          </div>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span>
+          <code>claude plugin marketplace add soumyachk101/VibeLens</code>
+        </div>
       </div>
     </div>
   </section>
