@@ -166,13 +166,33 @@
       return total;
     };
 
-    /** Pulls a snippet around the first match so the result explains itself. */
+    /**
+     * Pulls a snippet around the first match. The window is snapped to word
+     * boundaries, because a snippet that starts mid-word reads as a bug.
+     */
     const snippet = (page, term) => {
       const body = page.b;
       const at = body.toLowerCase().indexOf(term);
-      if (at === -1) return body.slice(0, 120);
-      const from = Math.max(0, at - 48);
-      return `${from > 0 ? "…" : ""}${body.slice(from, from + 150)}…`;
+      if (at === -1) return body.slice(0, 140).replace(/\s+\S*$/, "…");
+
+      let from = Math.max(0, at - 52);
+      if (from > 0) {
+        const space = body.indexOf(" ", from);
+        if (space !== -1 && space < at) from = space + 1;
+      }
+      const slice = body.slice(from, from + 160).replace(/\s+\S*$/, "");
+      return `${from > 0 ? "… " : ""}${slice}…`;
+    };
+
+    /** Wraps every occurrence of a term so the reader sees why it matched. */
+    const highlight = (text, terms) => {
+      let out = escapeHtml(text);
+      for (const term of terms) {
+        if (term.length < 2) continue;
+        const pattern = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+        out = out.replace(pattern, "<mark>$1</mark>");
+      }
+      return out;
     };
 
     const render = (query) => {
@@ -203,8 +223,8 @@
           const label = heading ? `${page.t} › ${heading.t}` : page.t;
           return `<a class="search-result" href="${href}" role="option" aria-selected="${i === 0}" data-i="${i}">
             <span class="search-result-group">${escapeHtml(page.g ?? "")}</span>
-            <span class="search-result-title">${escapeHtml(label)}</span>
-            <span class="search-result-snippet">${escapeHtml(snippet(page, terms[0]))}</span>
+            <span class="search-result-title">${highlight(label, terms)}</span>
+            <span class="search-result-snippet">${highlight(snippet(page, terms[0]), terms)}</span>
           </a>`;
         })
         .join("");
