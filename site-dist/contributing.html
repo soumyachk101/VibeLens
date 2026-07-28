@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contributing · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Contributing · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html" aria-current="page">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Contributing</h1>
+            <p>Thanks for taking the time to look at this. VibeLens is a single-purpose MCP
+server: it exposes one tool, <code>inspect_localhost_ui</code>, which drives a real
+Chromium on the contributor&#39;s own machine. That makes <strong>security and resource
+cleanup more important than features</strong>, and it shapes almost every rule below.</p>
+<p>Before you write code, read <a href="https://github.com/soumyachk101/VibeLens/blob/main/CLAUDE.md" target="_blank" rel="noopener noreferrer">CLAUDE.md</a>. It is the architecture and
+invariant reference for both humans and AI assistants working in this repo. This
+document is the process layer on top of it.</p>
+<ul>
+<li><a href="#getting-set-up">Getting set up</a></li>
+<li><a href="#the-pre-pr-verification-checklist">The pre-PR verification checklist</a></li>
+<li><a href="#the-invariants">The invariants</a></li>
+<li><a href="#where-each-kind-of-change-goes">Where each kind of change goes</a></li>
+<li><a href="#test-conventions">Test conventions</a></li>
+<li><a href="#commit-messages">Commit messages</a></li>
+<li><a href="#what-a-good-pull-request-looks-like">What a good pull request looks like</a></li>
+<li><a href="#reporting-bugs-and-security-issues">Reporting bugs and security issues</a></li>
+</ul>
+<hr>
+<h2 id="getting-set-up">Getting set up<a class="heading-anchor" href="#getting-set-up" aria-label="Link to this section">#</a></h2>
+<p>You need <strong>Node.js 20 or newer</strong>. Playwright 1.62 requires &gt;=20 and vitest 4
+supports <code>^20 || ^22 || &gt;=24</code>, so 20 is the floor for the whole toolchain. CI
+runs the suite on 20, 22 and 24.</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>git clone https://github.com/soumyachk101/VibeLens.git
+cd VibeLens
+npm install
+npx playwright install chromium   # one-time, ~95 MB, required for the tests</code></pre></div>
+<p>Then confirm the checkout is healthy before changing anything:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npm run typecheck
+npm test          # 63 tests; several launch a real Chromium
+npm run build
+node scripts/smoke.mjs</code></pre></div>
+<p>If that is green, you have a working baseline. If it is not, fix the environment
+first — a red baseline makes it impossible to tell whether your change broke
+something.</p>
+<p>Useful during development:</p>
+<div class="table-wrap"><table><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody>
+<tr><td><code>npm run dev</code></td><td>Runs the server from source over stdio (<code>tsx src/index.ts</code>).</td></tr>
+<tr><td><code>npm run test:watch</code></td><td>vitest in watch mode.</td></tr>
+<tr><td><code>npm run typecheck</code></td><td><code>tsc --noEmit</code> with <code>strict</code> and <code>noUncheckedIndexedAccess</code>.</td></tr>
+<tr><td><code>npm run build</code></td><td>Emits <code>dist/</code>.</td></tr>
+<tr><td><code>node scripts/smoke.mjs</code></td><td>Spawns <code>dist/</code> and drives it over real stdio, end to end.</td></tr>
+<tr><td><code>node scripts/validate-manifests.mjs</code></td><td>Checks the plugin/marketplace manifests and version sync.</td></tr>
+<tr><td><code>npm run validate:plugin</code></td><td><code>claude plugin validate .</code> (needs the Claude Code CLI).</td></tr>
+</tbody></table></div>
+<p>Dependencies are <strong>pinned exactly</strong>, deliberately. Do not widen a range, do not
+add a dependency without a concrete reason stated in the PR, and do not swap
+Playwright for Puppeteer — the DOM sanitizer and the capture engine both depend
+on Playwright semantics.</p>
+<h2 id="the-pre-pr-verification-checklist">The pre-PR verification checklist<a class="heading-anchor" href="#the-pre-pr-verification-checklist" aria-label="Link to this section">#</a></h2>
+<p>Run all of these locally before you open a pull request, and paste the outcome
+into the PR description. CI runs the same things, but finding a failure locally
+is a minute instead of ten.</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npm run typecheck                    # 1. strict TypeScript, no emit
+npm test                             # 2. full vitest run, real Chromium
+npm run build                        # 3. dist/ compiles
+node scripts/smoke.mjs               # 4. the built server answers over stdio
+node scripts/validate-manifests.mjs  # 5. manifests parse, versions in sync
+claude plugin validate .             # 6. marketplace catalog at the repo root
+claude plugin validate ./plugin      # 7. the plugin itself</code></pre></div>
+<p>Notes on the ones that are easy to skip:</p>
+<ul>
+<li><strong>Step 4 is not redundant with step 2.</strong> The vitest suite drives the server
+in-process through <code>InMemoryTransport</code>. <code>scripts/smoke.mjs</code> spawns the built
+<code>dist/index.js</code> as a child process and speaks JSON-RPC over real pipes, which
+is the only check that catches a stray stdout write or a broken shebang.</li>
+<li><strong>Steps 6 and 7 need the Claude Code CLI.</strong> If you do not have it installed,
+say so in the PR and make sure step 5 passed; CI runs the manifest validator
+on every push.</li>
+<li>If you changed anything under <code>plugin/</code>, also confirm <code>plugin/</code> still has <strong>no
+<code>package.json</code></strong> (see invariant 9).</li>
+</ul>
+<h2 id="the-invariants">The invariants<a class="heading-anchor" href="#the-invariants" aria-label="Link to this section">#</a></h2>
+<p>CLAUDE.md lists these under &quot;Invariants — do not break these&quot;. They are
+non-negotiable: a PR that breaks one will be asked to change approach, not
+argued about. Each line below is the <em>why</em>, because an invariant you understand
+is one you will not break by accident.</p>
+<ol>
+<li><strong>stdout belongs to the MCP transport. Never <code>console.log</code>.</strong> Use the <code>log()</code>
+helper in <code>server.ts</code>, which writes to stderr. <em>Why:</em> stdout carries the
+JSON-RPC stream; one stray write corrupts it and the integration dies
+silently, with no error the user can see.</li>
+<li><strong>The browser is always closed in a <code>finally</code> block.</strong> <em>Why:</em> the server is
+long-lived and each leaked Chromium costs hundreds of MB of RSS — painful on
+the laptops this tool runs on.</li>
+<li><strong>Validate the URL before launching anything.</strong> <code>validateLocalUrl()</code> is the
+only gate. No bypass flag, no &quot;allow any host&quot; option, no DNS resolution of
+arbitrary hostnames, and instance-metadata addresses stay unconditionally
+blocked. <em>Why:</em> the tool is a browser you can point at a URL, i.e. a
+ready-made SSRF primitive; resolving hostnames would also reintroduce DNS
+rebinding.</li>
+<li><strong>A failed capture must never crash the process.</strong> Catch it, wrap it in
+<code>CaptureError</code>, return <code>{ isError: true, content: [text] }</code>. <em>Why:</em> a crashed
+stdio server takes the whole MCP session down and the user has to restart
+their IDE.</li>
+<li><strong>Every error the model sees needs a next step.</strong> <code>CaptureError</code> carries a
+<code>message</code> (what happened) and a <code>hint</code> (what to do). <em>Why:</em> the consumer is
+an LLM; an error without a hint turns into a guess instead of a fix.</li>
+<li><strong>Respect the token budget.</strong> Everything in <code>LIMITS</code> exists to protect the
+caller&#39;s context window. Raising a limit needs justification; adding a new
+unbounded field to the payload is not acceptable. <em>Why:</em> an unbounded payload
+silently eats the context the assistant needs to actually fix the bug.</li>
+<li><strong><code>sanitizeDomInPage</code> must stay self-contained.</strong> No imports, no
+module-scope references — configuration arrives through its single argument.
+<em>Why:</em> Playwright serializes the function with
+<code>Function.prototype.toString()</code> and evaluates it inside the page, where those
+bindings do not exist.</li>
+<li><strong>The tool stays read-only.</strong> It observes pages. It does not click, type,
+navigate the user&#39;s app into a mutating state, or write files. <em>Why:</em> the
+tool is annotated <code>readOnlyHint</code>, and assistants (plus users) trust that
+annotation. Roadmap work on pre-capture interaction changes this invariant
+deliberately, in CLAUDE.md, before any code lands.</li>
+<li><strong>The plugin stays in <code>plugin/</code>, and <code>plugin/</code> never contains a
+<code>package.json</code>.</strong> <em>Why:</em> Claude Code runs <code>npm install</code> inside a plugin
+directory that has one, which previously pushed ~112 MB of devDependencies
+into every user&#39;s plugin cache. <code>scripts/validate-manifests.mjs</code> enforces
+<code>source: &quot;./plugin&quot;</code>.</li>
+<li><strong>A version bump goes in <code>package.json</code> <em>and</em>
+<code>plugin/.claude-plugin/plugin.json</code>.</strong> <em>Why:</em> Claude Code only serves an
+update when <code>plugin.json</code>&#39;s version string changes, and the manifest
+validator fails the build when the two drift.</li>
+</ol>
+<h2 id="where-each-kind-of-change-goes">Where each kind of change goes<a class="heading-anchor" href="#where-each-kind-of-change-goes" aria-label="Link to this section">#</a></h2>
+<div class="code-block"><pre><code>src/index.ts     Executable entrypoint. Stdio wiring only — keep it thin.
+src/server.ts    MCP server: tool schema, description, response assembly,
+                 error formatting. No side effects on import.
+src/browser.ts   Playwright capture engine: launch -&gt; observe -&gt; capture -&gt; close.
+src/dom.ts       sanitizeDomInPage() (runs in the browser) + truncateDom() (Node).
+src/security.ts  validateLocalUrl() — the SSRF allowlist.
+src/types.ts     Shared types, VIEWPORT_PRESETS, LIMITS, CaptureError.</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th>If you are changing...</th><th>Touch</th><th>Also update</th></tr></thead><tbody>
+<tr><td>A tool parameter</td><td><code>src/server.ts</code> (<code>inputSchema</code>, with a <code>.describe()</code> written for a model and a safe default), <code>src/types.ts</code> (<code>CaptureOptions</code>), <code>src/browser.ts</code> (<code>captureUIState</code>)</td><td>A test, <code>README.md</code>&#39;s parameter table, <code>docs/PRD-TRD.md</code>, and <code>summary</code>/<code>meta</code> so the model can see the value it actually got</td></tr>
+<tr><td>The SSRF allowlist</td><td><code>src/security.ts</code></td><td><strong>New cases in <code>tests/security.test.ts</code></strong> (mandatory), <code>README.md</code>&#39;s Security section, <code>SECURITY.md</code> if the threat model shifts</td></tr>
+<tr><td>DOM sanitizing or truncation</td><td><code>src/dom.ts</code></td><td><code>tests/dom.test.ts</code>, the fixture page if a new node type matters, <code>README.md</code>&#39;s context-window section</td></tr>
+<tr><td>Diagnostics or capture behaviour</td><td><code>src/browser.ts</code></td><td><code>tests/capture.test.ts</code> plus the fixture page</td></tr>
+<tr><td>Error messages or hints</td><td><code>src/types.ts</code> (<code>CaptureError</code>), <code>src/server.ts</code></td><td><code>README.md</code>&#39;s troubleshooting table and <code>docs/TROUBLESHOOTING.md</code></td></tr>
+<tr><td>Limits</td><td><code>src/types.ts</code> (<code>LIMITS</code>)</td><td>A justification in the PR body; never inline a magic number</td></tr>
+<tr><td>Skills, agents or hooks</td><td><code>plugin/</code></td><td><code>plugin/.claude-plugin/plugin.json</code> if the manifest lists them, <code>README.md</code>&#39;s plugin table</td></tr>
+<tr><td>Release or distribution wiring</td><td><code>package.json</code>, <code>.mcp.json</code>, <code>plugin/.mcp.json</code>, <code>.claude-plugin/marketplace.json</code></td><td><code>RELEASE.md</code>, and re-run <code>node scripts/validate-manifests.mjs</code> — renaming the npm package means updating <strong>both</strong> <code>.mcp.json</code> copies and every IDE snippet in <code>README.md</code></td></tr>
+<tr><td>Anything an AI assistant needs to know</td><td><code>CLAUDE.md</code></td><td>This file, if the process changed too</td></tr>
+</tbody></table></div>
+<p>Please open an issue before starting anything on the roadmap list
+(element-scoped capture, pre-capture interaction, multi-viewport diffing,
+network waterfall, accessibility tree). Those have design decisions attached and
+one of them changes invariant 8.</p>
+<h2 id="test-conventions">Test conventions<a class="heading-anchor" href="#test-conventions" aria-label="Link to this section">#</a></h2>
+<p>The suite is <code>vitest</code>, run with <code>npm test</code>. It is not fast, because it is not
+pretend: several tests launch a real Chromium and capture a real page.</p>
+<div class="table-wrap"><table><thead><tr><th>File</th><th>Scope</th></tr></thead><tbody>
+<tr><td><code>tests/security.test.ts</code></td><td>Table-driven allow/block cases for <code>validateLocalUrl</code>, <code>parseIPv4</code>, <code>isPrivateIPv4</code>, <code>isPrivateIPv6</code>.</td></tr>
+<tr><td><code>tests/dom.test.ts</code></td><td>Pure truncation logic.</td></tr>
+<tr><td><code>tests/capture.test.ts</code></td><td>End-to-end against <code>tests/fixture-server.ts</code> with a real browser.</td></tr>
+<tr><td><code>tests/server.test.ts</code></td><td>The real MCP server driven through <code>InMemoryTransport</code> with a real <code>Client</code> — the protocol surface an IDE sees.</td></tr>
+</tbody></table></div>
+<p>Three rules matter more than the rest:</p>
+<p><strong>1. <code>tests/security.test.ts</code> is table-driven, and any change to
+<code>src/security.ts</code> requires new cases in it.</strong> The allow list and the block list
+are arrays of URLs (the block list is <code>[url, reason]</code> pairs, so the reason shows
+up in the test name). Add your case to the right table rather than writing a
+bespoke <code>it()</code> block — that is what keeps the file readable as a threat
+inventory. If you are relaxing the allowlist at all, add both the newly allowed
+form <em>and</em> the nearest neighbour that must still be blocked.</p>
+<p><strong>2. <code>tests/capture.test.ts</code> runs a real Chromium against
+<code>tests/fixture-server.ts</code>.</strong> The fixture page deliberately contains a console
+error, an uncaught exception, a 404 image, a base64 data URI, a huge SVG path
+and long text, so one capture exercises every branch of the sanitizer and the
+diagnostics collector.</p>
+<p><strong>3. Extend the fixture rather than mocking Playwright.</strong> If you need a new
+condition — a hydration warning, a slow XHR, a nested iframe — add it to the
+fixture page and assert on the captured result. A mocked <code>page.screenshot()</code>
+tests our own stub, not the pipeline that actually breaks. If a new fixture
+element could disturb existing assertions, gate it behind its own route.</p>
+<p>Other expectations:</p>
+<ul>
+<li>New behaviour needs a test. Bug fixes need a test that fails before the fix.</li>
+<li>Keep tests deterministic. No fixed sleeps to paper over a race; wait for the
+condition.</li>
+<li>Tests must clean up: close browsers and stop fixture servers in <code>finally</code> or
+an <code>afterAll</code>. Invariant 2 applies to test code too.</li>
+<li>Do not increase the total runtime carelessly. Prefer adding assertions to an
+existing capture over launching another browser.</li>
+</ul>
+<h2 id="commit-messages">Commit messages<a class="heading-anchor" href="#commit-messages" aria-label="Link to this section">#</a></h2>
+<p>We use <a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank" rel="noopener noreferrer">Conventional Commits</a>:</p>
+<div class="code-block"><pre><code>&lt;type&gt;(&lt;optional scope&gt;): &lt;imperative summary&gt;
+
+&lt;optional body explaining the why&gt;
+
+&lt;optional footer: BREAKING CHANGE: ..., Closes #12&gt;</code></pre></div>
+<p>Types used here:</p>
+<div class="table-wrap"><table><thead><tr><th>Type</th><th>Use for</th></tr></thead><tbody>
+<tr><td><code>feat</code></td><td>A new capability or tool parameter.</td></tr>
+<tr><td><code>fix</code></td><td>A bug fix.</td></tr>
+<tr><td><code>docs</code></td><td>Documentation only, including <code>CLAUDE.md</code> and ADRs.</td></tr>
+<tr><td><code>test</code></td><td>Tests only.</td></tr>
+<tr><td><code>refactor</code></td><td>No behaviour change.</td></tr>
+<tr><td><code>perf</code></td><td>Faster or lighter, same behaviour.</td></tr>
+<tr><td><code>build</code></td><td>Build config, <code>tsconfig</code>, packaging.</td></tr>
+<tr><td><code>ci</code></td><td>Workflows and CI scripts.</td></tr>
+<tr><td><code>chore</code></td><td>Everything else, including dependency bumps (<code>chore(deps)</code>).</td></tr>
+<tr><td><code>security</code></td><td>A hardening change to the allowlist or sanitizer.</td></tr>
+</tbody></table></div>
+<p>Useful scopes: <code>server</code>, <code>browser</code>, <code>dom</code>, <code>security</code>, <code>plugin</code>, <code>skills</code>,
+<code>docs</code>, <code>deps</code>. Examples:</p>
+<div class="code-block"><pre><code>feat(server): add a selector parameter for element-scoped capture
+fix(browser): close the context when networkidle times out
+security(security): block IPv4-mapped IPv6 metadata addresses
+docs(adr): record why hostnames are refused instead of resolved</code></pre></div>
+<p>Keep the summary in the imperative mood, under about 72 characters, and no
+trailing period. Put the reasoning in the body — the <em>why</em> is the part reviewers
+and future readers need. A breaking change needs <code>!</code> after the type or a
+<code>BREAKING CHANGE:</code> footer.</p>
+<h2 id="what-a-good-pull-request-looks-like">What a good pull request looks like<a class="heading-anchor" href="#what-a-good-pull-request-looks-like" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>One concern per PR.</strong> A refactor bundled with a behaviour change is much
+harder to review and to revert.</li>
+<li><strong>Fill in the PR template</strong> honestly, including the verification checklist. If
+you could not run something, say which and why.</li>
+<li><strong>Green CI.</strong> The workflow runs typecheck, tests, build and the stdio smoke
+test on Node 20, 22 and 24, plus the manifest validator. Do not modify the
+workflows to make a failure go away.</li>
+<li><strong>Explain the why in the description</strong>, not just the what. The diff already
+shows the what.</li>
+<li><strong>Include evidence for UI-adjacent or capture changes</strong> — the relevant slice
+of a <code>summary</code> payload, or the before/after of a sanitized DOM. You have a
+tool that produces exactly this.</li>
+<li><strong>Update the docs in the same PR.</strong> A new parameter that is not in <code>README.md</code>
+effectively does not exist for users.</li>
+<li><strong>Match the existing style.</strong> Small named single-purpose functions, no classes
+except <code>CaptureError</code>, <code>LIMITS</code> constants instead of magic numbers, and
+comments that explain trade-offs rather than restating the code.</li>
+<li><strong>Expect review questions on anything touching <code>src/security.ts</code>, <code>LIMITS</code>, or
+the stdio path.</strong> Those three are where a mistake is invisible in normal use
+and expensive in production.</li>
+<li>Draft PRs are welcome for early feedback. Say what you want reviewed.</li>
+</ul>
+<p>Maintainer review is best-effort by one person, so please be patient; a clear
+description and a green checklist make it much faster.</p>
+<h2 id="reporting-bugs-and-security-issues">Reporting bugs and security issues<a class="heading-anchor" href="#reporting-bugs-and-security-issues" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Bugs and feature requests: use the <a href="https://github.com/soumyachk101/VibeLens/issues/new/choose" target="_blank" rel="noopener noreferrer">issue
+forms</a>. The bug
+form asks for the exact tool arguments and the <code>[vibelens]</code>-prefixed stderr
+lines, which is usually enough to reproduce.</li>
+<li>Questions and setup help: see <a href="/support.html">SUPPORT.md</a>.</li>
+<li><strong>Security vulnerabilities: do not open a public issue.</strong> Follow
+<a href="/security.html">SECURITY.md</a> and report privately through GitHub Security
+Advisories.</li>
+</ul>
+<p>By contributing you agree that your contribution is licensed under the
+<a href="https://github.com/soumyachk101/VibeLens/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>, and to abide by the
+<a href="/code-of-conduct.html">Code of Conduct</a>.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/adr/0006-jpeg-screenshots-and-dom-truncation.html"><small>Previous</small><strong>0006 · JPEG and truncation</strong></a><a class="next" href="/security.html"><small>Next</small><strong>Security</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#getting-set-up">Getting set up</a></li>
+<li class="lvl-2"><a href="#the-pre-pr-verification-checklist">The pre-PR verification checklist</a></li>
+<li class="lvl-2"><a href="#the-invariants">The invariants</a></li>
+<li class="lvl-2"><a href="#where-each-kind-of-change-goes">Where each kind of change goes</a></li>
+<li class="lvl-2"><a href="#test-conventions">Test conventions</a></li>
+<li class="lvl-2"><a href="#commit-messages">Commit messages</a></li>
+<li class="lvl-2"><a href="#what-a-good-pull-request-looks-like">What a good pull request looks like</a></li>
+<li class="lvl-2"><a href="#reporting-bugs-and-security-issues">Reporting bugs and security issues</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

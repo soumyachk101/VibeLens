@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product and technical requirements · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Product and technical requirements · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html" aria-current="page">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Product and technical requirements</h1>
+            <p><strong>Product:</strong> VibeLens (Auto-UI Debugger MCP server)
+<strong>Version:</strong> 1.0.0
+<strong>Status:</strong> implemented — this document describes what was built, not just what
+was planned.</p>
+<hr>
+<h1 id="1-product-requirements">1. Product Requirements</h1>
+<h2 id="11-audience">1.1 Audience<a class="heading-anchor" href="#11-audience" aria-label="Link to this section">#</a></h2>
+<p>Frontend and full-stack developers working in AI-assisted IDEs: Claude Code,
+Cursor, Google Antigravity, Windsurf, VS Code (Copilot agent mode), Claude
+Desktop.</p>
+<h2 id="12-problem">1.2 Problem<a class="heading-anchor" href="#12-problem" aria-label="Link to this section">#</a></h2>
+<p>An AI assistant can generate a complete pricing page, but it cannot see the
+result. The rendered output is invisible to it, so the developer becomes a
+human framebuffer:</p>
+<ol>
+<li>Developer asks for a page. The model writes it.</li>
+<li>Developer opens <code>localhost:3000</code>, sees the CTA overflowing its card.</li>
+<li>Developer types a prose description: <em>&quot;the button sticks out on the right&quot;</em>.</li>
+<li>The model guesses which class is responsible and proposes a change.</li>
+<li>Repeat 3–4 times.</li>
+</ol>
+<p>Each loop costs a full round trip, and the model is reasoning about markup it
+has to imagine. Two failure modes dominate:</p>
+<ul>
+<li><strong>Invisible errors.</strong> A React hydration mismatch or a 404 hero image shows up
+in the console, not in the developer&#39;s description.</li>
+<li><strong>Selector hallucination.</strong> The model edits <code>.btn-primary</code> when the element
+actually carries <code>.cta-button</code>, because it is recalling its own earlier output
+rather than reading the DOM.</li>
+</ul>
+<h2 id="13-solution">1.3 Solution<a class="heading-anchor" href="#13-solution" aria-label="Link to this section">#</a></h2>
+<p>An MCP server exposing one tool. When the assistant needs to know what the page
+looks like, it calls the tool and receives, in a single response:</p>
+<ol>
+<li>a <strong>screenshot</strong> — visual truth about layout, spacing, colour, overflow;</li>
+<li><strong>console and network diagnostics</strong> — errors the screenshot cannot show;</li>
+<li>a <strong>sanitized DOM snapshot</strong> — the real element tree with real class names.</li>
+</ol>
+<p>The model then edits a selector that exists, and can re-run the tool to confirm
+the fix. The developer never has to describe the bug.</p>
+<h2 id="14-features-delivered-in-10">1.4 Features (delivered in 1.0)<a class="heading-anchor" href="#14-features-delivered-in-10" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Feature</th><th>Detail</th></tr></thead><tbody>
+<tr><td>Screenshot capture</td><td>Base64 JPEG (quality 75); viewport or <code>fullPage</code>.</td></tr>
+<tr><td>Viewport emulation</td><td><code>desktop</code> 1920×1080, <code>tablet</code> 820×1180 @2x, <code>mobile</code> 390×844 @2x with touch + mobile emulation.</td></tr>
+<tr><td>Console sniffing</td><td><code>console.error</code> and <code>console.warn</code> with source location. <code>console.log</code> is dropped as noise.</td></tr>
+<tr><td>Uncaught exception capture</td><td><code>pageerror</code> events — React render crashes surface even when nothing is logged.</td></tr>
+<tr><td>Failed request capture</td><td>Network-level failures <em>and</em> HTTP 4xx/5xx responses (the 404-image case).</td></tr>
+<tr><td>DOM extraction</td><td>In-page sanitizer preserving structure, ids, classes, ARIA and test hooks.</td></tr>
+<tr><td>Wait mechanism</td><td><code>delay</code> (0–15000 ms) plus a best-effort <code>networkidle</code> wait for hydration and data fetching.</td></tr>
+<tr><td>Diagnostic summary</td><td>Counts and timings so the model can see at a glance whether the page is healthy.</td></tr>
+</tbody></table></div>
+<h2 id="15-non-goals-for-10">1.5 Non-goals for 1.0<a class="heading-anchor" href="#15-non-goals-for-10" aria-label="Link to this section">#</a></h2>
+<p>Interaction before capture, element-scoped capture, multi-viewport diffing in one
+call, a full network waterfall, accessibility-tree output, and inspecting remote
+(non-local) URLs. The last one is a permanent non-goal: it is the security
+boundary, not a missing feature.</p>
+<h2 id="16-success-criteria">1.6 Success criteria<a class="heading-anchor" href="#16-success-criteria" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>One tool call replaces the describe-the-bug loop.</li>
+<li>The model&#39;s fix references a class that exists in the page (verifiable in the
+returned DOM).</li>
+<li>Payload stays small enough to call repeatedly in one session: a typical page
+yields well under 1 KB of DOM text.</li>
+<li>No leaked browser processes across a long IDE session.</li>
+</ul>
+<hr>
+<h1 id="2-technical-requirements">2. Technical Requirements</h1>
+<h2 id="21-stack">2.1 Stack<a class="heading-anchor" href="#21-stack" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Concern</th><th>Choice</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Runtime</td><td>Node.js ≥ 20, ESM</td><td>Playwright 1.62 requires &gt;=20; vitest 4 supports ^20 || ^22 || &gt;=24.</td></tr>
+<tr><td>Language</td><td>TypeScript, <code>strict</code></td><td>The tool input is model-generated; types catch shape errors early.</td></tr>
+<tr><td>Browser</td><td><code>playwright</code> (Chromium)</td><td>Reliable with modern frameworks; first-class console/network events.</td></tr>
+<tr><td>Protocol</td><td><code>@modelcontextprotocol/sdk</code></td><td>Official server + stdio transport.</td></tr>
+<tr><td>Validation</td><td><code>zod</code></td><td>Schema doubles as the JSON Schema the IDE shows the model.</td></tr>
+<tr><td>Tests</td><td><code>vitest</code></td><td>Fast, ESM-native.</td></tr>
+</tbody></table></div>
+<h2 id="22-architecture">2.2 Architecture<a class="heading-anchor" href="#22-architecture" aria-label="Link to this section">#</a></h2>
+<div class="code-block"><pre><code>IDE (MCP host)
+   │  stdio, JSON-RPC
+   ▼
+src/index.ts ── StdioServerTransport
+   │
+src/server.ts ── tool schema, response assembly, error formatting
+   │
+src/browser.ts ── captureUIState()
+   │   1. validateLocalUrl()            [src/security.ts]  ← before any launch
+   │   2. chromium.launch()
+   │   3. attach console/pageerror/requestfailed/response listeners
+   │   4. page.goto(url, waitUntil: &quot;load&quot;)
+   │   5. best-effort networkidle (5 s cap), then delay
+   │   6. page.evaluate(sanitizeDomInPage)  [src/dom.ts]
+   │   7. page.screenshot({ type: &quot;jpeg&quot;, quality: 75 })
+   │   8. finally → browser.close()
+   ▼
+{ image block, text block }</code></pre></div>
+<h2 id="23-tool-contract">2.3 Tool contract<a class="heading-anchor" href="#23-tool-contract" aria-label="Link to this section">#</a></h2>
+<div class="code-block"><span class="code-lang">jsonc</span><pre><code>{
+  &quot;name&quot;: &quot;inspect_localhost_ui&quot;,
+  &quot;annotations&quot;: { &quot;readOnlyHint&quot;: true, &quot;openWorldHint&quot;: false },
+  &quot;inputSchema&quot;: {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+      &quot;url&quot;:      { &quot;type&quot;: &quot;string&quot; },
+      &quot;viewport&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;enum&quot;: [&quot;desktop&quot;, &quot;tablet&quot;, &quot;mobile&quot;], &quot;default&quot;: &quot;desktop&quot; },
+      &quot;delay&quot;:    { &quot;type&quot;: &quot;integer&quot;, &quot;minimum&quot;: 0, &quot;maximum&quot;: 15000, &quot;default&quot;: 1000 },
+      &quot;fullPage&quot;: { &quot;type&quot;: &quot;boolean&quot;, &quot;default&quot;: false }
+    },
+    &quot;required&quot;: [&quot;url&quot;]
+  }
+}</code></pre></div>
+<p>Response: <code>content: [ImageContent, TextContent]</code>.</p>
+<ul>
+<li><code>ImageContent</code> — <code>{ type: &quot;image&quot;, data: &lt;base64&gt;, mimeType: &quot;image/jpeg&quot; }</code></li>
+<li><code>TextContent</code> — JSON string: <code>summary</code>, <code>consoleLogs</code>, <code>uncaughtPageErrors</code>,
+<code>failedRequests</code>, <code>simplifiedDOM</code> (largest field, therefore last).</li>
+</ul>
+<h2 id="24-security">2.4 Security<a class="heading-anchor" href="#24-security" aria-label="Link to this section">#</a></h2>
+<p><strong>Threat model.</strong> The tool takes a URL from an LLM, which may itself be
+influenced by untrusted content, and opens it in a browser on the developer&#39;s
+machine with their local network access. Unconstrained, that is an SSRF
+primitive.</p>
+<p><strong>Controls.</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Implementation</th></tr></thead><tbody>
+<tr><td>Allowlist, not denylist</td><td><code>validateLocalUrl()</code> permits <code>localhost</code>, <code>*.localhost</code>, <code>127.0.0.0/8</code>, <code>0.0.0.0</code>, <code>10/8</code>, <code>172.16/12</code>, <code>192.168/16</code>, <code>[::1]</code>, <code>fc00::/7</code>, <code>fe80::/10</code>. Everything else is refused.</td></tr>
+<tr><td>No DNS resolution</td><td>Any hostname that is not <code>localhost</code>-based is rejected outright rather than resolved — resolving would permit DNS rebinding.</td></tr>
+<tr><td>Metadata endpoints</td><td><code>169.254.169.254</code>, <code>169.254.170.2</code>, <code>fd00:ec2::254</code>, <code>100.100.100.200</code> blocked unconditionally; all of IPv4 link-local <code>169.254/16</code> excluded from the allowlist.</td></tr>
+<tr><td>Scheme restriction</td><td>Only <code>http:</code> and <code>https:</code>.</td></tr>
+<tr><td>No credentials</td><td>URLs with <code>user:pass@</code> are refused.</td></tr>
+<tr><td>Fail-closed ordering</td><td>Validation happens before the browser launches, so a rejected URL costs no process.</td></tr>
+<tr><td>Obfuscated IPs</td><td>WHATWG URL canonicalization normalizes octal/decimal/hex forms <em>before</em> the check, so <code>0177.0.0.1</code> is evaluated as <code>127.0.0.1</code> and <code>0x08080808</code> as <code>8.8.8.8</code> (rejected). Verified by test.</td></tr>
+<tr><td>Read-only annotation</td><td><code>readOnlyHint: true</code> — the tool observes, never mutates.</td></tr>
+</tbody></table></div>
+<p><strong>Residual risk (documented, not mitigated in code):</strong> rendered page content is
+untrusted input. Text in a page could attempt prompt injection against the
+calling assistant. The DOM snapshot must be treated as data.</p>
+<h2 id="25-context-window-budget">2.5 Context-window budget<a class="heading-anchor" href="#25-context-window-budget" aria-label="Link to this section">#</a></h2>
+<p>Constants in <code>src/types.ts</code>:</p>
+<div class="table-wrap"><table><thead><tr><th>Limit</th><th>Value</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>MAX_DOM_CHARS</code></td><td>20,000</td><td>Hard cap, with an in-band truncation marker.</td></tr>
+<tr><td><code>MAX_TEXT_LENGTH</code></td><td>160</td><td>Per text node.</td></tr>
+<tr><td><code>MAX_ATTR_LENGTH</code></td><td>300</td><td>Per attribute; <code>data:</code> URIs replaced outright.</td></tr>
+<tr><td><code>MAX_CONSOLE_ENTRIES</code></td><td>40</td><td>Per capture.</td></tr>
+<tr><td><code>MAX_CONSOLE_LENGTH</code></td><td>600</td><td>Per message.</td></tr>
+<tr><td><code>MAX_FAILED_REQUESTS</code></td><td>20</td><td>Deduplicated by URL + failure.</td></tr>
+</tbody></table></div>
+<p>Sanitizer behaviour: drops <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code>, <code>&lt;noscript&gt;</code>, <code>&lt;template&gt;</code>,
+<code>&lt;link&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;base&gt;</code>, <code>&lt;title&gt;</code> and comments; collapses <code>&lt;svg&gt;</code>,
+<code>&lt;canvas&gt;</code>, <code>&lt;iframe&gt;</code>, <code>&lt;video&gt;</code>, <code>&lt;audio&gt;</code>, <code>&lt;object&gt;</code>, <code>&lt;embed&gt;</code>, <code>&lt;map&gt;</code>,
+<code>&lt;picture&gt;</code> to empty placeholders; keeps only layout-relevant attributes plus
+<code>aria-*</code> and <code>data-testid</code>/<code>-test</code>/<code>-cy</code>/<code>-qa</code>.</p>
+<p>Measured: a ~10 KB fixture page reduces to ~680 characters with every Tailwind
+class intact.</p>
+<h2 id="26-reliability">2.6 Reliability<a class="heading-anchor" href="#26-reliability" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Requirement</th><th>Implementation</th></tr></thead><tbody>
+<tr><td>No zombie browsers</td><td><code>browser.close()</code> in a <code>finally</code>, itself error-swallowing.</td></tr>
+<tr><td>Server survives failures</td><td>Tool handler catches everything and returns <code>isError: true</code>; <code>uncaughtException</code>/<code>unhandledRejection</code> are logged, not fatal.</td></tr>
+<tr><td>Actionable errors</td><td><code>CaptureError</code> codes: <code>INVALID_URL</code>, <code>CONNECTION_REFUSED</code>, <code>DNS_FAILURE</code>, <code>UNSAFE_PORT</code>, <code>TIMEOUT</code>, <code>BROWSER_NOT_INSTALLED</code>, <code>BROWSER_LAUNCH_FAILED</code>, <code>UNKNOWN</code> — each with a <code>hint</code>.</td></tr>
+<tr><td>Transport hygiene</td><td>All logging on stderr; stdout carries only JSON-RPC frames.</td></tr>
+<tr><td>Bounded waits</td><td>30 s navigation, 45 s launch, 5 s best-effort <code>networkidle</code>, <code>delay</code> clamped to 0–15 s.</td></tr>
+</tbody></table></div>
+<h2 id="27-verification">2.7 Verification<a class="heading-anchor" href="#27-verification" aria-label="Link to this section">#</a></h2>
+<p><code>npm test</code> — 63 vitest cases:</p>
+<ul>
+<li><strong>security</strong> (44) — allow/block table incl. metadata endpoints, credentialed
+URLs, non-HTTP schemes, spoofed <code>localhost</code> suffixes, obfuscated IPs; plus
+hostile-input fuzz that must not throw.</li>
+<li><strong>dom</strong> (3) — truncation boundaries and the in-band marker.</li>
+<li><strong>capture</strong> (9) — real Chromium against a local fixture: JPEG magic bytes,
+console error/warning captured and <code>console.log</code> dropped, uncaught exception
+captured, 404 image reported as <code>HTTP 404</code>, sanitizer keeps ids/classes and
+strips scripts/styles/SVG paths/base64, viewport presets, delay clamping,
+full-page capture, and the <code>INVALID_URL</code> / <code>UNSAFE_PORT</code> / <code>CONNECTION_REFUSED</code>
+paths.</li>
+<li><strong>protocol</strong> (7) — real MCP <code>Client</code> over <code>InMemoryTransport</code>: <code>tools/list</code>
+shape, <code>required: [&quot;url&quot;]</code>, image-then-text block order, schema defaults
+applied, blocked URL returns a tool error while the server stays healthy, and
+malformed arguments are rejected at the protocol layer.</li>
+</ul>
+<p>Additionally verified by spawning <code>dist/index.js</code> as a child process and
+completing an <code>initialize</code> → <code>tools/list</code> → <code>tools/call</code> exchange over real
+stdio.</p>
+<h2 id="28-distribution">2.8 Distribution<a class="heading-anchor" href="#28-distribution" aria-label="Link to this section">#</a></h2>
+<p>Two channels, one codebase:</p>
+<ol>
+<li><strong>npm</strong> — published as <code>mcp-vibelens</code> with a <code>bin</code> entry, so every IDE config
+is <code>npx -y mcp-vibelens@1</code>. (<code>vibelens-mcp</code> and <code>vibelens</code> were already taken
+on npm by unrelated packages.)</li>
+<li><strong>Claude Code plugin</strong> — <code>.claude-plugin/marketplace.json</code> at the repo root
+catalogs a single plugin whose source is <code>./plugin</code>. That directory holds
+<code>plugin.json</code>, <code>.mcp.json</code> and the two skills, and deliberately contains no
+<code>package.json</code>: Claude Code runs <code>npm install</code> inside a plugin directory that
+has one, which measured 112 MB of devDependencies in the plugin cache when the
+source pointed at the repo root. <code>claude plugin marketplace add soumyachk101/VibeLens</code> followed by <code>claude plugin install vibelens@vibelens</code>
+installs the MCP server plus the <code>check-ui</code> and <code>responsive-audit</code> skills.
+The plugin&#39;s <code>.mcp.json</code> launches the npm package, so npm remains the single
+distribution artifact.</li>
+</ol>
+<p>Chromium is a one-time <code>npx playwright install chromium</code>; if it is missing, the
+tool returns <code>BROWSER_NOT_INSTALLED</code> with that exact command rather than failing
+opaquely.</p>
+<p>CI (<code>.github/workflows/ci.yml</code>) runs typecheck, the vitest suite against real
+Chromium, the build, and the stdio smoke test on Node 20/22/24, plus manifest
+validation. Publishing is tag-driven (<code>.github/workflows/release.yml</code>): a <code>v*</code>
+tag re-runs the full verification, refuses to continue if the tag and
+<code>package.json</code> version disagree, then publishes with npm provenance.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/architecture.html"><small>Previous</small><strong>Architecture</strong></a><a class="next" href="/adr/"><small>Next</small><strong>ADR index</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#11-audience">1.1 Audience</a></li>
+<li class="lvl-2"><a href="#12-problem">1.2 Problem</a></li>
+<li class="lvl-2"><a href="#13-solution">1.3 Solution</a></li>
+<li class="lvl-2"><a href="#14-features-delivered-in-10">1.4 Features (delivered in 1.0)</a></li>
+<li class="lvl-2"><a href="#15-non-goals-for-10">1.5 Non-goals for 1.0</a></li>
+<li class="lvl-2"><a href="#16-success-criteria">1.6 Success criteria</a></li>
+<li class="lvl-2"><a href="#21-stack">2.1 Stack</a></li>
+<li class="lvl-2"><a href="#22-architecture">2.2 Architecture</a></li>
+<li class="lvl-2"><a href="#23-tool-contract">2.3 Tool contract</a></li>
+<li class="lvl-2"><a href="#24-security">2.4 Security</a></li>
+<li class="lvl-2"><a href="#25-context-window-budget">2.5 Context-window budget</a></li>
+<li class="lvl-2"><a href="#26-reliability">2.6 Reliability</a></li>
+<li class="lvl-2"><a href="#27-verification">2.7 Verification</a></li>
+<li class="lvl-2"><a href="#28-distribution">2.8 Distribution</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

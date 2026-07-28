@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Release process · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Release process · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html" aria-current="page">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Release process</h1>
+            <p>Two artifacts ship from this one repository:</p>
+<div class="table-wrap"><table><thead><tr><th>Artifact</th><th>Consumed by</th><th>Source of truth</th></tr></thead><tbody>
+<tr><td>npm package <code>mcp-vibelens</code></td><td>every MCP client (<code>npx -y mcp-vibelens@1</code>)</td><td><code>package.json</code></td></tr>
+<tr><td>Claude Code plugin <code>vibelens</code></td><td><code>claude plugin install vibelens@vibelens</code></td><td><code>plugin/.claude-plugin/plugin.json</code> + <code>.claude-plugin/marketplace.json</code> + <code>plugin/.mcp.json</code></td></tr>
+</tbody></table></div>
+<p>The plugin&#39;s <code>.mcp.json</code> launches the npm package, so <strong>npm must be published
+first</strong>. A plugin release without a matching npm version installs but cannot
+start the server.</p>
+<hr>
+<h2 id="one-time-setup">One-time setup<a class="heading-anchor" href="#one-time-setup" aria-label="Link to this section">#</a></h2>
+<h3 id="1-create-the-github-repository">1. Create the GitHub repository<a class="heading-anchor" href="#1-create-the-github-repository" aria-label="Link to this section">#</a></h3>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>gh repo create VibeLens --public --source=. --remote=origin \
+  --description &quot;MCP server that gives AI coding assistants eyes on localhost&quot;
+git push -u origin main</code></pre></div>
+<h3 id="2-claim-the-npm-name">2. Claim the npm name<a class="heading-anchor" href="#2-claim-the-npm-name" aria-label="Link to this section">#</a></h3>
+<p><code>vibelens-mcp</code> and <code>vibelens</code> are already taken on npm by unrelated projects, so
+this package publishes as <strong><code>mcp-vibelens</code></strong>. Confirm it is still free before the
+first publish:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npm view mcp-vibelens version   # should 404</code></pre></div>
+<p>If you would rather ship under your own scope, change <code>name</code> in <code>package.json</code>
+to <code>@&lt;your-npm-user&gt;/vibelens</code> and update the <code>args</code> in <code>.mcp.json</code> plus the IDE
+snippets in <code>README.md</code> to match. <code>scripts/validate-manifests.mjs</code> enforces that
+they stay in sync, so CI will catch a half-done rename.</p>
+<h3 id="3-add-the-npm-token-to-github">3. Add the npm token to GitHub<a class="heading-anchor" href="#3-add-the-npm-token-to-github" aria-label="Link to this section">#</a></h3>
+<p>Create an <strong>Automation</strong> access token at npmjs.com → Access Tokens, then:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>gh secret set NPM_TOKEN</code></pre></div>
+<p>Automation tokens bypass 2FA, which the publish workflow needs. Granular tokens
+also work; classic &quot;Publish&quot; tokens do not if you have 2FA-on-publish enabled.</p>
+<hr>
+<h2 id="every-release">Every release<a class="heading-anchor" href="#every-release" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><p><strong>Bump the version in both places.</strong> They must match or CI fails:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npm version 1.0.1 --no-git-tag-version    # package.json
+# then edit plugin/.claude-plugin/plugin.json → &quot;version&quot;: &quot;1.0.1&quot;</code></pre></div>
+<p>Claude Code resolves the plugin version from <code>plugin.json</code> and only serves an
+update to existing users when that string changes. Forgetting it means nobody
+gets the new version.</p>
+</li>
+<li><p><strong>Verify locally.</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npm run typecheck
+npm test                     # 63 tests, real Chromium
+npm run build
+node scripts/smoke.mjs       # spawns dist/ over real stdio
+node scripts/validate-manifests.mjs
+npm run validate:plugin      # claude plugin validate .
+npm pack --dry-run           # confirm only dist/ + docs ship</code></pre></div>
+</li>
+<li><p><strong>Commit, tag and push.</strong> The tag is what triggers publishing:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>git add -A
+git commit -m &quot;release: v1.0.1&quot;
+git tag v1.0.1
+git push origin main --tags</code></pre></div>
+<p><code>.github/workflows/release.yml</code> re-runs the full verification, checks the tag
+against <code>package.json</code>, and publishes with <code>--provenance</code>.</p>
+</li>
+<li><p><strong>Confirm the publish.</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npm view mcp-vibelens version
+npx -y mcp-vibelens@latest --help 2&gt;&amp;1 | head -3   # should start and log to stderr</code></pre></div>
+</li>
+<li><p><strong>Confirm the plugin path.</strong> In a scratch directory:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>claude plugin marketplace update vibelens
+claude plugin install vibelens@vibelens</code></pre></div>
+<p>Then in a session: <code>/mcp</code> should list <code>vibelens</code> as connected, and
+<code>/vibelens:check-ui http://localhost:3000</code> should run against a live dev
+server.</p>
+</li>
+<li><p><strong>Cut GitHub release notes.</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>gh release create v1.0.1 --generate-notes</code></pre></div>
+</li>
+</ol>
+<hr>
+<h2 id="optional-submit-to-the-community-marketplace">Optional: submit to the community marketplace<a class="heading-anchor" href="#optional-submit-to-the-community-marketplace" aria-label="Link to this section">#</a></h2>
+<p>Anthropic reviews third-party plugins for the <code>claude-community</code> marketplace.
+Run <code>claude plugin validate .</code> first (the review pipeline runs the same check),
+then submit via <a href="https://platform.claude.com/plugins/submit" target="_blank" rel="noopener noreferrer"><a href="https://platform.claude.com/plugins/submit">https://platform.claude.com/plugins/submit</a></a>. Approved plugins
+are pinned to a commit SHA and the pin advances automatically as you push.</p>
+<h2 id="rollback">Rollback<a class="heading-anchor" href="#rollback" aria-label="Link to this section">#</a></h2>
+<p>npm forbids republishing a version number. To pull a bad release:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npm deprecate mcp-vibelens@1.0.1 &quot;Broken release, use 1.0.2&quot;</code></pre></div>
+<p>Then publish a fixed patch version. <code>npm unpublish</code> is only available within 72
+hours and breaks anyone who already installed it — prefer deprecate plus a fix.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/changelog.html"><small>Previous</small><strong>Changelog</strong></a><a class="next" href="/code-of-conduct.html"><small>Next</small><strong>Code of conduct</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#one-time-setup">One-time setup</a></li>
+<li class="lvl-3"><a href="#1-create-the-github-repository">1. Create the GitHub repository</a></li>
+<li class="lvl-3"><a href="#2-claim-the-npm-name">2. Claim the npm name</a></li>
+<li class="lvl-3"><a href="#3-add-the-npm-token-to-github">3. Add the npm token to GitHub</a></li>
+<li class="lvl-2"><a href="#every-release">Every release</a></li>
+<li class="lvl-2"><a href="#optional-submit-to-the-community-marketplace">Optional: submit to the community marketplace</a></li>
+<li class="lvl-2"><a href="#rollback">Rollback</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

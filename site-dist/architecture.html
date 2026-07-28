@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Architecture · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html" aria-current="page">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Architecture</h1>
+            <p>This document describes how VibeLens is built and why the boundaries are drawn
+where they are. Every statement here is traceable to a file in <code>src/</code>; where a
+number appears it comes from <code>src/types.ts</code> unless stated otherwise.</p>
+<ul>
+<li><a href="#1-the-problem">1. The problem</a></li>
+<li><a href="#2-system-context">2. System context</a></li>
+<li><a href="#3-modules">3. Modules</a></li>
+<li><a href="#4-lifecycle-of-one-inspect_localhost_ui-call">4. Lifecycle of one call</a></li>
+<li><a href="#5-dom-sanitization-pipeline">5. DOM sanitization pipeline</a></li>
+<li><a href="#6-error-taxonomy">6. Error taxonomy</a></li>
+<li><a href="#7-resource-model">7. Resource model</a></li>
+<li><a href="#8-token-budget">8. Token budget</a></li>
+<li><a href="#9-extension-points">9. Extension points</a></li>
+</ul>
+<hr>
+<h2 id="1-the-problem">1. The problem<a class="heading-anchor" href="#1-the-problem" aria-label="Link to this section">#</a></h2>
+<p>An AI coding assistant can write a page but cannot see the render. The developer
+becomes the framebuffer: they look at <code>localhost:3000</code>, describe the defect in
+prose, and the model guesses which selector is responsible. Two failure modes
+dominate:</p>
+<ul>
+<li><strong>Invisible errors.</strong> A hydration mismatch or a 404 hero image appears in the
+browser console, not in the developer&#39;s description.</li>
+<li><strong>Selector hallucination.</strong> The model edits <code>.btn-primary</code> because that is
+what it wrote earlier, while the element actually carries <code>.cta-button</code>.</li>
+</ul>
+<p>A screenshot alone fixes neither. A DOM dump alone fixes neither, and costs an
+enormous amount of context. VibeLens exists to return all three signals —
+pixels, diagnostics, and a <em>sanitized</em> element tree — in one tool call, cheaply
+enough that the model can call it again to verify its own fix.</p>
+<p>The architectural consequences of that goal are the whole design:</p>
+<div class="table-wrap"><table><thead><tr><th>Goal</th><th>Consequence in the code</th></tr></thead><tbody>
+<tr><td>One call must be enough</td><td>A single tool, three signals in one response (<code>src/server.ts</code>).</td></tr>
+<tr><td>Calls must be repeatable in one session</td><td>JPEG screenshots and the <code>LIMITS</code> budget (<code>src/types.ts</code>).</td></tr>
+<tr><td>It runs on a developer&#39;s machine</td><td>Ephemeral browser, <code>finally</code>-close (<code>src/browser.ts</code>).</td></tr>
+<tr><td>The URL comes from a model</td><td>Allowlist validation before launch (<code>src/security.ts</code>).</td></tr>
+<tr><td>Failure must not end the session</td><td><code>CaptureError</code> with a <code>hint</code>, <code>isError: true</code> responses.</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="2-system-context">2. System context<a class="heading-anchor" href="#2-system-context" aria-label="Link to this section">#</a></h2>
+<p>VibeLens is a local stdio process. It never listens on a socket, and it never
+reaches the public internet.</p>
+<pre class="mermaid">flowchart LR
+    dev[&quot;Developer&quot;]
+    host[&quot;IDE / MCP host&lt;br/&gt;Claude Code, Cursor, Codex,&lt;br/&gt;Antigravity, Windsurf, VS Code&quot;]
+    client[&quot;MCP client&lt;br/&gt;(inside the host)&quot;]
+    vl[&quot;VibeLens&lt;br/&gt;mcp-vibelens process&quot;]
+    cr[&quot;Headless Chromium&lt;br/&gt;(Playwright)&quot;]
+    srv[&quot;Dev server&lt;br/&gt;localhost:3000 / :5173 / ...&quot;]
+
+    dev --&gt;|&quot;prompt: 'the CTA overflows'&quot;| host
+    host --&gt; client
+    client --&gt;|&quot;JSON-RPC over stdio&quot;| vl
+    vl --&gt;|&quot;launch / navigate&quot;| cr
+    cr --&gt;|&quot;HTTP&quot;| srv
+    cr --&gt;|&quot;pixels, console, network&quot;| vl
+    vl --&gt;|&quot;image block + text block&quot;| client
+    client --&gt; host
+    host --&gt;|&quot;file edits&quot;| dev</pre>
+<p>Trust boundaries, from most to least trusted:</p>
+<ol>
+<li><strong>The host and its MCP client</strong> — trusted transport peer. It supplies tool
+arguments that originate from a model, so the arguments themselves are not
+trusted.</li>
+<li><strong>VibeLens</strong> — trusted code, running with the developer&#39;s privileges. This is
+why the SSRF gate lives here and not in the host.</li>
+<li><strong>Chromium</strong> — trusted binary, untrusted content. It is given only URLs that
+already passed validation.</li>
+<li><strong>The rendered page</strong> — fully untrusted data. Its text may contain prompt
+injection aimed at the calling assistant, so the DOM snapshot is data, never
+instruction. This is a documented residual risk, not something code can fix.</li>
+</ol>
+<p>Two properties fall out of the diagram:</p>
+<ul>
+<li>There is no network server to attack. The only input channel is stdio from the
+host process.</li>
+<li>The dev server is reached <em>through</em> Chromium, so VibeLens never needs an HTTP
+client of its own.</li>
+</ul>
+<hr>
+<h2 id="3-modules">3. Modules<a class="heading-anchor" href="#3-modules" aria-label="Link to this section">#</a></h2>
+<pre class="mermaid">flowchart TD
+    index[&quot;index.ts&lt;br/&gt;entrypoint, stdio wiring,&lt;br/&gt;process fault handlers&quot;]
+    server[&quot;server.ts&lt;br/&gt;tool schema, response&lt;br/&gt;assembly, error formatting&quot;]
+    browser[&quot;browser.ts&lt;br/&gt;launch, observe,&lt;br/&gt;capture, tear down&quot;]
+    security[&quot;security.ts&lt;br/&gt;validateLocalUrl()&quot;]
+    dom[&quot;dom.ts&lt;br/&gt;sanitizeDomInPage()&lt;br/&gt;truncateDom()&quot;]
+    types[&quot;types.ts&lt;br/&gt;LIMITS, VIEWPORT_PRESETS,&lt;br/&gt;SCREENSHOT, CaptureError&quot;]
+
+    index --&gt; server
+    server --&gt; browser
+    browser --&gt; security
+    browser --&gt; dom
+    server --&gt; types
+    browser --&gt; types
+    dom --&gt; types</pre>
+<p>Dependencies point one way only: entrypoint to server to engine to leaf modules.
+<code>security.ts</code> and <code>dom.ts</code> import nothing from the rest of the project except
+types, so both are unit-testable without a browser or a protocol client.</p>
+<h3 id="srcindexts-entrypoint"><code>src/index.ts</code> — entrypoint<a class="heading-anchor" href="#srcindexts-entrypoint" aria-label="Link to this section">#</a></h3>
+<p>Roughly thirty lines. It installs <code>uncaughtException</code> and <code>unhandledRejection</code>
+handlers that log and continue, creates the server, connects it to
+<code>StdioServerTransport</code>, and logs readiness.</p>
+<p><em>Why the boundary exists:</em> connecting to stdio is a side effect. Keeping it out
+of <code>server.ts</code> means <code>createServer()</code> can be imported by tests and driven over
+<code>InMemoryTransport</code> with no process-level effects. The fault handlers live here
+because they are process concerns, not server concerns: an MCP server that exits
+mid-session forces the user to restart their IDE integration.</p>
+<h3 id="srcserverts-protocol-surface"><code>src/server.ts</code> — protocol surface<a class="heading-anchor" href="#srcserverts-protocol-surface" aria-label="Link to this section">#</a></h3>
+<p>Owns the tool name (<code>inspect_localhost_ui</code>), its description, its zod
+<code>inputSchema</code>, the <code>readOnlyHint</code> / <code>openWorldHint</code> annotations, and the two
+builders <code>buildTextPayload()</code> and <code>buildErrorPayload()</code>. It also exports <code>log()</code>,
+the only sanctioned logging path, which writes to <strong>stderr</strong>.</p>
+<p><em>Why the boundary exists:</em> this module is where the model-facing contract lives.
+The schema descriptions, the tool description, and the error prose are all
+written for a model to read, and they change for product reasons, not for
+browser reasons. Separating them from <code>browser.ts</code> means a change to how a
+failure is phrased cannot touch capture logic. <code>buildTextPayload</code> and
+<code>buildErrorPayload</code> are exported as pure functions precisely so their wording is
+testable.</p>
+<p>The handler&#39;s contract is narrow: call <code>captureUIState()</code>, and on any throw
+return <code>{ isError: true, content: [text] }</code>. It never rethrows.</p>
+<h3 id="srcbrowserts-capture-engine"><code>src/browser.ts</code> — capture engine<a class="heading-anchor" href="#srcbrowserts-capture-engine" aria-label="Link to this section">#</a></h3>
+<p>The only module that knows Playwright exists. It exports one function,
+<code>captureUIState(options)</code>, and holds four private helpers: <code>normalizeDelay()</code>,
+<code>toCaptureError()</code>, <code>launchBrowser()</code> and <code>formatConsoleMessage()</code>.</p>
+<p><em>Why the boundary exists:</em> Playwright is the single heaviest dependency and the
+single most likely thing to be swapped or upgraded. Containing it behind one
+function with a plain-data return type (<code>CaptureResult</code>) means the protocol layer
+has no browser-shaped types in it. It is also where the resource invariant is
+enforced — one <code>try/finally</code> in one place is auditable; cleanup scattered across
+modules is not.</p>
+<p><code>toCaptureError()</code> is the translation layer between Chromium&#39;s error strings
+(<code>ERR_CONNECTION_REFUSED</code>, <code>ERR_UNSAFE_PORT</code>, ...) and the taxonomy in section 6.
+It exists so that no raw Chromium message ever reaches the model unclassified.</p>
+<h3 id="srcsecurityts-ssrf-guard"><code>src/security.ts</code> — SSRF guard<a class="heading-anchor" href="#srcsecurityts-ssrf-guard" aria-label="Link to this section">#</a></h3>
+<p>Exports <code>validateLocalUrl()</code> plus the two predicates it is built from,
+<code>parseIPv4()</code> and <code>isPrivateIPv4()</code> / <code>isPrivateIPv6()</code>. It returns a
+discriminated union — <code>{ ok: true, url }</code> or <code>{ ok: false, reason }</code> — and never
+throws.</p>
+<p><em>Why the boundary exists:</em> this is the security-critical code, and it is pure.
+No I/O, no browser, no protocol. That property is what makes the table-driven
+test suite possible, and the tests are the actual control: the module is small
+enough to review line by line, and every allow/block decision has a case.</p>
+<p>It is deliberately <em>not</em> called from <code>server.ts</code>. Putting the gate at the top of
+<code>captureUIState()</code> means there is no path to a browser launch that skips it, even
+if another caller appears later.</p>
+<h3 id="srcdomts-sanitizer"><code>src/dom.ts</code> — sanitizer<a class="heading-anchor" href="#srcdomts-sanitizer" aria-label="Link to this section">#</a></h3>
+<p>Two functions with very different execution environments.
+<code>sanitizeDomInPage(opts)</code> is serialized by Playwright and executed inside the
+page; <code>truncateDom(html, maxChars)</code> runs in Node.</p>
+<p><em>Why the boundary exists:</em> the split is forced by Playwright, which serializes
+the callback with <code>Function.prototype.toString()</code>. <code>sanitizeDomInPage</code> therefore
+cannot reference imports or module scope — its budgets arrive through its single
+argument. Keeping it in its own module, with that constraint documented at the
+top of the file, prevents a well-meaning refactor from hoisting a shared
+constant into it and breaking capture at runtime rather than at compile time.</p>
+<p><code>truncateDom</code> stays in Node because the final cap must hold even if the in-page
+code is somehow bypassed or a page is pathological. It is defence in depth on
+the token budget, and it is trivially unit-testable.</p>
+<h3 id="srctypests-shared-vocabulary"><code>src/types.ts</code> — shared vocabulary<a class="heading-anchor" href="#srctypests-shared-vocabulary" aria-label="Link to this section">#</a></h3>
+<p><code>ViewportName</code>, <code>VIEWPORT_PRESETS</code>, <code>LIMITS</code>, <code>SCREENSHOT</code>, <code>CaptureOptions</code>,
+<code>CaptureResult</code>, <code>CaptureMeta</code>, <code>ConsoleEntry</code>, <code>FailedRequest</code>,
+<code>DomSanitizeOptions</code>, <code>CaptureErrorCode</code> and the <code>CaptureError</code> class.</p>
+<p><em>Why the boundary exists:</em> every tunable that affects the caller&#39;s context
+window is in one <code>as const</code> object. A reviewer can see the entire cost model of
+the tool by reading forty lines. It also breaks what would otherwise be a
+dependency cycle: <code>server.ts</code> needs <code>CaptureResult</code>, <code>browser.ts</code> needs <code>LIMITS</code>,
+<code>dom.ts</code> needs <code>DomSanitizeOptions</code>.</p>
+<hr>
+<h2 id="4-lifecycle-of-one-inspectlocalhostui-call">4. Lifecycle of one <code>inspect_localhost_ui</code> call<a class="heading-anchor" href="#4-lifecycle-of-one-inspectlocalhostui-call" aria-label="Link to this section">#</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant C as MCP client
+    participant S as server.ts
+    participant B as browser.ts
+    participant G as security.ts
+    participant P as Chromium
+    participant D as dev server
+
+    C-&gt;&gt;S: tools/call inspect_localhost_ui
+    S-&gt;&gt;S: zod parse + defaults
+    S-&gt;&gt;B: captureUIState(options)
+    B-&gt;&gt;G: validateLocalUrl(url)
+    G--&gt;&gt;B: { ok: true, url }
+    B-&gt;&gt;P: chromium.launch()
+    B-&gt;&gt;P: newContext(viewport preset)
+    B-&gt;&gt;P: attach console / pageerror / requestfailed / response
+    B-&gt;&gt;P: page.goto(url, waitUntil &quot;load&quot;)
+    P-&gt;&gt;D: HTTP GET
+    D--&gt;&gt;P: HTML, assets
+    B-&gt;&gt;P: waitForLoadState(&quot;networkidle&quot;) best effort
+    B-&gt;&gt;P: waitForTimeout(delay)
+    B-&gt;&gt;P: evaluate(sanitizeDomInPage)
+    P--&gt;&gt;B: raw sanitized markup
+    B-&gt;&gt;B: truncateDom(markup, MAX_DOM_CHARS)
+    B-&gt;&gt;P: screenshot(jpeg, quality 75)
+    B-&gt;&gt;P: title(), url()
+    B-&gt;&gt;P: browser.close() in finally
+    B--&gt;&gt;S: CaptureResult
+    S--&gt;&gt;C: [image block, text block]</pre>
+<p>Numbered, as the code executes:</p>
+<ol>
+<li><strong>Schema validation.</strong> The MCP SDK parses arguments against the zod schema in
+<code>server.ts</code>. <code>viewport</code> defaults to <code>desktop</code>, <code>delay</code> to <code>1000</code>, <code>fullPage</code>
+to <code>false</code>. <code>delay</code> outside 0–<code>MAX_DELAY_MS</code> is rejected at this layer;
+malformed arguments never reach the engine.</li>
+<li><strong>Log the call.</strong> <code>log()</code> writes the arguments to stderr. Not stdout — see
+section 7.</li>
+<li><strong>Security gate.</strong> <code>captureUIState()</code> calls <code>validateLocalUrl()</code> as its first
+statement. A rejection throws <code>CaptureError(&quot;INVALID_URL&quot;, ...)</code> before any
+process is spawned, so a hostile URL costs nothing.</li>
+<li><strong>Resolve options.</strong> The validated URL is re-serialized from the parsed <code>URL</code>
+(canonicalized, so <code>0177.0.0.1</code> has already become <code>127.0.0.1</code>), the viewport
+preset is looked up with a <code>desktop</code> fallback, and <code>normalizeDelay()</code> clamps
+the delay a second time in Node.</li>
+<li><strong>Launch.</strong> <code>launchBrowser()</code> starts headless Chromium with
+<code>--disable-dev-shm-usage</code> (small <code>/dev/shm</code> in containers crashes Chromium)
+and <code>--hide-scrollbars</code>, under <code>LAUNCH_TIMEOUT_MS</code>. A missing browser binary
+is mapped to <code>BROWSER_NOT_INSTALLED</code>; anything else to
+<code>BROWSER_LAUNCH_FAILED</code>.</li>
+<li><strong>Create the context.</strong> Viewport width/height, <code>deviceScaleFactor</code>,
+<code>isMobile</code> and <code>hasTouch</code> come from the preset. <code>locale</code> is pinned to <code>en-US</code>
+and <code>timezoneId</code> to <code>UTC</code> so two captures of the same page are comparable.</li>
+<li><strong>Attach observers, then navigate — in that order.</strong> <code>console</code> (errors and
+warnings only; <code>console.log</code> is dropped as noise), <code>pageerror</code>,
+<code>requestfailed</code>, and <code>response</code> for status &gt;= 400. Attaching after navigation
+would silently miss the errors that fire during load, which are exactly the
+interesting ones.</li>
+<li><strong>Navigate</strong> with <code>waitUntil: &quot;load&quot;</code> under <code>NAVIGATION_TIMEOUT_MS</code>. A throw
+here goes through <code>toCaptureError()</code>.</li>
+<li><strong>Settle.</strong> <code>waitForLoadState(&quot;networkidle&quot;)</code> with a 5 s cap, wrapped in
+<code>.catch(() =&gt; undefined)</code>. Best effort by design: an app with a websocket or
+long-poll never reaches networkidle, and that must not fail the capture.</li>
+<li><strong>Delay.</strong> <code>waitForTimeout(delayMs)</code> if non-zero — the model&#39;s explicit
+budget for hydration, animation or data fetching.</li>
+<li><strong>Extract the DOM.</strong> <code>page.evaluate(sanitizeDomInPage, { maxTextLength, maxAttrLength })</code>, then <code>truncateDom()</code> in Node.</li>
+<li><strong>Screenshot.</strong> JPEG, quality 75, <code>fullPage</code> as requested.</li>
+<li><strong>Metadata.</strong> <code>page.title()</code> (with a <code>&quot;&quot;</code> fallback) and <code>page.url()</code>, so the
+model can see whether it was redirected.</li>
+<li><strong>Tear down.</strong> The <code>finally</code> block closes the browser, itself wrapped in
+<code>.catch(() =&gt; undefined)</code> so a close failure cannot mask the real error.</li>
+<li><strong>Assemble the response.</strong> Image block first — the model&#39;s vision pass
+anchors on it — then the text block from <code>buildTextPayload()</code>, whose
+<code>simplifiedDOM</code> field is last because it is the largest and therefore the
+first casualty of any client-side truncation.</li>
+<li><strong>On failure instead:</strong> <code>buildErrorPayload()</code> produces <code>code</code>, <code>Problem:</code>
+and <code>Next step:</code> lines, returned with <code>isError: true</code>. The process stays up.</li>
+</ol>
+<hr>
+<h2 id="5-dom-sanitization-pipeline">5. DOM sanitization pipeline<a class="heading-anchor" href="#5-dom-sanitization-pipeline" aria-label="Link to this section">#</a></h2>
+<p>Raw <code>document.body.outerHTML</code> from a framework app is mostly noise: inline
+scripts, injected style blobs, base64 images, SVG path data. The sanitizer runs
+in the page, on a <em>clone</em> of <code>&lt;body&gt;</code>, so the live page is never mutated — the
+tool stays read-only in fact as well as in annotation.</p>
+<pre class="mermaid">flowchart TD
+    A[&quot;document.body.cloneNode(true)&quot;] --&gt; B{&quot;node type&quot;}
+    B --&gt;|comment| R1[&quot;remove&quot;]
+    B --&gt;|text| T[&quot;collapse whitespace&lt;br/&gt;drop if empty&lt;br/&gt;cap at MAX_TEXT_LENGTH&quot;]
+    B --&gt;|other non-element| R2[&quot;remove&quot;]
+    B --&gt;|element| C{&quot;tag in DROP_TAGS&quot;}
+    C --&gt;|yes| R3[&quot;remove subtree&quot;]
+    C --&gt;|no| D[&quot;prune attributes&quot;]
+    D --&gt; E{&quot;tag in COLLAPSE_TAGS&quot;}
+    E --&gt;|yes| F[&quot;keep element,&lt;br/&gt;empty its contents&quot;]
+    E --&gt;|no| G[&quot;recurse into children&quot;]
+    F --&gt; H[&quot;clone.outerHTML&quot;]
+    G --&gt; H
+    T --&gt; H
+    H --&gt; I[&quot;collapse inter-tag whitespace&quot;]
+    I --&gt; J[&quot;truncateDom(MAX_DOM_CHARS)&quot;]
+    J --&gt; K[&quot;simplifiedDOM&quot;]</pre>
+<p>Stage by stage:</p>
+<ol>
+<li><strong>Clone.</strong> If there is no <code>&lt;body&gt;</code>, return <code>&lt;!-- no &lt;body&gt; found --&gt;</code>.</li>
+<li><strong>Drop entirely</strong> (<code>DROP_TAGS</code>): <code>SCRIPT</code>, <code>STYLE</code>, <code>NOSCRIPT</code>, <code>TEMPLATE</code>,
+<code>LINK</code>, <code>META</code>, <code>BASE</code>, <code>TITLE</code>. None of these carry layout signal for the
+model.</li>
+<li><strong>Collapse to an empty box</strong> (<code>COLLAPSE_TAGS</code>): <code>SVG</code>, <code>CANVAS</code>, <code>IFRAME</code>,
+<code>OBJECT</code>, <code>EMBED</code>, <code>VIDEO</code>, <code>AUDIO</code>, <code>MAP</code>, <code>PICTURE</code>. The element stays
+because it occupies space and affects layout; its internals are discarded
+because an SVG path is thousands of characters of nothing useful.</li>
+<li><strong>Attribute allowlist</strong> (<code>KEEP_ATTRS</code>): <code>id</code>, <code>class</code>, <code>role</code>, <code>type</code>, <code>name</code>,
+<code>alt</code>, <code>title</code>, <code>placeholder</code>, <code>href</code>, <code>src</code>, <code>value</code>, <code>for</code>, <code>label</code>,
+<code>hidden</code>, <code>disabled</code>, <code>checked</code>, <code>selected</code>, <code>readonly</code>, <code>required</code>, <code>open</code>,
+<code>colspan</code>, <code>rowspan</code>, <code>width</code>, <code>height</code>, <code>style</code>. Plus prefix matches
+(<code>KEEP_PREFIXES</code>): <code>aria-</code>, <code>data-testid</code>, <code>data-test</code>, <code>data-cy</code>, <code>data-qa</code>.
+Everything else is removed — framework bookkeeping attributes are the bulk of
+a modern DOM&#39;s attribute weight.</li>
+<li><strong>Attribute value cleaning.</strong> A value starting with <code>data:</code> becomes
+<code>data:&lt;mime&gt;[stripped]</code>, keeping the fact of an inline asset without its
+payload. <code>style</code> longer than 120 characters is cut (long inline styles are
+generated, not authored). Everything else is capped at <code>MAX_ATTR_LENGTH</code>.
+Truncation is marked with <code>…[truncated]</code> so the model knows the value is
+partial.</li>
+<li><strong>Text nodes.</strong> Whitespace collapsed to single spaces, empty nodes removed,
+each node capped at <code>MAX_TEXT_LENGTH</code>.</li>
+<li><strong>Serialize and compress.</strong> <code>outerHTML</code>, then <code>&gt;\s+&lt;</code> collapsed to <code>&gt;&lt;</code> and
+runs of spaces/tabs squeezed.</li>
+<li><strong>Hard cap in Node.</strong> <code>truncateDom()</code> cuts at <code>MAX_DOM_CHARS</code> and appends
+<code>&lt;!-- VibeLens: DOM truncated at N characters (original M). --&gt;</code>. The marker
+is in-band on purpose: a model that can see the tree is partial narrows its
+next request instead of reasoning about markup that was never sent.
+<code>summary.domTruncated</code> reports the same fact in the structured payload.</li>
+</ol>
+<p>Measured against the test fixture, a ~10 KB page reduces to ~680 characters with
+every Tailwind class intact. That ratio is the entire reason the tool can be
+called repeatedly inside one conversation.</p>
+<p>What survives is deliberately what a layout fix needs: the element tree, ids,
+classes, ARIA and role, form and table structure, test hooks, and short text.</p>
+<hr>
+<h2 id="6-error-taxonomy">6. Error taxonomy<a class="heading-anchor" href="#6-error-taxonomy" aria-label="Link to this section">#</a></h2>
+<p><code>CaptureError</code> carries three things: a machine-readable <code>code</code>, a <code>message</code>
+saying what happened, and a <code>hint</code> saying what to do next. <code>buildErrorPayload()</code>
+renders all three. The contract is that no error reaches the model without a
+next step.</p>
+<div class="table-wrap"><table><thead><tr><th>Code</th><th>Raised by</th><th>Cause</th><th>Hint given to the model</th></tr></thead><tbody>
+<tr><td><code>INVALID_URL</code></td><td><code>captureUIState</code>, from <code>validateLocalUrl</code></td><td>Not a local address: public host or IP, a DNS name, a metadata endpoint, a non-HTTP scheme, embedded credentials, or unparseable input.</td><td>Pass a localhost URL such as <code>http://localhost:3000</code>; the restriction exists to prevent SSRF.</td></tr>
+<tr><td><code>CONNECTION_REFUSED</code></td><td><code>toCaptureError</code></td><td><code>ERR_CONNECTION_REFUSED</code> / <code>ECONNREFUSED</code>, or <code>ERR_EMPTY_RESPONSE</code> / <code>ERR_CONNECTION_RESET</code>.</td><td>Dev server not running, on another port, still compiling, or crashed. Ask the user to start it or check its terminal, then retry.</td></tr>
+<tr><td><code>DNS_FAILURE</code></td><td><code>toCaptureError</code></td><td><code>ERR_NAME_NOT_RESOLVED</code>. Rare, because non-<code>localhost</code> hostnames are refused before launch; it surfaces for a <code>*.localhost</code> name that does not actually resolve.</td><td>Check the hostname; only localhost and private addresses are reachable.</td></tr>
+<tr><td><code>UNSAFE_PORT</code></td><td><code>toCaptureError</code></td><td><code>ERR_UNSAFE_PORT</code> — Chromium refuses a fixed list of ports (1, 7, 69, 79, 6000, 6666, ...).</td><td>Run the dev server on a normal port such as 3000, 5173 or 8080.</td></tr>
+<tr><td><code>TIMEOUT</code></td><td><code>toCaptureError</code></td><td>Any message containing <code>Timeout</code>/<code>timeout</code>, typically navigation exceeding <code>NAVIGATION_TIMEOUT_MS</code>.</td><td>The page never finished loading; retry or increase <code>delay</code>.</td></tr>
+<tr><td><code>BROWSER_NOT_INSTALLED</code></td><td><code>launchBrowser</code></td><td>Launch failed with <code>Executable doesn&#39;t exist</code>, <code>please run the following command</code>, or <code>browserType.launch: Failed to launch</code>.</td><td>Run <code>npx playwright install chromium</code>.</td></tr>
+<tr><td><code>BROWSER_LAUNCH_FAILED</code></td><td><code>launchBrowser</code></td><td>Any other launch failure.</td><td>Verify the Playwright installation.</td></tr>
+<tr><td><code>UNKNOWN</code></td><td><code>toCaptureError</code>, or the non-<code>CaptureError</code> branch of <code>buildErrorPayload</code></td><td>Anything unclassified.</td><td>Retry once; if it persists, report the message to the user.</td></tr>
+</tbody></table></div>
+<p>Two design rules hold this together:</p>
+<ul>
+<li><strong>Classification happens once.</strong> <code>captureUIState</code> rethrows an existing
+<code>CaptureError</code> untouched and only calls <code>toCaptureError()</code> on raw failures, so
+a specific diagnosis is never overwritten by a generic one.</li>
+<li><strong>Errors are tool errors, not transport errors.</strong> A failure returns
+<code>isError: true</code> content. The JSON-RPC session stays healthy and the model can
+act on the hint and call again.</li>
+</ul>
+<hr>
+<h2 id="7-resource-model">7. Resource model<a class="heading-anchor" href="#7-resource-model" aria-label="Link to this section">#</a></h2>
+<p><strong>One browser per call, always closed.</strong></p>
+<pre class="mermaid">flowchart LR
+    A[&quot;captureUIState()&quot;] --&gt; B[&quot;validate URL&lt;br/&gt;(no process yet)&quot;]
+    B --&gt; C[&quot;chromium.launch()&quot;]
+    C --&gt; D[&quot;context + page&quot;]
+    D --&gt; E[&quot;navigate, observe, capture&quot;]
+    E --&gt; F[&quot;finally:&lt;br/&gt;browser.close().catch(noop)&quot;]
+    B --&gt;|rejected| F2[&quot;throw INVALID_URL&lt;br/&gt;nothing to clean up&quot;]
+    E --&gt;|throws| F</pre>
+<p>The rules, and the reasons:</p>
+<ul>
+<li><strong>Validate before spawning.</strong> The security gate is the first statement in
+<code>captureUIState()</code>. A rejected URL never costs a process launch, which also
+means a model that repeatedly guesses bad URLs cannot exhaust the machine.</li>
+<li><strong><code>finally</code>, unconditionally.</strong> The MCP server is long-lived — it survives for
+the whole IDE session. A single leaked Chromium costs hundreds of MB of RSS,
+and the failure mode is cumulative: it appears as a slow laptop hours later,
+far from the call that caused it. The close is wrapped in
+<code>.catch(() =&gt; undefined)</code> so a teardown error cannot replace the real error the
+caller needs to see.</li>
+<li><strong>No context reuse between calls.</strong> A fresh <code>BrowserContext</code> means no cookie,
+storage or service-worker state carries from one inspection to the next, so
+two captures of the same URL are comparable.</li>
+<li><strong>Bounded waits everywhere.</strong> <code>LAUNCH_TIMEOUT_MS</code> 45 s,
+<code>NAVIGATION_TIMEOUT_MS</code> 30 s, a 5 s cap on the best-effort networkidle wait,
+and <code>delay</code> clamped to <code>MAX_DELAY_MS</code>. Nothing in the pipeline can block
+forever, which is what keeps a hung dev server from wedging the session.</li>
+<li><strong>Process-level backstop.</strong> <code>index.ts</code> logs <code>uncaughtException</code> and
+<code>unhandledRejection</code> instead of letting Node exit.</li>
+</ul>
+<h3 id="why-there-is-no-browser-pool-in-v1">Why there is no browser pool in v1<a class="heading-anchor" href="#why-there-is-no-browser-pool-in-v1" aria-label="Link to this section">#</a></h3>
+<p>Pooling would save the launch cost on the second and subsequent calls. It was
+rejected for now because the cost it saves is smaller than the correctness it
+risks:</p>
+<ul>
+<li><strong>Correctness first.</strong> A pool has to answer eviction, idle timeout, crash
+recovery, and shutdown-on-transport-close. Every one of those is a new way to
+leak a Chromium — the exact failure this design is built to make impossible.</li>
+<li><strong>The usage pattern is bursty, not hot.</strong> Calls arrive when a developer asks
+about the UI: a handful per session, seconds to minutes apart. A pooled
+browser would spend nearly all its life idle, holding memory on a laptop that
+is also running the dev server, the IDE and a language server.</li>
+<li><strong>Isolation is a feature.</strong> Reusing a browser reintroduces state bleed between
+captures, and &quot;it only reproduces on the second call&quot; is a miserable class of
+bug for a debugging tool to have.</li>
+<li><strong>The measurement is visible.</strong> <code>summary.captureMs</code> is in every response, so
+if launch overhead ever dominates real usage there will be data to justify
+pooling rather than an assumption.</li>
+</ul>
+<p>If pooling is added later, the invariant to preserve is the one that matters: no
+code path may end with a browser still running that nothing owns.</p>
+<hr>
+<h2 id="8-token-budget">8. Token budget<a class="heading-anchor" href="#8-token-budget" aria-label="Link to this section">#</a></h2>
+<p>The payload is a cost the caller pays out of its context window, so every
+unbounded field is a bug. All budgets live in one place, <code>LIMITS</code> in
+<code>src/types.ts</code>:</p>
+<div class="table-wrap"><table><thead><tr><th>Constant</th><th>Value</th><th>What it bounds</th><th>Why</th></tr></thead><tbody>
+<tr><td><code>MAX_DOM_CHARS</code></td><td>20,000</td><td>The sanitized DOM string</td><td>Hard ceiling on the largest field, with an in-band truncation marker.</td></tr>
+<tr><td><code>MAX_TEXT_LENGTH</code></td><td>160</td><td>Each text node</td><td>Prose adds tokens but almost no layout signal.</td></tr>
+<tr><td><code>MAX_ATTR_LENGTH</code></td><td>300</td><td>Each kept attribute</td><td>Kills long generated values; <code>data:</code> URIs are replaced outright.</td></tr>
+<tr><td><code>MAX_CONSOLE_ENTRIES</code></td><td>40</td><td>Console entries per capture; also caps <code>pageErrors</code></td><td>A page in a render loop can log thousands of identical errors.</td></tr>
+<tr><td><code>MAX_CONSOLE_LENGTH</code></td><td>600</td><td>Each console entry and each page error</td><td>Framework stack traces are long and repetitive.</td></tr>
+<tr><td><code>MAX_FAILED_REQUESTS</code></td><td>20</td><td>Failed requests, deduplicated by URL + failure</td><td>One dead API called in a loop should cost one entry.</td></tr>
+<tr><td><code>MAX_DELAY_MS</code></td><td>15,000</td><td>The model-supplied <code>delay</code></td><td>Bounds wall-clock time, not tokens.</td></tr>
+<tr><td><code>NAVIGATION_TIMEOUT_MS</code></td><td>30,000</td><td><code>page.goto</code></td><td>Turns a hung server into a <code>TIMEOUT</code> with a hint.</td></tr>
+<tr><td><code>LAUNCH_TIMEOUT_MS</code></td><td>45,000</td><td><code>chromium.launch</code></td><td>Cold start on a loaded laptop is slow but finite.</td></tr>
+</tbody></table></div>
+<p>Beyond <code>LIMITS</code>, three further choices protect the budget:</p>
+<ul>
+<li><strong>JPEG at quality 75</strong> (<code>SCREENSHOT</code> in <code>types.ts</code>). Layout, spacing, colour
+and overflow all survive lossy compression; a PNG of the same viewport is
+several times larger for signal the model does not use.</li>
+<li><strong><code>console.log</code> is dropped.</strong> Only <code>error</code> and <code>warning</code> are recorded. Debug
+logging is the noisiest thing on a dev server.</li>
+<li><strong>Field order.</strong> <code>simplifiedDOM</code> is serialized last in <code>buildTextPayload()</code>,
+so if a client truncates the text block the diagnostics survive.</li>
+</ul>
+<p>Independent of the caps, the sanitizer itself does the heavy lifting: the fixture
+page&#39;s ~10 KB of HTML becomes ~680 characters. In normal use nothing hits
+<code>MAX_DOM_CHARS</code> at all — the caps are there for the pathological page, not the
+typical one.</p>
+<hr>
+<h2 id="9-extension-points">9. Extension points<a class="heading-anchor" href="#9-extension-points" aria-label="Link to this section">#</a></h2>
+<p>Where to add things, and what each addition must respect.</p>
+<h3 id="a-new-tool-parameter">A new tool parameter<a class="heading-anchor" href="#a-new-tool-parameter" aria-label="Link to this section">#</a></h3>
+<p><code>server.ts</code> <code>inputSchema</code> -&gt; <code>CaptureOptions</code> in <code>types.ts</code> -&gt; <code>captureUIState</code>
+-&gt; surfaced in <code>summary</code>. Requirements: a <code>.describe()</code> written for a model, a
+safe default, clamping on the Node side as well as in the schema (assume the
+value is model-generated), and a test. Keep the schema small and enumerated —
+one required string plus bounded options is the shape models get right on the
+first attempt.</p>
+<h3 id="a-new-diagnostic-signal">A new diagnostic signal<a class="heading-anchor" href="#a-new-diagnostic-signal" aria-label="Link to this section">#</a></h3>
+<p>Attach a Playwright listener in <code>captureUIState</code> <em>before</em> <code>page.goto</code>, bound by a
+new <code>LIMITS</code> constant, and add the field to <code>CaptureResult</code> and
+<code>buildTextPayload</code>. A new unbounded field in the payload is not acceptable; the
+budget in section 8 is the acceptance criterion.</p>
+<h3 id="a-new-sanitizer-rule">A new sanitizer rule<a class="heading-anchor" href="#a-new-sanitizer-rule" aria-label="Link to this section">#</a></h3>
+<p>Edit <code>DROP_TAGS</code>, <code>COLLAPSE_TAGS</code>, <code>KEEP_ATTRS</code> or <code>KEEP_PREFIXES</code> inside
+<code>sanitizeDomInPage</code>. The function must stay self-contained — Playwright
+serializes it with <code>Function.prototype.toString()</code>, so it cannot reference
+imports or module scope, and configuration must arrive through its argument.
+Extend <code>tests/fixture-server.ts</code> rather than mocking Playwright; a mock would
+verify nothing that matters here.</p>
+<h3 id="a-change-to-the-security-allowlist">A change to the security allowlist<a class="heading-anchor" href="#a-change-to-the-security-allowlist" aria-label="Link to this section">#</a></h3>
+<p><code>security.ts</code> only, with new cases in <code>tests/security.test.ts</code>. Non-negotiable:
+no bypass flag, no &quot;allow any host&quot; option, no DNS resolution of arbitrary
+hostnames (that reintroduces DNS rebinding), and metadata endpoints stay blocked
+unconditionally.</p>
+<h3 id="a-second-tool">A second tool<a class="heading-anchor" href="#a-second-tool" aria-label="Link to this section">#</a></h3>
+<p>Possible, but the bar is high: the single-tool design exists because a model
+picks the right tool reliably when there is only one. A second tool needs a
+distinct enough job that no reasonable prompt is ambiguous between them, and it
+must reuse <code>captureUIState</code> rather than opening its own browser.</p>
+<h3 id="a-different-browser-engine">A different browser engine<a class="heading-anchor" href="#a-different-browser-engine" aria-label="Link to this section">#</a></h3>
+<p>Confined to <code>browser.ts</code> by construction — nothing else imports Playwright. The
+work is <code>launchBrowser()</code>, the four event listeners, <code>page.evaluate</code>, and
+<code>page.screenshot</code>. The <code>CaptureResult</code> shape would not change.</p>
+<h3 id="roadmap-items-and-their-constraints">Roadmap items and their constraints<a class="heading-anchor" href="#roadmap-items-and-their-constraints" aria-label="Link to this section">#</a></h3>
+<p>Element-scoped capture, pre-capture interaction, multi-viewport diffing, a full
+network waterfall, and accessibility-tree output are the planned extensions.
+Interaction is the one that breaks a stated invariant: the tool is annotated
+<code>readOnlyHint: true</code>, and clicking or typing in the user&#39;s app is no longer
+purely observational. That annotation and the surrounding documentation must
+change deliberately, not incidentally.</p>
+<hr>
+<h2 id="verification">Verification<a class="heading-anchor" href="#verification" aria-label="Link to this section">#</a></h2>
+<p>The architecture is checked, not asserted. <code>npm test</code> runs 63 vitest cases:
+table-driven security allow/block cases including obfuscated IPs and metadata
+endpoints, DOM truncation boundaries, end-to-end captures against a local
+fixture page with a real Chromium, and protocol tests that drive the real MCP
+<code>Client</code> over <code>InMemoryTransport</code>. <code>scripts/smoke.mjs</code> additionally spawns
+<code>dist/index.js</code> and completes an <code>initialize</code> -&gt; <code>tools/list</code> -&gt; <code>tools/call</code>
+exchange over real stdio, which is the only way to catch a stdout-corruption
+regression.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/design/motion.html"><small>Previous</small><strong>Motion</strong></a><a class="next" href="/prd-trd.html"><small>Next</small><strong>PRD &amp; TRD</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#1-the-problem">1. The problem</a></li>
+<li class="lvl-2"><a href="#2-system-context">2. System context</a></li>
+<li class="lvl-2"><a href="#3-modules">3. Modules</a></li>
+<li class="lvl-3"><a href="#srcindexts-entrypoint">src/index.ts — entrypoint</a></li>
+<li class="lvl-3"><a href="#srcserverts-protocol-surface">src/server.ts — protocol surface</a></li>
+<li class="lvl-3"><a href="#srcbrowserts-capture-engine">src/browser.ts — capture engine</a></li>
+<li class="lvl-3"><a href="#srcsecurityts-ssrf-guard">src/security.ts — SSRF guard</a></li>
+<li class="lvl-3"><a href="#srcdomts-sanitizer">src/dom.ts — sanitizer</a></li>
+<li class="lvl-3"><a href="#srctypests-shared-vocabulary">src/types.ts — shared vocabulary</a></li>
+<li class="lvl-2"><a href="#4-lifecycle-of-one-inspectlocalhostui-call">4. Lifecycle of one inspect_localhost_ui call</a></li>
+<li class="lvl-2"><a href="#5-dom-sanitization-pipeline">5. DOM sanitization pipeline</a></li>
+<li class="lvl-2"><a href="#6-error-taxonomy">6. Error taxonomy</a></li>
+<li class="lvl-2"><a href="#7-resource-model">7. Resource model</a></li>
+<li class="lvl-3"><a href="#why-there-is-no-browser-pool-in-v1">Why there is no browser pool in v1</a></li>
+<li class="lvl-2"><a href="#8-token-budget">8. Token budget</a></li>
+<li class="lvl-2"><a href="#9-extension-points">9. Extension points</a></li>
+<li class="lvl-3"><a href="#a-new-tool-parameter">A new tool parameter</a></li>
+<li class="lvl-3"><a href="#a-new-diagnostic-signal">A new diagnostic signal</a></li>
+<li class="lvl-3"><a href="#a-new-sanitizer-rule">A new sanitizer rule</a></li>
+<li class="lvl-3"><a href="#a-change-to-the-security-allowlist">A change to the security allowlist</a></li>
+<li class="lvl-3"><a href="#a-second-tool">A second tool</a></li>
+<li class="lvl-3"><a href="#a-different-browser-engine">A different browser engine</a></li>
+<li class="lvl-3"><a href="#roadmap-items-and-their-constraints">Roadmap items and their constraints</a></li>
+<li class="lvl-2"><a href="#verification">Verification</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  const dark = document.documentElement.dataset.theme !== "light";
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: "strict",
+    theme: dark ? "dark" : "neutral",
+    fontFamily: "ui-sans-serif, system-ui, sans-serif",
+  });
+</script>
+</body>
+</html>

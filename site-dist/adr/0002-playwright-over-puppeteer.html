@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0002 · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="ADR 0002 · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html" aria-current="page">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>ADR 0002</h1>
+            <h2 id="status">Status<a class="heading-anchor" href="#status" aria-label="Link to this section">#</a></h2>
+<p>Accepted, 2026-07-28</p>
+<h2 id="context">Context<a class="heading-anchor" href="#context" aria-label="Link to this section">#</a></h2>
+<p>VibeLens needs a headless browser to render a dev server page and report four
+things: pixels, console errors and warnings, uncaught page exceptions, and failed
+network requests. The realistic candidates were Playwright and Puppeteer; both
+drive Chromium over the DevTools protocol and both have mature Node APIs.</p>
+<p>The requirements that separate them:</p>
+<ol>
+<li><strong>Device emulation as a first-class concept.</strong> The three viewport presets need
+<code>deviceScaleFactor: 2</code>, <code>isMobile</code> and <code>hasTouch</code> for mobile and tablet, so pages
+render as they would on a handset, meta-viewport handling included.
+<code>browser.newContext()</code> takes all of these as plain options.</li>
+<li><strong>Deterministic captures.</strong> Playwright contexts accept <code>locale</code> and
+<code>timezoneId</code>, which the code pins to <code>en-US</code> and <code>UTC</code> so two inspections of the
+same page are comparable.</li>
+<li><strong>Network-level and HTTP-level failures as separate events.</strong> A 404 image is a
+<em>successful</em> request with a failing status, so <code>requestfailed</code> alone is not
+enough. Playwright exposes both <code>requestfailed</code> and <code>response</code>, which
+<code>browser.ts</code> uses together, deduplicating by URL plus failure text.</li>
+<li><strong>A load-state primitive that can be waited on and abandoned.</strong> The capture waits
+for <code>networkidle</code> with a 5 s cap and swallows the timeout, because an app with a
+websocket never reaches it. <code>page.waitForLoadState(state, { timeout })</code> is
+exactly that.</li>
+<li><strong>A predictable browser install story.</strong> One documented command,
+<code>npx playwright install chromium</code>, and a missing binary must be detectable so the
+tool can return <code>BROWSER_NOT_INSTALLED</code> with that command as the hint —
+Playwright&#39;s launch error text is stable enough to match on.</li>
+</ol>
+<h2 id="decision">Decision<a class="heading-anchor" href="#decision" aria-label="Link to this section">#</a></h2>
+<p>Use <code>playwright</code>, pinned to 1.62.0, with Chromium only.</p>
+<p>The dependency is confined to <code>src/browser.ts</code>; no other module imports it. All
+browser interaction happens through one exported function, <code>captureUIState()</code>, which
+returns plain data (<code>CaptureResult</code>). Firefox and WebKit are not installed and not
+exposed — Chromium is what most dev-server users target, and each extra engine is
+another download and another rendering baseline to support. <code>CLAUDE.md</code> records the
+standing instruction: do not swap Playwright for Puppeteer.</p>
+<h2 id="consequences">Consequences<a class="heading-anchor" href="#consequences" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Viewport emulation, locale and timezone pinning, and dual failure signals are
+configuration rather than code. The mobile preset is four fields.</li>
+<li>Chromium&#39;s version is pinned transitively by the Playwright version, so a capture
+is reproducible from a lockfile, and upgrading Playwright is a deliberate act that
+also moves the browser.</li>
+<li>The end-to-end tests can launch a real browser against a local fixture server,
+which is why mocking Playwright is explicitly discouraged: 63 tests include real
+captures, and a green run means the actual pipeline works.</li>
+<li><strong>Given up: install weight.</strong> Chromium is a one-time download of roughly 95 MB on
+top of the npm package — the single largest onboarding friction, and one that can
+only be documented, not removed. Hence the dedicated <code>BROWSER_NOT_INSTALLED</code> code.</li>
+<li><strong>Given up: reusing a browser the developer already has.</strong> Playwright manages its
+own builds and does not use the system Chrome. That duplication is the price of
+version determinism.</li>
+<li><strong>Given up: Puppeteer&#39;s smaller footprint.</strong> Playwright ships surface VibeLens
+never imports (test runner integration, tracing, multiple engines) but that is
+still installed.</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives considered<a class="heading-anchor" href="#alternatives-considered" aria-label="Link to this section">#</a></h2>
+<p><strong>Puppeteer.</strong> Rejected, not because it cannot do the job, but because each of
+the five requirements above costs more setup: device emulation via
+<code>page.emulate()</code> with a descriptor rather than context options, and no equivalent
+of the context-level locale/timezone pinning. Neither is prohibitive, but the
+weight of the whole list favoured Playwright, and the choice is not worth
+revisiting without a concrete failure.</p>
+<p><strong>Chrome DevTools Protocol directly, against a browser the user launches.</strong>
+Rejected. It removes the browser download but pushes the burden onto the user
+(launch Chrome with a debugging port, keep it running) and forces VibeLens to
+reimplement navigation, load-state and screenshot semantics.</p>
+<p><strong>A screenshot service or WebDriver/Selenium.</strong> Rejected. A hosted service cannot
+reach <code>localhost</code> and contradicts ADR 0001 and ADR 0003. WebDriver adds a driver
+process and gives weaker console and network instrumentation than the DevTools
+protocol.</p>
+<p><strong>Installing all three Playwright engines.</strong> Rejected for v1: tripling the
+download to serve a use case nobody asked for is the wrong first trade. The
+engine choice is one line in <code>launchBrowser()</code> if that changes.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/adr/0001-mcp-over-stdio.html"><small>Previous</small><strong>0001 · MCP over stdio</strong></a><a class="next" href="/adr/0003-ssrf-allowlist-not-denylist.html"><small>Next</small><strong>0003 · SSRF allowlist</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#status">Status</a></li>
+<li class="lvl-2"><a href="#context">Context</a></li>
+<li class="lvl-2"><a href="#decision">Decision</a></li>
+<li class="lvl-2"><a href="#consequences">Consequences</a></li>
+<li class="lvl-2"><a href="#alternatives-considered">Alternatives considered</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

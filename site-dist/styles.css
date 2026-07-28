@@ -1,0 +1,809 @@
+/*
+  VibeLens documentation site.
+
+  This stylesheet follows the rules the project itself ships in docs/design/.
+  Where a choice is deliberate and could otherwise look like an oversight, the
+  reason is in a comment.
+
+  - Tokens are semantic (surface / border / text-muted / accent), layered on an
+    oklch primitive ramp, so dark mode is a remap rather than an inversion.
+  - No pure black and no pure white anywhere: the neutrals are tinted toward the
+    accent hue so surfaces read as a family. See docs/design/COLOR.md.
+  - One type scale, ratio 1.25, defined once. See docs/design/TYPOGRAPHY.md.
+  - Radii and shadows come in steps, not one value on everything, so elevation
+    carries meaning. See docs/design/ANTI-SLOP.md sections 2 and 7.
+  - Motion has named duration and easing tokens and degrades under
+    prefers-reduced-motion. See docs/design/MOTION.md.
+*/
+
+/* ---------------------------------------------------------------- tokens -- */
+
+:root {
+  /* Primitive ramp. oklch keeps the lightness steps perceptually even, which
+     hsl() does not: see docs/design/COLOR.md. Hue 250 is a cool blue-violet,
+     shared by the neutrals so nothing looks like flat grey. */
+  --n-975: oklch(16% 0.022 255);
+  --n-950: oklch(19.5% 0.026 255);
+  --n-900: oklch(23% 0.028 255);
+  --n-850: oklch(27% 0.03 255);
+  --n-800: oklch(32% 0.032 255);
+  --n-700: oklch(44% 0.03 255);
+  --n-600: oklch(56% 0.026 255);
+  --n-500: oklch(66% 0.022 255);
+  --n-300: oklch(84% 0.014 255);
+  --n-200: oklch(91% 0.009 255);
+  --n-100: oklch(95.5% 0.006 255);
+  --n-050: oklch(98% 0.004 255);
+
+  --accent-400: oklch(82% 0.13 205);
+  --accent-500: oklch(74% 0.145 205);
+  --accent-600: oklch(64% 0.145 210);
+  --violet-400: oklch(78% 0.13 300);
+  --violet-500: oklch(70% 0.16 300);
+  --success-500: oklch(74% 0.16 158);
+  --warning-500: oklch(80% 0.15 75);
+  --danger-400: oklch(74% 0.16 22);
+  --danger-500: oklch(64% 0.19 22);
+
+  /* Type scale, ratio 1.25 from a 1rem base, with line heights paired to size:
+     tight for display, looser for body. */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.1875rem;
+  --text-3xl: clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem);
+
+  --leading-tight: 1.12;
+  --leading-snug: 1.3;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.7;
+
+  /* 4px spacing scale. */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.25rem;
+  --s-6: 1.5rem;
+  --s-8: 2rem;
+  --s-10: 2.5rem;
+  --s-12: 3rem;
+  --s-16: 4rem;
+  --s-20: 5rem;
+
+  /* Radii as steps: controls, cards, pills. */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  /* Motion tokens. */
+  --dur-instant: 90ms;
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --ease-out: cubic-bezier(0.16, 0.84, 0.44, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.35, 1);
+
+  /* Named z-index scale, so nothing needs a magic 9999. */
+  --z-content: 1;
+  --z-sticky: 20;
+  --z-header: 40;
+  --z-overlay: 60;
+
+  --measure: 74ch;
+  --sidebar: 268px;
+  --toc: 220px;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+/* Semantic layer, dark theme (the default: the brand assets are dark). */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: var(--n-975);
+  --bg-subtle: var(--n-950);
+  --surface: var(--n-950);
+  --surface-raised: var(--n-900);
+  --surface-sunken: oklch(14% 0.02 255);
+  --border: var(--n-850);
+  --border-strong: var(--n-800);
+  --text: var(--n-100);
+  --text-strong: var(--n-050);
+  --text-muted: var(--n-500);
+  --text-subtle: var(--n-600);
+  --accent: var(--accent-400);
+  --accent-hover: var(--accent-500);
+  --accent-contrast: var(--n-975);
+  --violet: var(--violet-400);
+  --success: var(--success-500);
+  --danger: var(--danger-400);
+  --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.4), 0 18px 40px -28px oklch(0% 0 0 / 0.75);
+  --selection: oklch(74% 0.145 205 / 0.28);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: var(--n-050);
+  --bg-subtle: var(--n-100);
+  --surface: oklch(99.5% 0.003 255);
+  --surface-raised: oklch(100% 0 0);
+  --surface-sunken: var(--n-100);
+  --border: var(--n-200);
+  --border-strong: var(--n-300);
+  --text: var(--n-900);
+  --text-strong: var(--n-975);
+  --text-muted: var(--n-600);
+  --text-subtle: var(--n-500);
+  --accent: var(--accent-600);
+  --accent-hover: oklch(56% 0.145 212);
+  --accent-contrast: oklch(99% 0 0);
+  --violet: oklch(56% 0.19 300);
+  --success: oklch(52% 0.15 158);
+  --danger: var(--danger-500);
+  --shadow-card: 0 1px 2px oklch(50% 0.03 255 / 0.09), 0 14px 30px -22px oklch(45% 0.05 255 / 0.4);
+  --selection: oklch(74% 0.145 205 / 0.24);
+}
+
+/* ----------------------------------------------------------------- reset -- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--selection); }
+
+img, svg { max-width: 100%; height: auto; display: block; }
+
+/* One visible focus treatment for every interactive element. Removing this is
+   tell 14 in docs/design/ANTI-SLOP.md. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+a {
+  color: var(--accent);
+  text-decoration-color: color-mix(in oklch, var(--accent) 45%, transparent);
+  text-underline-offset: 0.18em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+a:hover { color: var(--accent-hover); text-decoration-color: currentColor; }
+
+/* Anchor targets clear the sticky header instead of hiding under it. */
+:target { scroll-margin-top: calc(var(--s-16) + var(--s-4)); }
+
+.skip-link {
+  position: absolute;
+  left: var(--s-4);
+  top: var(--s-2);
+  z-index: var(--z-overlay);
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transform: translateY(-160%);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus-visible { transform: translateY(0); }
+
+/* ---------------------------------------------------------------- header -- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  height: 60px;
+  padding: 0 var(--s-6);
+  background: color-mix(in oklch, var(--bg) 86%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-weight: 700;
+  font-size: var(--text-md);
+  letter-spacing: -0.015em;
+  color: var(--text-strong);
+  text-decoration: none;
+}
+.brand:hover { color: var(--text-strong); }
+.brand img { width: 26px; height: 26px; border-radius: 7px; }
+.brand span { color: var(--accent); }
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  margin-left: auto;
+  font-size: var(--text-sm);
+}
+.header-nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; }
+.header-nav a:hover { color: var(--text); }
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  /* 36px: above the 24x24 minimum in WCAG 2.5.8, comfortable with a mouse. */
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.icon-button:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface-raised); }
+.icon-button:active { transform: translateY(0.5px); }
+.icon-button svg { width: 17px; height: 17px; stroke-width: 1.7; }
+[data-theme="dark"] .icon-sun { display: none; }
+[data-theme="light"] .icon-moon { display: none; }
+
+.nav-toggle { display: none; }
+
+/* ----------------------------------------------------------------- shell -- */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  align-items: start;
+  max-width: 1560px;
+  margin: 0 auto;
+}
+
+.sidebar {
+  position: sticky;
+  top: 60px;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding: var(--s-8) var(--s-4) var(--s-16) var(--s-6);
+  border-right: 1px solid var(--border);
+  font-size: var(--text-sm);
+}
+
+.sidebar h2 {
+  margin: var(--s-6) 0 var(--s-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+.sidebar h2:first-child { margin-top: 0; }
+
+.sidebar ul { margin: 0; padding: 0; list-style: none; }
+.sidebar li { margin: 1px 0; }
+
+.sidebar a {
+  display: block;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.sidebar a:hover { color: var(--text); background: var(--surface); }
+.sidebar a[aria-current="page"] {
+  color: var(--text-strong);
+  background: color-mix(in oklch, var(--accent) 14%, transparent);
+  box-shadow: inset 2px 0 0 var(--accent);
+  font-weight: 600;
+}
+
+.main { min-width: 0; padding: var(--s-10) var(--s-8) var(--s-20); }
+
+.with-toc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--toc);
+  gap: var(--s-10);
+  align-items: start;
+}
+
+.toc {
+  position: sticky;
+  top: calc(60px + var(--s-10));
+  max-height: calc(100vh - 60px - var(--s-16));
+  overflow-y: auto;
+  font-size: var(--text-sm);
+  border-left: 1px solid var(--border);
+  padding-left: var(--s-4);
+}
+.toc p {
+  margin: 0 0 var(--s-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+.toc ul { margin: 0; padding: 0; list-style: none; }
+.toc li { margin: var(--s-1) 0; }
+.toc a { display: block; color: var(--text-muted); text-decoration: none; line-height: var(--leading-snug); }
+.toc a:hover { color: var(--text); }
+.toc a.is-active { color: var(--accent); font-weight: 600; }
+.toc .lvl-3 { padding-left: var(--s-3); font-size: var(--text-xs); }
+
+/* --------------------------------------------------------------- content -- */
+
+.prose { max-width: var(--measure); }
+
+.prose > * + * { margin-top: var(--s-4); }
+
+.prose h1 {
+  margin: 0 0 var(--s-3);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  /* Display sizes get negative tracking; body text never does. */
+  letter-spacing: -0.024em;
+  font-weight: 700;
+  color: var(--text-strong);
+  text-wrap: balance;
+}
+
+.prose h2 {
+  margin-top: var(--s-12);
+  margin-bottom: var(--s-3);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  letter-spacing: -0.014em;
+  font-weight: 660;
+  color: var(--text-strong);
+  text-wrap: balance;
+}
+
+.prose h3 {
+  margin-top: var(--s-8);
+  margin-bottom: var(--s-2);
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  font-weight: 640;
+  color: var(--text-strong);
+}
+
+.prose h4 {
+  margin-top: var(--s-6);
+  margin-bottom: var(--s-2);
+  font-size: var(--text-base);
+  font-weight: 640;
+  color: var(--text-strong);
+}
+
+.prose p { margin: 0; line-height: var(--leading-relaxed); text-wrap: pretty; }
+.prose strong { color: var(--text-strong); font-weight: 640; }
+
+.prose ul, .prose ol { margin: 0; padding-left: var(--s-5); }
+.prose li { margin: var(--s-2) 0; line-height: var(--leading-relaxed); }
+.prose li::marker { color: var(--text-subtle); }
+
+.prose blockquote {
+  margin: var(--s-6) 0;
+  padding: var(--s-4) var(--s-5);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  background: color-mix(in oklch, var(--accent) 7%, transparent);
+  color: var(--text);
+}
+.prose blockquote > :first-child { margin-top: 0; }
+
+.prose hr { margin: var(--s-10) 0; border: 0; border-top: 1px solid var(--border); }
+
+.heading-anchor {
+  margin-left: var(--s-2);
+  color: var(--text-subtle);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+h2:hover > .heading-anchor,
+h3:hover > .heading-anchor,
+.heading-anchor:focus-visible { opacity: 1; }
+
+/* Code. Inline code is tinted rather than boxed in a hard border, so it does
+   not fight the prose; blocks get a sunken surface and a copy affordance. */
+.prose :not(pre) > code {
+  padding: 0.12em 0.36em;
+  border-radius: 5px;
+  background: color-mix(in oklch, var(--accent) 12%, var(--surface));
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.code-block {
+  position: relative;
+  margin: var(--s-5) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+.code-block pre {
+  margin: 0;
+  padding: var(--s-4) var(--s-5);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.62;
+  tab-size: 2;
+}
+.code-block code { color: var(--text); }
+.code-lang {
+  position: absolute;
+  top: var(--s-2);
+  right: 52px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+  pointer-events: none;
+}
+.copy-button {
+  position: absolute;
+  top: var(--s-2);
+  right: var(--s-2);
+  padding: var(--s-1) var(--s-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.code-block:hover .copy-button,
+.copy-button:focus-visible { opacity: 1; }
+.copy-button:hover { color: var(--text); }
+.copy-button[data-state="done"] { color: var(--success); opacity: 1; }
+
+/* Tables scroll instead of breaking the layout, and numbers line up. */
+.table-wrap {
+  margin: var(--s-5) 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.prose th {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-strong);
+  font-weight: 640;
+  text-align: left;
+  white-space: nowrap;
+}
+.prose td {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: var(--leading-snug);
+}
+.prose tr:last-child td { border-bottom: 0; }
+.prose tbody tr { transition: background-color var(--dur-fast) var(--ease-out); }
+.prose tbody tr:hover { background: color-mix(in oklch, var(--accent) 5%, transparent); }
+
+.prose img { border-radius: var(--r-md); }
+.prose figure { margin: var(--s-6) 0; }
+
+.page-nav {
+  display: flex;
+  gap: var(--s-4);
+  margin-top: var(--s-16);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--border);
+}
+.page-nav a {
+  flex: 1;
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.page-nav a:hover { border-color: var(--accent); transform: translateY(-1px); }
+.page-nav a.next { text-align: right; }
+.page-nav small { display: block; color: var(--text-subtle); font-size: var(--text-xs); letter-spacing: 0.06em; text-transform: uppercase; }
+.page-nav strong { color: var(--text-strong); font-weight: 600; }
+
+/* ------------------------------------------------------------- home page -- */
+
+.home { padding: 0; }
+
+.hero {
+  position: relative;
+  padding: var(--s-20) var(--s-8) var(--s-16);
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -40% 30% 40% -10%;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--accent) 22%, transparent), transparent);
+  pointer-events: none;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 30% -10% -50% 45%;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--violet) 18%, transparent), transparent);
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: var(--z-content); max-width: 1180px; margin: 0 auto; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-1) var(--s-3) var(--s-1) var(--s-2);
+  border: 1px solid color-mix(in oklch, var(--accent) 34%, transparent);
+  border-radius: var(--r-pill);
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 620;
+  letter-spacing: 0.02em;
+}
+.eyebrow b { font-weight: 700; }
+
+.hero h1 {
+  max-width: 22ch;
+  margin: var(--s-5) 0 var(--s-4);
+  font-size: var(--text-3xl);
+  line-height: 1.06;
+  letter-spacing: -0.032em;
+  font-weight: 700;
+  color: var(--text-strong);
+  text-wrap: balance;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(100deg, var(--accent), var(--violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero .lede {
+  max-width: 62ch;
+  margin: 0 0 var(--s-8);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+}
+
+.cta-row { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  font-size: var(--text-sm);
+  font-weight: 620;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-instant) var(--ease-out);
+}
+.button:active { transform: translateY(1px); }
+.button-primary { background: var(--accent); color: var(--accent-contrast); }
+.button-primary:hover { background: var(--accent-hover); color: var(--accent-contrast); }
+.button-secondary { border-color: var(--border-strong); background: var(--surface); color: var(--text); }
+.button-secondary:hover { border-color: var(--accent); color: var(--text-strong); }
+
+.install-line {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-8);
+  padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4);
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-sunken);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  overflow-x: auto;
+}
+.install-line .prompt { color: var(--text-subtle); user-select: none; }
+
+.section { max-width: 1180px; margin: 0 auto; padding: var(--s-16) var(--s-8); }
+.section + .section { border-top: 1px solid var(--border); }
+.section-head { max-width: 64ch; margin-bottom: var(--s-10); }
+.section-head h2 {
+  margin: 0 0 var(--s-3);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  letter-spacing: -0.02em;
+  font-weight: 680;
+  color: var(--text-strong);
+  text-wrap: balance;
+}
+.section-head p { margin: 0; color: var(--text-muted); line-height: var(--leading-relaxed); }
+
+/* Deliberately not a uniform three-card grid: the payload cards are the
+   emphasis, so they get a wider column and a different treatment from the
+   skill list below. See docs/design/ANTI-SLOP.md section 10. */
+.payload-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--s-4);
+}
+.card {
+  padding: var(--s-6);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin: 0 0 var(--s-2);
+  font-size: var(--text-base);
+  font-weight: 640;
+  color: var(--text-strong);
+}
+.card p { margin: 0; color: var(--text-muted); font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+.card .tag {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  flex: none;
+}
+
+.skill-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--s-6); }
+.skill-group {
+  padding: var(--s-5) var(--s-5) var(--s-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+}
+.skill-group > h3 {
+  margin: 0 0 var(--s-4);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.skill-group dl { margin: 0; }
+.skill-group dt {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.skill-group dd {
+  margin: var(--s-1) 0 var(--s-4);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}
+
+.figure-wide { max-width: 1180px; margin: 0 auto; padding: 0 var(--s-8) var(--s-16); }
+.figure-wide figcaption {
+  margin-top: var(--s-3);
+  color: var(--text-subtle);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+.figure-wide img { border: 1px solid var(--border); border-radius: var(--r-lg); }
+
+.site-footer {
+  padding: var(--s-10) var(--s-8);
+  border-top: 1px solid var(--border);
+  color: var(--text-subtle);
+  font-size: var(--text-sm);
+}
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.site-footer a { color: var(--text-muted); text-decoration: none; }
+.site-footer a:hover { color: var(--text); }
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--s-4); }
+
+/* ------------------------------------------------------------ responsive -- */
+
+@media (max-width: 1180px) {
+  .with-toc { grid-template-columns: minmax(0, 1fr); }
+  .toc { display: none; }
+}
+
+@media (max-width: 860px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .nav-toggle { display: inline-grid; }
+  .header-nav .desktop-only { display: none; }
+  .sidebar {
+    position: fixed;
+    inset: 60px 0 auto 0;
+    max-height: min(70vh, calc(100vh - 60px));
+    z-index: var(--z-sticky);
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-subtle);
+    /* Hidden by default on small screens; the toggle sets [data-open]. */
+    display: none;
+  }
+  .sidebar[data-open="true"] { display: block; }
+  .main { padding: var(--s-8) var(--s-5) var(--s-16); }
+  .hero { padding: var(--s-12) var(--s-5) var(--s-10); }
+  .section, .figure-wide { padding-left: var(--s-5); padding-right: var(--s-5); }
+  .section { padding-top: var(--s-12); padding-bottom: var(--s-12); }
+  .page-nav { flex-direction: column; }
+}
+
+/* Degrade motion rather than removing meaning: transitions collapse to near
+   zero, and smooth scrolling is turned off. See docs/design/MOTION.md. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .page-nav a:hover, .button:active, .icon-button:active { transform: none; }
+}
+
+@media print {
+  .site-header, .sidebar, .toc, .page-nav, .copy-button { display: none; }
+  .shell, .with-toc { grid-template-columns: 1fr; }
+  body { background: #fff; color: #000; }
+}

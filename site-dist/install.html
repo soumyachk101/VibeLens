@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install and IDE setup · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Install and IDE setup · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html" aria-current="page">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Install and IDE setup</h1>
+            <p>VibeLens is a plain MCP server over stdio, so every MCP-capable client takes the
+same shape. Claude Code additionally gets a plugin that bundles the skills,
+subagents and hooks.</p>
+<h2 id="requirements">Requirements<a class="heading-anchor" href="#requirements" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Node.js 20 or newer. Playwright 1.62 requires it.</li>
+<li>Chromium for Playwright, installed once:</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npx playwright install chromium</code></pre></div>
+<p>There is no global install step for the server itself: <code>npx</code> fetches it on
+first run.</p>
+<h2 id="claude-code">Claude Code<a class="heading-anchor" href="#claude-code" aria-label="Link to this section">#</a></h2>
+<p>Install as a plugin. This is the recommended path because it also installs the
+twelve skills, four subagents and two advisory hooks:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>claude plugin marketplace add soumyachk101/VibeLens
+claude plugin install vibelens@vibelens</code></pre></div>
+<p>Or add it as a bare MCP server:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>claude mcp add vibelens --scope user -- npx -y mcp-vibelens@1
+claude mcp add vibelens --scope project -- npx -y mcp-vibelens@1</code></pre></div>
+<p><code>--scope user</code> makes it available in every project; <code>--scope project</code> writes a
+<code>.mcp.json</code> you can commit for your team. Verify with <code>/mcp</code> in a session:
+<code>vibelens</code> should be listed as connected.</p>
+<h2 id="openai-codex">OpenAI Codex<a class="heading-anchor" href="#openai-codex" aria-label="Link to this section">#</a></h2>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>codex mcp add vibelens -- npx -y mcp-vibelens@1</code></pre></div>
+<p>Codex shares this configuration between the CLI and the IDE extension, so it
+only needs doing once. To edit it by hand, add this to <code>~/.codex/config.toml</code>:</p>
+<div class="code-block"><span class="code-lang">toml</span><pre><code>[mcp_servers.vibelens]
+command = &quot;npx&quot;
+args = [&quot;-y&quot;, &quot;mcp-vibelens@1&quot;]</code></pre></div>
+<p>Check with <code>codex mcp list</code>. Codex supports local stdio servers only, which is
+exactly what VibeLens is.</p>
+<h2 id="cursor">Cursor<a class="heading-anchor" href="#cursor" aria-label="Link to this section">#</a></h2>
+<p>Create <code>.cursor/mcp.json</code> in your project, or <code>~/.cursor/mcp.json</code> for every
+project:</p>
+<div class="code-block"><span class="code-lang">json</span><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;vibelens&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;mcp-vibelens@1&quot;]
+    }
+  }
+}</code></pre></div>
+<p>Then enable <strong>vibelens</strong> under Settings, MCP.</p>
+<h2 id="google-antigravity">Google Antigravity<a class="heading-anchor" href="#google-antigravity" aria-label="Link to this section">#</a></h2>
+<p>Open the MCP configuration from the UI — the three-dot menu in chat, then MCP
+Servers, Manage MCP Servers, View raw config; or Settings, Customizations, Open
+MCP Config — and paste the same JSON block. Depending on your build the file is
+at one of:</p>
+<ul>
+<li><code>~/.gemini/antigravity/mcp_config.json</code></li>
+<li><code>~/.gemini/config/mcp_config.json</code> on newer builds and the Antigravity CLI</li>
+</ul>
+<p>Using the in-app menu is the reliable way to open the right one.</p>
+<h2 id="windsurf">Windsurf<a class="heading-anchor" href="#windsurf" aria-label="Link to this section">#</a></h2>
+<p><code>~/.codeium/windsurf/mcp_config.json</code>, same JSON block as Cursor.</p>
+<h2 id="vs-code-github-copilot-agent-mode">VS Code, GitHub Copilot agent mode<a class="heading-anchor" href="#vs-code-github-copilot-agent-mode" aria-label="Link to this section">#</a></h2>
+<p><code>.vscode/mcp.json</code> uses <code>servers</code> rather than <code>mcpServers</code>:</p>
+<div class="code-block"><span class="code-lang">json</span><pre><code>{
+  &quot;servers&quot;: {
+    &quot;vibelens&quot;: { &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;mcp-vibelens@1&quot;] }
+  }
+}</code></pre></div>
+<h2 id="claude-desktop">Claude Desktop<a class="heading-anchor" href="#claude-desktop" aria-label="Link to this section">#</a></h2>
+<p><code>~/Library/Application Support/Claude/claude_desktop_config.json</code> on macOS, same
+JSON block as Cursor. Restart the app afterwards.</p>
+<h2 id="from-source">From source<a class="heading-anchor" href="#from-source" aria-label="Link to this section">#</a></h2>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>git clone https://github.com/soumyachk101/VibeLens.git
+cd VibeLens
+npm install
+npx playwright install chromium
+npm run build
+npm test
+npm run smoke</code></pre></div>
+<p>Then point your IDE at <code>node /absolute/path/to/VibeLens/dist/index.js</code>.</p>
+<h2 id="it-is-not-connecting">It is not connecting<a class="heading-anchor" href="#it-is-not-connecting" aria-label="Link to this section">#</a></h2>
+<p>Start with <a href="/troubleshooting.html">Troubleshooting</a>; it covers the per-IDE
+diagnosis and every error code the tool can return.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/"><small>Previous</small><strong>Introduction</strong></a><a class="next" href="/tool.html"><small>Next</small><strong>Tool reference</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#requirements">Requirements</a></li>
+<li class="lvl-2"><a href="#claude-code">Claude Code</a></li>
+<li class="lvl-2"><a href="#openai-codex">OpenAI Codex</a></li>
+<li class="lvl-2"><a href="#cursor">Cursor</a></li>
+<li class="lvl-2"><a href="#google-antigravity">Google Antigravity</a></li>
+<li class="lvl-2"><a href="#windsurf">Windsurf</a></li>
+<li class="lvl-2"><a href="#vs-code-github-copilot-agent-mode">VS Code, GitHub Copilot agent mode</a></li>
+<li class="lvl-2"><a href="#claude-desktop">Claude Desktop</a></li>
+<li class="lvl-2"><a href="#from-source">From source</a></li>
+<li class="lvl-2"><a href="#it-is-not-connecting">It is not connecting</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

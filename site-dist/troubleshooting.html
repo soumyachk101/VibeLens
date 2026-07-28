@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Troubleshooting · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html" aria-current="page">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Troubleshooting</h1>
+            <p>Every failure VibeLens can produce, what causes it, and how to fix it. Error
+codes come from <code>CaptureErrorCode</code> in <code>src/types.ts</code>; the messages and hints come
+from <code>src/browser.ts</code> and <code>src/server.ts</code>.</p>
+<ul>
+<li><a href="#how-to-read-an-error">How to read an error</a></li>
+<li><a href="#error-codes">Error codes</a></li>
+<li><a href="#the-screenshot-is-blank-or-half-rendered">The screenshot is blank or half-rendered</a></li>
+<li><a href="#chromium-is-missing">Chromium is missing</a></li>
+<li><a href="#the-tool-is-not-listed-in-my-ide">The tool is not listed in my IDE</a></li>
+<li><a href="#the-claude-code-plugin-installs-but-the-server-will-not-connect">The Claude Code plugin installs but the server will not connect</a></li>
+<li><a href="#stdout-corruption">Stdout corruption</a></li>
+<li><a href="#other-symptoms">Other symptoms</a></li>
+<li><a href="#collecting-diagnostics">Collecting diagnostics</a></li>
+</ul>
+<hr>
+<h2 id="how-to-read-an-error">How to read an error<a class="heading-anchor" href="#how-to-read-an-error" aria-label="Link to this section">#</a></h2>
+<p>A failed capture is a <em>tool</em> error, not a transport error: the server returns
+<code>isError: true</code> with text and stays connected. The text always has three parts,
+produced by <code>buildErrorPayload()</code>:</p>
+<div class="code-block"><pre><code>VibeLens could not inspect the page (CONNECTION_REFUSED).
+
+Problem: Connection refused at http://localhost:3000/.
+Next step: The dev server does not appear to be running (or is on a different
+port). Ask the user to start it, then retry.</code></pre></div>
+<p>The code in parentheses is the entry point into the table below. If you see no
+code at all — no VibeLens text, just the tool failing or the session dropping —
+skip to <a href="#stdout-corruption">stdout corruption</a>, because that is a transport
+problem rather than a capture problem.</p>
+<hr>
+<h2 id="error-codes">Error codes<a class="heading-anchor" href="#error-codes" aria-label="Link to this section">#</a></h2>
+<h3 id="invalidurl"><code>INVALID_URL</code><a class="heading-anchor" href="#invalidurl" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>captureUIState()</code> when <code>validateLocalUrl()</code> refuses the URL, before
+Chromium is launched.</p>
+<p><strong>Causes, in the order the validator checks them:</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Cause</th><th>Example</th></tr></thead><tbody>
+<tr><td>Empty or unparseable input</td><td><code>&quot;&quot;</code>, <code>http://</code></td></tr>
+<tr><td>Non-HTTP scheme</td><td><code>file:///etc/passwd</code>, <code>ftp://localhost</code></td></tr>
+<tr><td>Embedded credentials</td><td><code>http://user:pass@localhost:3000</code></td></tr>
+<tr><td>Cloud metadata endpoint</td><td><code>http://169.254.169.254/</code>, <code>http://100.100.100.200/</code></td></tr>
+<tr><td>Public IPv4 or IPv6</td><td><code>http://8.8.8.8</code>, <code>http://0x08080808</code> (canonicalizes to 8.8.8.8)</td></tr>
+<tr><td>Any hostname that is not <code>localhost</code> or <code>*.localhost</code></td><td><code>http://myapp.local</code>, <code>http://staging.example.com</code>, <code>http://host.docker.internal</code></td></tr>
+</tbody></table></div>
+<p><strong>Fix.</strong> Use a local address. Allowed: <code>localhost</code>, <code>*.localhost</code>,
+<code>127.0.0.0/8</code>, <code>0.0.0.0</code>, <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>,
+<code>[::1]</code>, <code>fc00::/7</code>, <code>fe80::/10</code>. The scheme may be omitted —
+<code>localhost:3000</code> is accepted and treated as <code>http://localhost:3000</code>.</p>
+<p>If your dev server is only reachable by a DNS name, address it by IP instead.
+Hostnames are refused rather than resolved, on purpose: resolving them would
+reintroduce DNS rebinding. See <a href="/adr/0003-ssrf-allowlist-not-denylist.html">ADR 0003</a>.
+There is no flag to relax this.</p>
+<h3 id="connectionrefused"><code>CONNECTION_REFUSED</code><a class="heading-anchor" href="#connectionrefused" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>toCaptureError()</code> on <code>ERR_CONNECTION_REFUSED</code>, <code>ECONNREFUSED</code>,
+<code>ERR_EMPTY_RESPONSE</code> or <code>ERR_CONNECTION_RESET</code>.</p>
+<p><strong>Causes.</strong> The dev server is not running; it is running on a different port; it
+is still compiling its first bundle; or it crashed mid-request. The two
+connection-reset variants get their own wording (&quot;closed the connection without
+responding&quot;) because they usually mean &quot;compiling&quot; or &quot;crashed&quot; rather than &quot;not
+started&quot;.</p>
+<p><strong>Fix.</strong> Start the dev server and confirm the port it printed. Check the terminal
+where it runs for a compile error. Confirm the port is actually listening:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>curl -I http://localhost:3000</code></pre></div>
+<p>If the server binds only to a specific interface, use the address it reports. A
+server bound to <code>127.0.0.1</code> will refuse <code>http://192.168.1.20:3000</code> even though
+both are allowed by the validator.</p>
+<h3 id="dnsfailure"><code>DNS_FAILURE</code><a class="heading-anchor" href="#dnsfailure" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>toCaptureError()</code> on <code>ERR_NAME_NOT_RESOLVED</code>.</p>
+<p><strong>Cause.</strong> Rare by construction: non-<code>localhost</code> hostnames are rejected as
+<code>INVALID_URL</code> before a browser exists. The realistic path here is a
+<code>*.localhost</code> name that does not actually resolve on your machine — for example
+<code>http://api.localhost:3000</code> on a system whose resolver does not implement RFC
+6761 loopback semantics.</p>
+<p><strong>Fix.</strong> Use <code>localhost</code> or <code>127.0.0.1</code> directly, or add the name to
+<code>/etc/hosts</code>.</p>
+<h3 id="unsafeport"><code>UNSAFE_PORT</code><a class="heading-anchor" href="#unsafeport" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>toCaptureError()</code> on <code>ERR_UNSAFE_PORT</code>.</p>
+<p><strong>Cause.</strong> Chromium refuses to connect to a fixed list of ports regardless of
+what is listening there, including 1, 7, 69, 79, 6000 and 6666. This is a browser
+policy, not a VibeLens rule, and it cannot be overridden from here.</p>
+<p><strong>Fix.</strong> Run the dev server on a conventional port: 3000, 5173, 8080, 4200, 8000.</p>
+<h3 id="timeout"><code>TIMEOUT</code><a class="heading-anchor" href="#timeout" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>toCaptureError()</code> when the failure message contains <code>Timeout</code> or
+<code>timeout</code>, typically <code>page.goto</code> exceeding <code>NAVIGATION_TIMEOUT_MS</code> (30 s).</p>
+<p><strong>Causes.</strong> The page never reached the <code>load</code> event: a request that hangs rather
+than fails, a dev server doing a very slow cold compile, an SSR route blocked on
+a backend that is not running, or an infinite redirect.</p>
+<p><strong>Fix.</strong> Load the URL in a normal browser and see whether it also hangs. If the
+first compile is simply slow, warm the server by loading the page once, then call
+the tool again. If a specific asset or API hangs, that is the bug worth fixing —
+<code>failedRequests</code> in a successful capture of another route will often name it.
+Raising <code>delay</code> does not help here: <code>delay</code> runs <em>after</em> navigation completes, so
+it cannot rescue a navigation that never finished.</p>
+<h3 id="browsernotinstalled"><code>BROWSER_NOT_INSTALLED</code><a class="heading-anchor" href="#browsernotinstalled" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>launchBrowser()</code> when the launch error mentions
+<code>Executable doesn&#39;t exist</code>, <code>please run the following command</code>, or
+<code>browserType.launch: Failed to launch</code>.</p>
+<p><strong>Fix.</strong> See <a href="#chromium-is-missing">Chromium is missing</a>.</p>
+<h3 id="browserlaunchfailed"><code>BROWSER_LAUNCH_FAILED</code><a class="heading-anchor" href="#browserlaunchfailed" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>launchBrowser()</code> for any other launch failure, including exceeding
+<code>LAUNCH_TIMEOUT_MS</code> (45 s).</p>
+<p><strong>Causes.</strong> A partially downloaded or corrupted browser build; missing shared
+libraries on a slim Linux image; no sandbox permissions in a container; a machine
+so loaded that launch times out; or a Playwright install that does not match the
+installed browser revision.</p>
+<p><strong>Fix.</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npx playwright install chromium          # re-download the matching build
+npx playwright install-deps chromium     # Linux only: system libraries</code></pre></div>
+<p>On Linux verify the message names a missing <code>.so</code>; if so, <code>install-deps</code> is the
+answer. Confirm the browser works independently of VibeLens:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>node -e &quot;import('playwright').then(p=&gt;p.chromium.launch().then(b=&gt;b.close()).then(()=&gt;console.log('launch ok')))&quot;</code></pre></div>
+<p>If that fails, the problem is the Playwright installation, not VibeLens.</p>
+<h3 id="unknown"><code>UNKNOWN</code><a class="heading-anchor" href="#unknown" aria-label="Link to this section">#</a></h3>
+<p><strong>Raised by</strong> <code>toCaptureError()</code> for anything unclassified, and by
+<code>buildErrorPayload()</code> for a non-<code>CaptureError</code> throw.</p>
+<p><strong>Cause.</strong> By definition unmapped. The raw message is included verbatim after
+<code>Problem:</code>.</p>
+<p><strong>Fix.</strong> Retry once — some are transient. If it persists, that message is the
+useful part of a bug report; include it along with your OS, Node version and the
+URL shape. A recurring <code>UNKNOWN</code> usually means a new Chromium error string needs a
+branch in <code>toCaptureError()</code>.</p>
+<hr>
+<h2 id="the-screenshot-is-blank-or-half-rendered">The screenshot is blank or half-rendered<a class="heading-anchor" href="#the-screenshot-is-blank-or-half-rendered" aria-label="Link to this section">#</a></h2>
+<p>The capture succeeded, so there is no error code. The image is white, shows a
+loading skeleton, or shows a layout that has not settled.</p>
+<p><strong>Why it happens.</strong> Navigation waits for <code>load</code>, then a best-effort
+<code>networkidle</code> wait capped at 5 s, then <code>delay</code>. An app whose content appears
+after client-side hydration, a data fetch, or an entry animation can be captured
+before any of that finishes. The <code>networkidle</code> wait is deliberately
+non-fatal — an app with a websocket or long-poll never reaches idle, so the wait
+times out silently and the capture proceeds.</p>
+<p><strong>Fixes, in order:</strong></p>
+<ol>
+<li>Raise <code>delay</code> to 2000–3000 ms. This is the intended control and solves most
+cases. The maximum is 15000.</li>
+<li>Check the text payload before assuming a timing problem. A blank page with a
+<code>pageError</code> such as <code>TypeError: Cannot read properties of undefined</code> is a
+crashed render, not a slow one, and no delay will fix it.</li>
+<li>Check <code>failedRequests</code>. A blank page whose bundle 404s is a build problem.</li>
+<li>Compare <code>summary.pageTitle</code> and <code>summary.url</code> against expectations. A blank
+page at an unexpected URL means a redirect, often an auth redirect to a login
+route that renders nothing without a session.</li>
+<li>For a long page, set <code>fullPage: true</code>. Content below the fold is otherwise
+simply outside the viewport, which looks like missing content in a viewport
+capture.</li>
+</ol>
+<p>Note that authenticated pages are a structural limitation, not a timing one:
+each call gets a fresh browser context with no cookies or storage, so a page
+requiring a session renders as logged-out.</p>
+<hr>
+<h2 id="chromium-is-missing">Chromium is missing<a class="heading-anchor" href="#chromium-is-missing" aria-label="Link to this section">#</a></h2>
+<p><strong>Symptom.</strong> <code>BROWSER_NOT_INSTALLED</code>, with the hint
+<code>npx playwright install chromium</code>.</p>
+<p><strong>Cause.</strong> Playwright manages its own browser builds and does not use your
+system Chrome. Installing the npm package does not download a browser; that is a
+separate, one-time step of roughly 95 MB.</p>
+<p><strong>Fix.</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npx playwright install chromium</code></pre></div>
+<p>Points that catch people out:</p>
+<ul>
+<li><strong>Do this once per machine, not once per project.</strong> Browsers live in a shared
+cache (<code>~/Library/Caches/ms-playwright</code> on macOS,
+<code>~/.cache/ms-playwright</code> on Linux), not in <code>node_modules</code>.</li>
+<li><strong><code>npx -y mcp-vibelens@1</code> will not install it for you.</strong> The package
+intentionally does not download a browser on install.</li>
+<li><strong>After a Playwright version bump, re-run it.</strong> A new Playwright expects a new
+browser revision; the old one no longer satisfies it.</li>
+<li><strong>In a container, add the system libraries too:</strong>
+<code>npx playwright install-deps chromium</code>.</li>
+<li><strong>If <code>PLAYWRIGHT_BROWSERS_PATH</code> is set</strong> in your shell but not in the
+environment your IDE spawns the server with, the server will not find the
+browser your terminal can see. Either unset it or set it in the MCP server
+config&#39;s <code>env</code> block.</li>
+</ul>
+<hr>
+<h2 id="the-tool-is-not-listed-in-my-ide">The tool is not listed in my IDE<a class="heading-anchor" href="#the-tool-is-not-listed-in-my-ide" aria-label="Link to this section">#</a></h2>
+<p>First, separate the two possibilities: the server is not being started, or it is
+starting and failing. Almost always it is a config path or a JSON syntax error,
+not a code problem.</p>
+<p>Config shape is the same everywhere:</p>
+<div class="code-block"><span class="code-lang">json</span><pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;vibelens&quot;: { &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;mcp-vibelens@1&quot;] }
+  }
+}</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th>IDE</th><th>Where the config lives</th><th>How to verify</th></tr></thead><tbody>
+<tr><td>Claude Code</td><td><code>claude mcp add vibelens --scope user -- npx -y mcp-vibelens@1</code>, or <code>.mcp.json</code> in the project for <code>--scope project</code></td><td>Run <code>/mcp</code> in a session; <code>vibelens</code> should show as connected</td></tr>
+<tr><td>OpenAI Codex (CLI and IDE extension)</td><td><code>~/.codex/config.toml</code> under <code>[mcp_servers.vibelens]</code>, or <code>codex mcp add vibelens -- npx -y mcp-vibelens@1</code></td><td><code>codex mcp list</code></td></tr>
+<tr><td>Cursor</td><td><code>.cursor/mcp.json</code> in the project, or <code>~/.cursor/mcp.json</code></td><td>Settings -&gt; MCP; the server must also be toggled on</td></tr>
+<tr><td>Google Antigravity</td><td><code>~/.gemini/antigravity/mcp_config.json</code> or <code>~/.gemini/config/mcp_config.json</code>, depending on build</td><td>Open it from the in-app MCP menu so you are certain which file is live</td></tr>
+<tr><td>Windsurf</td><td><code>~/.codeium/windsurf/mcp_config.json</code></td><td>Reload the window after editing</td></tr>
+<tr><td>VS Code (Copilot agent mode)</td><td><code>.vscode/mcp.json</code>, using the <code>servers</code> key rather than <code>mcpServers</code></td><td>The MCP view in the sidebar</td></tr>
+<tr><td>Claude Desktop</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code> on macOS</td><td>Fully quit and reopen the app; a window reload is not enough</td></tr>
+</tbody></table></div>
+<p>Checklist when it is still missing:</p>
+<ol>
+<li><p><strong>Validate the JSON.</strong> A trailing comma silently disables the whole file in
+most hosts. <code>node -e &quot;JSON.parse(require(&#39;fs&#39;).readFileSync(&#39;&lt;path&gt;&#39;,&#39;utf8&#39;))&quot;</code>
+will tell you.</p>
+</li>
+<li><p><strong>Use the right top-level key.</strong> VS Code expects <code>servers</code>; the others expect
+<code>mcpServers</code>.</p>
+</li>
+<li><p><strong>Restart the host.</strong> Config is read at startup. Claude Desktop needs a full
+quit, not a reload.</p>
+</li>
+<li><p><strong>Confirm <code>npx</code> is on the PATH the IDE sees.</strong> GUI apps on macOS do not
+inherit a shell profile, so a Node installed by <code>nvm</code> may be invisible to
+them. If <code>command: &quot;npx&quot;</code> fails, use an absolute path
+(<code>/usr/local/bin/npx</code>, or the output of <code>which npx</code>).</p>
+</li>
+<li><p><strong>Check the Node version.</strong> <code>node -v</code> must be 20 or newer; the package
+declares <code>engines.node &gt;= 20.0.0</code>.</p>
+</li>
+<li><p><strong>Prove the server itself runs</strong>, independently of any IDE:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>npx -y mcp-vibelens@1</code></pre></div>
+<p>It should print <code>[vibelens] vibelens v&lt;version&gt; ready on stdio</code> to stderr and
+then wait. If it does, the server is fine and the problem is host config.</p>
+</li>
+<li><p><strong>Read the host&#39;s MCP log.</strong> Every VibeLens diagnostic goes to stderr prefixed
+<code>[vibelens]</code>, and hosts surface child-process stderr in their MCP logs.</p>
+</li>
+</ol>
+<hr>
+<h2 id="the-claude-code-plugin-installs-but-the-server-will-not-connect">The Claude Code plugin installs but the server will not connect<a class="heading-anchor" href="#the-claude-code-plugin-installs-but-the-server-will-not-connect" aria-label="Link to this section">#</a></h2>
+<p>The plugin does not contain the server. <code>plugin/.mcp.json</code> launches
+<code>npx -y mcp-vibelens@1</code>, so a plugin that installs cleanly can still fail to
+connect for reasons that have nothing to do with the plugin.</p>
+<p>Work through it in this order:</p>
+<ol>
+<li><strong>Is the plugin installed and enabled?</strong> <code>claude plugin list</code>. Installation
+and enablement are separate states.</li>
+<li><strong>Is the MCP server connected?</strong> <code>/mcp</code> inside a session. The plugin&#39;s server
+appears under the name <code>vibelens</code>.</li>
+<li><strong>Can npx reach the package?</strong> Run <code>npx -y mcp-vibelens@1</code> in a terminal; it
+should print the <code>[vibelens] ... ready on stdio</code> line to stderr and wait, then
+stop it with Ctrl-C. Offline machines, a private registry without an upstream
+proxy, or a corporate proxy that blocks <code>registry.npmjs.org</code> all break this —
+and the failure looks like a broken plugin.</li>
+<li><strong>Is Chromium installed?</strong> The plugin never installs it. The server connects
+fine without it and then every call returns <code>BROWSER_NOT_INSTALLED</code>.</li>
+<li><strong>Did you install from the right source?</strong> The marketplace entry must point at
+<code>./plugin</code>. If a fork changed it to <code>./</code>, Claude Code will run <code>npm install</code>
+in the repository root and pull roughly 112 MB of devDependencies into the
+plugin cache. <code>node scripts/validate-manifests.mjs</code> fails on this
+(<a href="/adr/0005-plugin-ships-from-subdirectory.html">ADR 0005</a>).</li>
+<li><strong>Did the plugin update but the behaviour did not?</strong> Claude Code ships an
+update only when <code>version</code> in <code>plugin/.claude-plugin/plugin.json</code> changes.
+Since the plugin launches <code>mcp-vibelens@1</code>, a new patch of the npm package
+arrives independently of any plugin version.</li>
+<li><strong>Are the plugin&#39;s own components present?</strong> The plugin provides slash commands for
+its skills (<code>/vibelens:check-ui</code>, <code>/vibelens:responsive-audit</code>,
+<code>/vibelens:console-triage</code>, <code>/vibelens:a11y-audit</code>, <code>/vibelens:before-after</code>), two
+subagents in <code>plugin/agents/</code>, and a <code>PostToolUse</code> hook that reminds you a frontend
+edit is unverified until re-captured. If the slash commands are missing but <code>/mcp</code>
+shows the server connected, the plugin is not installed and you have a bare MCP
+server configured instead.</li>
+</ol>
+<hr>
+<h2 id="stdout-corruption">Stdout corruption<a class="heading-anchor" href="#stdout-corruption" aria-label="Link to this section">#</a></h2>
+<p>The most confusing failure mode, because there is no error message.</p>
+<p><strong>Symptoms.</strong></p>
+<ul>
+<li>The host reports the server as failed or disconnected shortly after start.</li>
+<li><code>tools/list</code> returns nothing, or the host reports a JSON parse error.</li>
+<li>A tool call hangs forever and no <code>[vibelens]</code> line explains it.</li>
+<li>The server works when run manually but not under the IDE.</li>
+<li>Logs mention unexpected token, invalid JSON-RPC, or an unparseable frame.</li>
+</ul>
+<p><strong>Cause.</strong> Under stdio transport, stdout carries JSON-RPC frames and nothing
+else. Any other byte written there corrupts the stream. This is invariant 1 in
+<code>CLAUDE.md</code>: no module in <code>src/</code> calls <code>console.log</code>, and every diagnostic goes
+through <code>log()</code> in <code>server.ts</code>, which writes to stderr with a <code>[vibelens]</code>
+prefix.</p>
+<p><strong>If you are a user:</strong> the published package does not write to stdout, so
+suspect the surroundings.</p>
+<ul>
+<li>Anything in <code>command</code> that prints before the server starts will break it —
+wrapper scripts that echo a banner, a version-manager shim that prints, a shell
+profile writing to stdout for non-interactive shells (a classic: <code>echo</code> in
+<code>.bashrc</code> or <code>.zshenv</code>).</li>
+<li>Prove it with a direct run: <code>npx -y mcp-vibelens@1 &gt; /tmp/vl.out 2&gt; /tmp/vl.err</code>,
+then stop it. <code>/tmp/vl.err</code> should hold the <code>[vibelens] ... ready on stdio</code>
+line and <code>/tmp/vl.out</code> should be empty until a request is sent. Bytes in
+<code>/tmp/vl.out</code> at startup identify the culprit.</li>
+</ul>
+<p><strong>If you are a contributor:</strong> you added a stdout write, directly or through a
+dependency. <code>npm test</code> may still pass, because the protocol tests use
+<code>InMemoryTransport</code> and never touch a pipe. The check that catches it is
+<code>node scripts/smoke.mjs</code>, which spawns <code>dist/index.js</code> and completes an
+<code>initialize</code> -&gt; <code>tools/list</code> -&gt; <code>tools/call</code> exchange over real stdio. Run it
+before declaring transport-adjacent work done.</p>
+<hr>
+<h2 id="other-symptoms">Other symptoms<a class="heading-anchor" href="#other-symptoms" aria-label="Link to this section">#</a></h2>
+<p><strong>Captures are slow.</strong> Every call launches and closes its own Chromium, so cold
+start is included in <code>summary.captureMs</code>, along with your <code>delay</code> and the
+<code>networkidle</code> wait of up to 5 s. There is no browser pool in v1; the reasoning is
+in <code>ARCHITECTURE.md</code>. Lower <code>delay</code> if you do not need it.</p>
+<p><strong><code>domTruncated: true</code>.</strong> The sanitized DOM hit <code>MAX_DOM_CHARS</code> (20,000) and the
+tree in the response is partial, marked in-band. Inspect a narrower route rather
+than the whole application shell. Element-scoped capture is on the roadmap.</p>
+<p><strong>A class the model needs is missing from the snapshot.</strong> The sanitizer keeps
+<code>id</code>, <code>class</code>, <code>role</code>, <code>aria-*</code>, <code>data-testid</code>/<code>-test</code>/<code>-cy</code>/<code>-qa</code>, and form and
+table structure attributes; everything else is dropped, so a custom attribute you
+rely on will not appear. Contents of <code>svg</code>, <code>canvas</code>, <code>iframe</code>, <code>video</code>, <code>audio</code>,
+<code>object</code>, <code>embed</code>, <code>map</code> and <code>picture</code> are removed entirely — the element remains
+as an empty box because it still affects layout.</p>
+<p><strong>A <code>console.log</code> I added is not in the output.</strong> Only <code>error</code> and <code>warning</code> are
+captured; <code>console.log</code> is dropped as noise. Use <code>console.error</code> while debugging
+with this tool.</p>
+<p><strong>Text in the snapshot ends with <code>…[truncated]</code>.</strong> Per-node text is capped at 160
+characters and attributes at 300. Expected behaviour, not data loss in the page.</p>
+<p><strong>A logged-in page renders as logged-out.</strong> Each call creates a fresh browser
+context with no cookies or storage. There is no way to pass a session today.</p>
+<p><strong>Fonts or images differ from my browser.</strong> The capture runs in headless
+Chromium with <code>locale: en-US</code>, <code>timezoneId: UTC</code> and <code>--hide-scrollbars</code>, using
+only fonts installed on the machine. Small differences from your everyday
+browser are expected; layout structure is faithful.</p>
+<p><strong>Mobile capture looks unexpectedly large or sharp.</strong> The mobile and tablet
+presets use <code>deviceScaleFactor: 2</code>, so a 390x844 mobile capture is a 780x1688
+image. The CSS viewport is still 390 wide, which is what breakpoints respond to.</p>
+<hr>
+<h2 id="collecting-diagnostics">Collecting diagnostics<a class="heading-anchor" href="#collecting-diagnostics" aria-label="Link to this section">#</a></h2>
+<p>If you need to file an issue, this is the useful set:</p>
+<div class="code-block"><span class="code-lang">bash</span><pre><code>node -v
+npm view mcp-vibelens version
+npx playwright --version</code></pre></div>
+<p>Plus:</p>
+<ul>
+<li>the full VibeLens error text, including the code in parentheses;</li>
+<li>the <code>summary</code> block from a successful call, if one succeeds;</li>
+<li>the shape of the URL (port and path; the host is always local);</li>
+<li>your IDE and its MCP config block, with any secrets removed;</li>
+<li>the <code>[vibelens]</code>-prefixed lines from the host&#39;s MCP log.</li>
+</ul>
+<p>From a clone of the repository, the fastest confirmation that the whole pipeline
+works on your machine is <code>npm run typecheck &amp;&amp; npm test</code> — 63 tests, including
+real Chromium captures against a local fixture server — followed by
+<code>node scripts/smoke.mjs</code> for the stdio path.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/faq.html"><small>Previous</small><strong>FAQ</strong></a><a class="next" href="/plugin.html"><small>Next</small><strong>Skills &amp; agents</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#how-to-read-an-error">How to read an error</a></li>
+<li class="lvl-2"><a href="#error-codes">Error codes</a></li>
+<li class="lvl-3"><a href="#invalidurl">INVALID_URL</a></li>
+<li class="lvl-3"><a href="#connectionrefused">CONNECTION_REFUSED</a></li>
+<li class="lvl-3"><a href="#dnsfailure">DNS_FAILURE</a></li>
+<li class="lvl-3"><a href="#unsafeport">UNSAFE_PORT</a></li>
+<li class="lvl-3"><a href="#timeout">TIMEOUT</a></li>
+<li class="lvl-3"><a href="#browsernotinstalled">BROWSER_NOT_INSTALLED</a></li>
+<li class="lvl-3"><a href="#browserlaunchfailed">BROWSER_LAUNCH_FAILED</a></li>
+<li class="lvl-3"><a href="#unknown">UNKNOWN</a></li>
+<li class="lvl-2"><a href="#the-screenshot-is-blank-or-half-rendered">The screenshot is blank or half-rendered</a></li>
+<li class="lvl-2"><a href="#chromium-is-missing">Chromium is missing</a></li>
+<li class="lvl-2"><a href="#the-tool-is-not-listed-in-my-ide">The tool is not listed in my IDE</a></li>
+<li class="lvl-2"><a href="#the-claude-code-plugin-installs-but-the-server-will-not-connect">The Claude Code plugin installs but the server will not connect</a></li>
+<li class="lvl-2"><a href="#stdout-corruption">Stdout corruption</a></li>
+<li class="lvl-2"><a href="#other-symptoms">Other symptoms</a></li>
+<li class="lvl-2"><a href="#collecting-diagnostics">Collecting diagnostics</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

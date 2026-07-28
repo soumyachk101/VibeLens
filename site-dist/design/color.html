@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colour · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Colour · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html" aria-current="page">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Colour</h1>
+            <p>Do not pick colours one at a time. Choose one accent hue, derive everything else
+from it, name the results by role, and check the contrast. A palette built this
+way is coherent by construction and themeable without touching components.</p>
+<h2 id="the-order-of-decisions">The order of decisions<a class="heading-anchor" href="#the-order-of-decisions" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Step</th><th>Decision</th><th>Output</th></tr></thead><tbody>
+<tr><td>1</td><td>One accent hue</td><td>A hue angle</td></tr>
+<tr><td>2</td><td>A lightness ramp for that hue</td><td><code>--blue-50</code> … <code>--blue-900</code> primitives</td></tr>
+<tr><td>3</td><td>A neutral ramp tinted toward the accent</td><td><code>--gray-*</code> primitives</td></tr>
+<tr><td>4</td><td>Status hues: success, warning, danger</td><td>Three more ramps, usually short</td></tr>
+<tr><td>5</td><td>Semantic names mapped onto primitives</td><td><code>--surface</code>, <code>--text</code>, <code>--border</code>, …</td></tr>
+<tr><td>6</td><td>A second mapping for dark mode</td><td>Same semantic names, different primitives</td></tr>
+<tr><td>7</td><td>Contrast verification of every text-on-surface pair</td><td>Pass or fail</td></tr>
+</tbody></table></div>
+<p>Components only ever read step 5 names. That is what makes step 6 possible.</p>
+<h2 id="why-oklch-not-hsl">Why OKLCH, not HSL<a class="heading-anchor" href="#why-oklch-not-hsl" aria-label="Link to this section">#</a></h2>
+<p>HSL&#39;s lightness is not perceptual. <code>hsl(60 100% 50%)</code> (yellow) and
+<code>hsl(240 100% 50%)</code> (blue) claim the same 50% lightness but differ enormously in
+perceived brightness, so an HSL ramp stepped evenly in <code>L</code> produces uneven steps
+and hue shifts. OKLCH is designed so equal <code>L</code> steps look equally spaced and so
+<code>L</code> is comparable across hues.</p>
+<div class="code-block"><span class="code-lang">css</span><pre><code>/* oklch(lightness chroma hue) - L is 0-1 (or a percentage), C is
+   chroma (0 = grey), H is the hue angle in degrees. */
+--blue-500: oklch(0.58 0.15 258);</code></pre></div>
+<p>Practical consequences:</p>
+<ul>
+<li>Build a ramp by walking <code>L</code> in even steps and holding <code>H</code>.</li>
+<li>Reduce <code>C</code> at both ends. Very light and very dark colours cannot carry high
+chroma without looking artificial, and out-of-gamut values get clipped.</li>
+<li>Two hues at the same <code>L</code> are genuinely comparable, so a hue swap does not break
+a contrast check the way it does in HSL.</li>
+<li><code>oklch()</code> also reaches colours outside sRGB on wide-gamut displays. If you must
+support engines without <code>oklch()</code>, provide an sRGB fallback declaration first
+and let the later <code>oklch()</code> declaration win where supported.</li>
+</ul>
+<h2 id="primitive-ramps">Primitive ramps<a class="heading-anchor" href="#primitive-ramps" aria-label="Link to this section">#</a></h2>
+<div class="code-block"><span class="code-lang">css</span><pre><code>:root {
+  /* Accent: one hue (258), even lightness steps, chroma easing off at the ends. */
+  --blue-50:  oklch(0.97 0.02 258);
+  --blue-100: oklch(0.93 0.04 258);
+  --blue-200: oklch(0.87 0.07 258);
+  --blue-300: oklch(0.78 0.11 258);
+  --blue-400: oklch(0.68 0.14 258);
+  --blue-500: oklch(0.58 0.15 258);
+  --blue-600: oklch(0.50 0.15 258);
+  --blue-700: oklch(0.42 0.13 258);
+  --blue-800: oklch(0.33 0.10 258);
+  --blue-900: oklch(0.24 0.07 258);
+
+  /* Neutrals: same hue, tiny chroma. Not pure grey - see below. */
+  --gray-50:  oklch(0.985 0.003 258);
+  --gray-100: oklch(0.96  0.005 258);
+  --gray-200: oklch(0.92  0.006 258);
+  --gray-300: oklch(0.86  0.007 258);
+  --gray-400: oklch(0.71  0.008 258);
+  --gray-500: oklch(0.58  0.009 258);
+  --gray-600: oklch(0.47  0.010 258);
+  --gray-700: oklch(0.37  0.011 258);
+  --gray-800: oklch(0.27  0.012 258);
+  --gray-900: oklch(0.18  0.012 258);
+}</code></pre></div>
+<p>Neutrals are tinted, not <code>oklch(L 0 0)</code>. Pure grey next to a saturated accent
+looks dead, and a shared hue makes the neutrals feel like they belong to the same
+palette. Keep chroma very low — enough to feel warm or cool, not enough to read
+as a colour. Warm the neutrals (a hue near 60–90) for editorial and consumer
+work, cool them (200–280) for tools and dashboards.</p>
+<p>Derive related shades in place rather than inventing values:</p>
+<div class="code-block"><span class="code-lang">css</span><pre><code>.btn { background: var(--accent); }
+.btn:hover  { background: color-mix(in oklch, var(--accent), black 10%); }
+.btn:active { background: color-mix(in oklch, var(--accent), black 18%); }</code></pre></div>
+<h2 id="semantic-tokens">Semantic tokens<a class="heading-anchor" href="#semantic-tokens" aria-label="Link to this section">#</a></h2>
+<p>Primitives say what a colour <em>is</em>. Semantic tokens say what it is <em>for</em>. A
+component that reads <code>--blue-600</code> is stuck with blue; one that reads <code>--accent</code>
+is themeable.</p>
+<div class="table-wrap"><table><thead><tr><th>Token</th><th>Role</th></tr></thead><tbody>
+<tr><td><code>--surface</code></td><td>Page background</td></tr>
+<tr><td><code>--surface-elevated</code></td><td>Cards, panels, popovers — a step off the page</td></tr>
+<tr><td><code>--surface-sunken</code></td><td>Wells, inset areas, code blocks</td></tr>
+<tr><td><code>--border</code></td><td>Default dividers and control outlines</td></tr>
+<tr><td><code>--border-strong</code></td><td>Emphasised separation, focused input border</td></tr>
+<tr><td><code>--text</code></td><td>Primary body text</td></tr>
+<tr><td><code>--text-muted</code></td><td>Secondary text, help text, timestamps</td></tr>
+<tr><td><code>--text-subtle</code></td><td>Tertiary; must still pass 4.5:1 if it is real content</td></tr>
+<tr><td><code>--accent</code></td><td>Primary action, active state, links</td></tr>
+<tr><td><code>--accent-fg</code></td><td>Text or icon placed on <code>--accent</code></td></tr>
+<tr><td><code>--accent-subtle</code></td><td>Tinted background for selected or active rows</td></tr>
+<tr><td><code>--success</code> / <code>--warning</code> / <code>--danger</code></td><td>Status, each with a <code>-fg</code> and <code>-subtle</code> pair</td></tr>
+</tbody></table></div>
+<div class="code-block"><span class="code-lang">css</span><pre><code>:root {
+  --surface:          var(--gray-50);
+  --surface-elevated: #fff;              /* the one place near-white is fine: small elevated surfaces */
+  --surface-sunken:   var(--gray-100);
+  --border:           var(--gray-200);
+  --border-strong:    var(--gray-300);
+  --text:             var(--gray-900);
+  --text-muted:       var(--gray-600);
+  --accent:           var(--blue-600);
+  --accent-fg:        var(--gray-50);
+  --accent-subtle:    var(--blue-50);
+  --danger:           oklch(0.55 0.18 25);
+  --danger-subtle:    oklch(0.96 0.03 25);
+}</code></pre></div>
+<p>Keep the set small. If a component needs a colour that no semantic token
+provides, either the token set is missing a role or the component is decorating.</p>
+<h2 id="contrast">Contrast<a class="heading-anchor" href="#contrast" aria-label="Link to this section">#</a></h2>
+<p>WCAG 2.2 AA thresholds, measured as a contrast ratio against the actual
+background the element renders on:</p>
+<div class="table-wrap"><table><thead><tr><th>Content</th><th>Minimum</th></tr></thead><tbody>
+<tr><td>Body text and images of text</td><td>4.5:1</td></tr>
+<tr><td>Large text — 24px regular, or 18.66px bold and above</td><td>3:1</td></tr>
+<tr><td>UI component boundaries, icons conveying meaning, focus indicators</td><td>3:1</td></tr>
+<tr><td>Disabled controls, purely decorative graphics</td><td>No requirement</td></tr>
+</tbody></table></div>
+<p>AAA raises body text to 7:1 and large text to 4.5:1. Meet AA as the floor.</p>
+<p>How to check, in order of reliability:</p>
+<ol>
+<li>Browser DevTools shows the computed ratio in the colour picker for any text
+node, and flags AA/AAA pass or fail.</li>
+<li>The accessibility audit in DevTools (or an axe-based tool) catches pairs you
+did not think to inspect.</li>
+<li>Compute it if you need a number in code — the ratio is defined on relative
+luminance, so convert to sRGB first. Do not eyeball it and do not assume
+<code>--text-muted</code> passes because it looked fine.</li>
+</ol>
+<p>Contrast is a property of a <em>pair</em>. <code>--text-muted</code> on <code>--surface</code> may pass while
+the same token on <code>--surface-sunken</code> fails. Check every combination that ships,
+including text on <code>--accent</code>, placeholder text, and hover backgrounds.</p>
+<p>Never use colour as the only carrier of meaning. A red border needs an icon or a
+message beside it; a green dot needs a label. Users with colour-vision
+deficiencies and users reading a greyscale screenshot get nothing from hue alone.</p>
+<h2 id="dark-mode">Dark mode<a class="heading-anchor" href="#dark-mode" aria-label="Link to this section">#</a></h2>
+<p>Dark mode is a second mapping of the same semantic names, not an inversion. An
+inverted palette gets the elevation wrong: in light mode elevated surfaces get
+lighter, and in dark mode they also get lighter, so flipping the ramp pushes
+cards <em>away</em> from the viewer.</p>
+<div class="code-block"><span class="code-lang">css</span><pre><code>:root { color-scheme: light; /* light tokens as above */ }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;                    /* themes scrollbars and form controls */
+    --surface:          var(--gray-900);
+    --surface-elevated: var(--gray-800);   /* lighter than the page, same as light mode's direction */
+    --surface-sunken:   oklch(0.14 0.012 258);
+    --border:           var(--gray-700);
+    --text:             var(--gray-100);
+    --text-muted:       var(--gray-400);
+    --accent:           var(--blue-400);   /* lighter step: 600 fails on a dark surface */
+    --accent-fg:        var(--gray-900);
+  }
+}</code></pre></div>
+<p>Four things change beyond the swap:</p>
+<div class="table-wrap"><table><thead><tr><th>Concern</th><th>Adjustment</th></tr></thead><tbody>
+<tr><td>Accent lightness</td><td>Move up the ramp; a mid-dark accent loses contrast on dark surfaces</td></tr>
+<tr><td>Chroma</td><td>Reduce it slightly; saturated colour vibrates against dark backgrounds</td></tr>
+<tr><td>Elevation</td><td>Signal it with a lighter surface, not a bigger shadow — shadows barely read on dark</td></tr>
+<tr><td>Images</td><td>Consider a small <code>filter: brightness(.9)</code> on bright photography, not on UI</td></tr>
+</tbody></table></div>
+<p>Set <code>color-scheme</code> so native scrollbars, form controls and the canvas background
+follow the theme. If you offer a manual toggle, drive it with a <code>data-theme</code>
+attribute and keep the media query as the default so the system preference is
+respected before the user chooses.</p>
+<h2 id="why-not-pure-black-and-pure-white">Why not pure black and pure white<a class="heading-anchor" href="#why-not-pure-black-and-pure-white" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Value</th><th>Problem</th></tr></thead><tbody>
+<tr><td><code>#000</code> background</td><td>Maximum contrast with light text causes halation; no room for a darker recessed surface</td></tr>
+<tr><td><code>#fff</code> text on black</td><td>Same halation from the other side; tiring for sustained reading</td></tr>
+<tr><td><code>#000</code> text on <code>#fff</code></td><td>Harsh at long measures; a near-black at high contrast reads better</td></tr>
+<tr><td><code>#000</code> shadows</td><td>Read as grey holes rather than as light being blocked</td></tr>
+</tbody></table></div>
+<p>Stay inside the extremes: dark surfaces around <code>oklch(0.18 ...)</code>, light text
+around <code>oklch(0.96 ...)</code>, and tint both toward the palette hue. Keep <code>#fff</code>
+available for small elevated surfaces in light mode where it functions as the
+top of the elevation ramp.</p>
+<h2 id="state-colour-vs-decorative-colour">State colour vs decorative colour<a class="heading-anchor" href="#state-colour-vs-decorative-colour" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Purpose</th><th>Rule</th></tr></thead><tbody>
+<tr><td>State (selected, error, disabled, active)</td><td>Must be consistent everywhere and paired with a non-colour cue</td></tr>
+<tr><td>Status (success, warning, danger, info)</td><td>Fixed hues, used only for status — never as decoration</td></tr>
+<tr><td>Accent</td><td>The primary action and navigation state; one per view</td></tr>
+<tr><td>Data visualisation</td><td>Its own categorical scale, contrast-checked against the plot background</td></tr>
+<tr><td>Decoration</td><td>Neutrals and low-chroma accent tints. Not the status hues</td></tr>
+</tbody></table></div>
+<p>The common failure is spending the status hues on decoration: a green gradient in
+a hero, a red icon that means nothing. Once red appears decoratively, a real error
+no longer registers. Keep the status hues scarce so they still carry weight.</p>
+<h2 id="review-checklist">Review checklist<a class="heading-anchor" href="#review-checklist" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>One accent hue, derived into a ramp, not a stock palette import.</li>
+<li>Neutrals carry a slight tint from the accent hue.</li>
+<li>Components reference semantic tokens only; no primitive or hex in a component.</li>
+<li>Every shipped text-on-surface pair verified at 4.5:1, or 3:1 for large text and
+UI boundaries.</li>
+<li>Dark mode is a token remap with a lighter accent step, plus <code>color-scheme</code>.</li>
+<li>No <code>#000</code> surfaces and no <code>#fff</code> body text.</li>
+<li>Status hues appear only for status.</li>
+</ul>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/design/typography.html"><small>Previous</small><strong>Typography</strong></a><a class="next" href="/design/spacing-layout.html"><small>Next</small><strong>Spacing &amp; layout</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#the-order-of-decisions">The order of decisions</a></li>
+<li class="lvl-2"><a href="#why-oklch-not-hsl">Why OKLCH, not HSL</a></li>
+<li class="lvl-2"><a href="#primitive-ramps">Primitive ramps</a></li>
+<li class="lvl-2"><a href="#semantic-tokens">Semantic tokens</a></li>
+<li class="lvl-2"><a href="#contrast">Contrast</a></li>
+<li class="lvl-2"><a href="#dark-mode">Dark mode</a></li>
+<li class="lvl-2"><a href="#why-not-pure-black-and-pure-white">Why not pure black and pure white</a></li>
+<li class="lvl-2"><a href="#state-colour-vs-decorative-colour">State colour vs decorative colour</a></li>
+<li class="lvl-2"><a href="#review-checklist">Review checklist</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

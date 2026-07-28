@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture decision records · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Architecture decision records · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/" aria-current="page">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Architecture decision records</h1>
+            <p>Each record captures one decision that shaped VibeLens: the context at the time,
+what was decided, what it cost, and what was rejected. Records are immutable.
+Reversing a decision means writing a new record that supersedes the old one, not
+editing history.</p>
+<p>Format: <code># ADR NNNN: Title</code>, then <code>## Status</code>, <code>## Context</code>, <code>## Decision</code>,
+<code>## Consequences</code>, <code>## Alternatives considered</code>.</p>
+<h2 id="index">Index<a class="heading-anchor" href="#index" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>ADR</th><th>Title</th><th>Status</th><th>Primary subject</th></tr></thead><tbody>
+<tr><td><a href="./0001-mcp-over-stdio.md">0001</a></td><td>MCP over stdio</td><td>Accepted</td><td>Transport and integration surface</td></tr>
+<tr><td><a href="./0002-playwright-over-puppeteer.md">0002</a></td><td>Playwright over Puppeteer</td><td>Accepted</td><td>Browser automation dependency</td></tr>
+<tr><td><a href="./0003-ssrf-allowlist-not-denylist.md">0003</a></td><td>SSRF allowlist, not denylist</td><td>Accepted</td><td>Security model</td></tr>
+<tr><td><a href="./0004-single-tool-not-many.md">0004</a></td><td>One tool, not many</td><td>Accepted</td><td>Model-facing API shape</td></tr>
+<tr><td><a href="./0005-plugin-ships-from-subdirectory.md">0005</a></td><td>The plugin ships from a subdirectory</td><td>Accepted</td><td>Distribution</td></tr>
+<tr><td><a href="./0006-jpeg-screenshots-and-dom-truncation.md">0006</a></td><td>JPEG screenshots and DOM truncation</td><td>Accepted</td><td>Context-window budget</td></tr>
+</tbody></table></div>
+<h2 id="reading-order">Reading order<a class="heading-anchor" href="#reading-order" aria-label="Link to this section">#</a></h2>
+<p>For a first pass, 0004 and 0006 explain the model-facing design, 0003 explains
+the security boundary, and 0001, 0002 and 0005 explain the plumbing.
+<a href="/architecture.html">ARCHITECTURE.md</a> describes the resulting system; these
+records describe why it is that system and not another one.</p>
+<h2 id="conventions">Conventions<a class="heading-anchor" href="#conventions" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>One decision per record. If a record needs two decisions, it needs to be two
+records.</li>
+<li><code>## Consequences</code> must state what was given up, not only what was gained. A
+record with no costs listed is incomplete.</li>
+<li><code>## Alternatives considered</code> names the option and the reason it lost. &quot;We did
+not consider alternatives&quot; is a valid answer only if it is true.</li>
+<li>Numbers in a record must be measurable from this repository.</li>
+</ul>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/prd-trd.html"><small>Previous</small><strong>PRD &amp; TRD</strong></a><a class="next" href="/adr/0001-mcp-over-stdio.html"><small>Next</small><strong>0001 · MCP over stdio</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#index">Index</a></li>
+<li class="lvl-2"><a href="#reading-order">Reading order</a></li>
+<li class="lvl-2"><a href="#conventions">Conventions</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

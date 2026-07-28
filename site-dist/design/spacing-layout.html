@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spacing and layout · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Spacing and layout · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html" aria-current="page">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Spacing and layout</h1>
+            <p>Spacing is the cheapest hierarchy available and the first thing that looks
+improvised when it is chosen per element. Use a scale, use it to signal grouping,
+and let the content decide the layout.</p>
+<h2 id="the-spacing-scale">The spacing scale<a class="heading-anchor" href="#the-spacing-scale" aria-label="Link to this section">#</a></h2>
+<p>Base 4px. Every gap, padding and margin is a step on this scale.</p>
+<div class="table-wrap"><table><thead><tr><th>Token</th><th>Value</th><th>Typical use</th></tr></thead><tbody>
+<tr><td><code>--space-1</code></td><td>4px</td><td>Icon-to-label, badge padding</td></tr>
+<tr><td><code>--space-2</code></td><td>8px</td><td>Inside dense controls, tight stacks</td></tr>
+<tr><td><code>--space-3</code></td><td>12px</td><td>Form field padding, list row padding</td></tr>
+<tr><td><code>--space-4</code></td><td>16px</td><td>Default gap between related elements</td></tr>
+<tr><td><code>--space-5</code></td><td>20px</td><td>Card padding, small</td></tr>
+<tr><td><code>--space-6</code></td><td>24px</td><td>Card padding, default</td></tr>
+<tr><td><code>--space-8</code></td><td>32px</td><td>Between groups inside a section</td></tr>
+<tr><td><code>--space-10</code></td><td>40px</td><td>Between subsections</td></tr>
+<tr><td><code>--space-12</code></td><td>48px</td><td>Section padding, compact</td></tr>
+<tr><td><code>--space-16</code></td><td>64px</td><td>Section padding, default</td></tr>
+<tr><td><code>--space-24</code></td><td>96px</td><td>Section padding, marketing</td></tr>
+</tbody></table></div>
+<div class="code-block"><span class="code-lang">css</span><pre><code>:root {
+  --space-1: 0.25rem; --space-2: 0.5rem;  --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem;  --space-8: 2rem;    --space-10: 2.5rem;
+  --space-12: 3rem;   --space-16: 4rem;   --space-24: 6rem;
+}</code></pre></div>
+<p>Why a scale beats arbitrary values: 4px is small enough to express real
+differences and large enough that adjacent steps are visibly distinct, so
+misalignment of a few pixels becomes impossible. A limited set also makes
+&quot;14px here, 15px there&quot; — the clearest sign nothing was measured — unrepresentable.</p>
+<p>Notes:</p>
+<ul>
+<li>Use <code>rem</code> so spacing scales with the user&#39;s font size.</li>
+<li>Skip odd steps at the large end. Nobody can tell 40px from 44px in a section
+gap, so shipping both is noise.</li>
+<li>Break the scale only for optical corrections (below), and comment why.</li>
+</ul>
+<h2 id="spacing-as-proximity">Spacing as proximity<a class="heading-anchor" href="#spacing-as-proximity" aria-label="Link to this section">#</a></h2>
+<p>Elements close together are read as one group. This is the mechanism, so use it
+deliberately: <strong>the space inside a group must be smaller than the space around
+it.</strong> The most common spacing bug is a label sitting equidistant from its own
+field and the field above, which makes the form unreadable regardless of how
+correct each value is.</p>
+<div class="table-wrap"><table><thead><tr><th>Relationship</th><th>Gap</th></tr></thead><tbody>
+<tr><td>Label to its own input</td><td><code>--space-1</code> / <code>--space-2</code></td></tr>
+<tr><td>Help text to its input</td><td><code>--space-1</code></td></tr>
+<tr><td>Field to next field</td><td><code>--space-4</code> / <code>--space-5</code></td></tr>
+<tr><td>Field group to next group</td><td><code>--space-8</code></td></tr>
+<tr><td>Section to next section</td><td><code>--space-16</code> and up</td></tr>
+</tbody></table></div>
+<p>Reduce space to group things before you add a border or a background to group
+them. A divider that only exists because the spacing was wrong is one more thing
+to maintain.</p>
+<h2 id="optical-vs-mathematical-alignment">Optical vs mathematical alignment<a class="heading-anchor" href="#optical-vs-mathematical-alignment" aria-label="Link to this section">#</a></h2>
+<p>Equal numbers do not always look equal. Fix by eye, then encode the fix.</p>
+<div class="table-wrap"><table><thead><tr><th>Situation</th><th>Mathematical result</th><th>Optical correction</th></tr></thead><tbody>
+<tr><td>Icon beside text</td><td>Icon bounding box aligned to text box</td><td>Align to cap height; the box includes descender space text does not use</td></tr>
+<tr><td>Circle or triangle beside a square</td><td>Same width</td><td>Make the round or pointed shape slightly larger so it reads the same size</td></tr>
+<tr><td>Text inside a pill</td><td>Equal left/right padding</td><td>Add 1–2px more on the side facing a round cap</td></tr>
+<tr><td>Button with a trailing chevron</td><td>Equal padding both sides</td><td>Reduce the trailing padding; the chevron&#39;s whitespace already reads as space</td></tr>
+<tr><td>Left-aligned quote or bullet</td><td>Text edge flush</td><td>Hang the punctuation or marker into the margin so the text edge stays straight</td></tr>
+<tr><td>Multi-line heading</td><td>Default <code>line-height</code> box</td><td>Trim leading above the first line so the cap sits on the intended baseline</td></tr>
+</tbody></table></div>
+<p>Also watch the extra spacing that comes free and then has to be removed: a
+heading&#39;s default margin plus a container&#39;s padding, or a <code>line-height</code> box adding
+space above the first line of a card title.</p>
+<h2 id="container-width-and-measure">Container width and measure<a class="heading-anchor" href="#container-width-and-measure" aria-label="Link to this section">#</a></h2>
+<p>Container width and text measure are separate constraints. A wide container is
+fine; a wide paragraph is not.</p>
+<div class="code-block"><span class="code-lang">css</span><pre><code>.container { max-inline-size: 72rem; margin-inline: auto;
+             padding-inline: max(var(--space-4), env(safe-area-inset-left)); }
+.prose     { max-inline-size: 68ch; }         /* measure, not layout */
+.sidebar   { inline-size: min(20rem, 100%); } /* never wider than its parent */</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th>Container</th><th>Width</th></tr></thead><tbody>
+<tr><td>Prose, article body</td><td>60–75ch</td></tr>
+<tr><td>Marketing section</td><td>64–80rem</td></tr>
+<tr><td>App shell</td><td>Full width, with internal max-widths per region</td></tr>
+<tr><td>Dialog</td><td><code>min(32rem, calc(100vw - 2 * var(--space-4)))</code></td></tr>
+<tr><td>Form column</td><td>24–32rem — wide inputs invite wrong input</td></tr>
+</tbody></table></div>
+<p>Use logical properties (<code>max-inline-size</code>, <code>padding-inline</code>, <code>margin-block</code>) so
+the layout works in right-to-left writing modes without a second stylesheet.</p>
+<h2 id="grid-or-flex">Grid or flex<a class="heading-anchor" href="#grid-or-flex" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Use</th><th>Because</th></tr></thead><tbody>
+<tr><td><strong>Flex</strong> for a row or column of items whose sizes come from their content</td><td>Toolbars, button rows, chips, nav, badge groups</td></tr>
+<tr><td><strong>Flex</strong> when items should wrap freely with no column alignment</td><td>Tag lists</td></tr>
+<tr><td><strong>Grid</strong> when items must align across both axes</td><td>Card grids, forms, dashboards, tables of layout</td></tr>
+<tr><td><strong>Grid</strong> for the page shell</td><td>Named areas beat nested wrappers</td></tr>
+<tr><td><strong>Grid</strong> for overlaying items in one cell</td><td><code>grid-area: 1/1</code> avoids absolute positioning</td></tr>
+</tbody></table></div>
+<p>The short rule: if you need alignment in one direction, use flex; if you need it
+in two, use grid. Reach for <code>grid-template-areas</code> when the shell would otherwise
+need wrapper divs that exist only for layout.</p>
+<div class="code-block"><span class="code-lang">css</span><pre><code>/* Responsive without breakpoints: as many columns as fit, min 16rem each. */
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: var(--space-6);
+}
+
+/* Page shell. */
+.shell {
+  display: grid;
+  grid-template: &quot;header header&quot; auto
+                 &quot;nav    main&quot;   1fr
+                 &quot;footer footer&quot; auto / 16rem 1fr;
+  min-block-size: 100dvh;
+}</code></pre></div>
+<p><code>min(16rem, 100%)</code> inside <code>minmax()</code> matters: a bare <code>16rem</code> minimum overflows a
+viewport narrower than 16rem.</p>
+<h2 id="container-queries">Container queries<a class="heading-anchor" href="#container-queries" aria-label="Link to this section">#</a></h2>
+<p>A component&#39;s layout should respond to the space it has, not to the viewport. The
+same card in a sidebar and in a main column needs different internal layout at the
+same viewport width, which media queries cannot express.</p>
+<div class="code-block"><span class="code-lang">css</span><pre><code>.card-host { container-type: inline-size; container-name: card; }
+
+/* Applies when the container is wide, wherever the container happens to be. */
+@container card (inline-size &gt; 28rem) {
+  .card { grid-template-columns: 12rem 1fr; gap: var(--space-6); }
+}</code></pre></div>
+<p>Use <code>container-type: inline-size</code> (not <code>size</code>) for normal flow content —
+<code>size</code> requires the block dimension to be constrained too. Keep media queries for
+genuinely viewport-level decisions: page shell, navigation pattern, safe areas.
+Container query units (<code>cqi</code>, <code>cqw</code>) are available for sizing relative to the
+container.</p>
+<h2 id="modern-layout-primitives">Modern layout primitives<a class="heading-anchor" href="#modern-layout-primitives" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Primitive</th><th>Use</th><th>Example</th></tr></thead><tbody>
+<tr><td><code>gap</code></td><td>Spacing between flex/grid children</td><td><code>gap: var(--space-4)</code> — replaces child margins and the last-child reset</td></tr>
+<tr><td><code>min()</code> / <code>max()</code></td><td>A bound without a breakpoint</td><td><code>inline-size: min(65ch, 100%)</code></td></tr>
+<tr><td><code>clamp()</code></td><td>Fluid value with hard limits</td><td><code>padding-block: clamp(3rem, 8vw, 6rem)</code></td></tr>
+<tr><td><code>aspect-ratio</code></td><td>Reserve space before media loads</td><td><code>aspect-ratio: 16/9</code> — prevents layout shift</td></tr>
+<tr><td><code>dvh</code> / <code>svh</code></td><td>Viewport height that accounts for mobile browser chrome</td><td><code>min-block-size: 100dvh</code></td></tr>
+<tr><td><code>:has()</code></td><td>Parent styling from a child&#39;s state</td><td><code>.field:has(:invalid) { --border: var(--danger); }</code></td></tr>
+</tbody></table></div>
+<p>Always pair <code>aspect-ratio</code> on media with intrinsic <code>width</code> and <code>height</code>
+attributes on the element, so space is reserved before CSS applies.</p>
+<h2 id="density-hierarchy">Density hierarchy<a class="heading-anchor" href="#density-hierarchy" aria-label="Link to this section">#</a></h2>
+<p>One padding value everywhere means nothing signals importance. Decide a density
+per region and keep it internally consistent.</p>
+<div class="table-wrap"><table><thead><tr><th>Density</th><th>Padding</th><th>Row height</th><th>Where</th></tr></thead><tbody>
+<tr><td>Compact</td><td><code>--space-1</code> / <code>--space-2</code></td><td>28–32px</td><td>Toolbars, menus, data tables, sidebars</td></tr>
+<tr><td>Default</td><td><code>--space-3</code> / <code>--space-4</code></td><td>36–44px</td><td>Forms, list rows, most controls</td></tr>
+<tr><td>Comfortable</td><td><code>--space-6</code></td><td>—</td><td>Cards, panels, dialogs</td></tr>
+<tr><td>Spacious</td><td><code>--space-12</code>+</td><td>—</td><td>Hero, empty states, marketing sections</td></tr>
+</tbody></table></div>
+<p>Two constraints on going compact: any touch target stays at least 24×24 CSS
+pixels with adequate spacing (WCAG 2.2 Target Size (Minimum), 2.5.8), and 44×44
+is the comfortable figure for primary touch controls. Compact density is for
+pointer-dense surfaces, so raise the density on small viewports.</p>
+<h2 id="z-index-as-a-named-scale">Z-index as a named scale<a class="heading-anchor" href="#z-index-as-a-named-scale" aria-label="Link to this section">#</a></h2>
+<p>Magic z-index numbers escalate: someone writes <code>9999</code>, the next person writes
+<code>10000</code>. Name the layers once and forbid raw numbers.</p>
+<div class="code-block"><span class="code-lang">css</span><pre><code>:root {
+  --z-base: 0;
+  --z-raised: 10;      /* sticky table header, hovered row */
+  --z-dropdown: 100;
+  --z-sticky: 200;     /* sticky page header */
+  --z-overlay: 300;    /* modal scrim */
+  --z-modal: 400;
+  --z-popover: 500;    /* must sit above a modal's own content */
+  --z-toast: 600;
+  --z-tooltip: 700;
+}</code></pre></div>
+<p>Two things that remove most z-index problems entirely:</p>
+<ul>
+<li><strong>Fewer stacking contexts.</strong> <code>transform</code>, <code>filter</code>, <code>opacity</code> below 1,
+<code>will-change</code> and <code>isolation: isolate</code> each create one, and a child cannot
+escape its parent&#39;s context no matter how high its z-index. When something
+&quot;won&#39;t go on top&quot;, look for the ancestor that created a context.</li>
+<li><strong>Top-layer elements.</strong> <code>&lt;dialog&gt;</code> opened with <code>showModal()</code> and popovers using
+the Popover API render in the browser&#39;s top layer, above all z-index. Use them
+for modals and menus and the stacking question disappears — along with focus
+trapping and dismissal, which they handle.</li>
+</ul>
+<h2 id="review-checklist">Review checklist<a class="heading-anchor" href="#review-checklist" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Every spacing value is a scale token; no arbitrary pixel values.</li>
+<li>Inside-group space is smaller than around-group space, everywhere.</li>
+<li>Prose has a measure; the container width and the measure are separate values.</li>
+<li>Grid where two-axis alignment is needed, flex where one axis is.</li>
+<li>Component-level responsiveness uses container queries, not viewport queries.</li>
+<li>Media has <code>aspect-ratio</code> plus intrinsic dimensions, so nothing shifts on load.</li>
+<li>Distinct densities exist; touch targets meet 24×24 minimum.</li>
+<li>No raw z-index numbers.</li>
+</ul>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/design/color.html"><small>Previous</small><strong>Colour</strong></a><a class="next" href="/design/motion.html"><small>Next</small><strong>Motion</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#the-spacing-scale">The spacing scale</a></li>
+<li class="lvl-2"><a href="#spacing-as-proximity">Spacing as proximity</a></li>
+<li class="lvl-2"><a href="#optical-vs-mathematical-alignment">Optical vs mathematical alignment</a></li>
+<li class="lvl-2"><a href="#container-width-and-measure">Container width and measure</a></li>
+<li class="lvl-2"><a href="#grid-or-flex">Grid or flex</a></li>
+<li class="lvl-2"><a href="#container-queries">Container queries</a></li>
+<li class="lvl-2"><a href="#modern-layout-primitives">Modern layout primitives</a></li>
+<li class="lvl-2"><a href="#density-hierarchy">Density hierarchy</a></li>
+<li class="lvl-2"><a href="#z-index-as-a-named-scale">Z-index as a named scale</a></li>
+<li class="lvl-2"><a href="#review-checklist">Review checklist</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design knowledge base · VibeLens</title>
+<meta name="description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:title" content="Design knowledge base · VibeLens">
+<meta property="og:description" content="VibeLens is a free, MIT-licensed MCP server that returns a screenshot, console and network diagnostics, and a token-optimized DOM snapshot of your local dev server, so an AI coding assistant fixes UI from evidence instead of guesswork.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/banner.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<link rel="stylesheet" href="/styles.css">
+<script>
+  /* Applied before first paint so the stored theme does not flash. */
+  try {
+    var stored = localStorage.getItem("vibelens-theme");
+    if (stored) document.documentElement.dataset.theme = stored;
+    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
+      document.documentElement.dataset.theme = "light";
+  } catch (e) {}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="/">
+    <img src="/assets/logo.svg" alt="" width="26" height="26">
+    Vibe<span>Lens</span>
+  </a>
+  <nav class="header-nav" aria-label="Site">
+    <a class="desktop-only" href="/install.html">Install</a>
+    <a class="desktop-only" href="/plugin.html">Skills</a>
+    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
+    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" aria-label="Documentation">
+    <h2>Overview</h2>
+<ul>
+<li><a href="/">Introduction</a></li>
+<li><a href="/install.html">Install &amp; IDE setup</a></li>
+<li><a href="/tool.html">Tool reference</a></li>
+<li><a href="/faq.html">FAQ</a></li>
+<li><a href="/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<h2>Claude Code plugin</h2>
+<ul>
+<li><a href="/plugin.html">Skills &amp; agents</a></li>
+</ul>
+<h2>Design system</h2>
+<ul>
+<li><a href="/design/" aria-current="page">Overview</a></li>
+<li><a href="/design/anti-slop.html">Anti-slop</a></li>
+<li><a href="/design/typography.html">Typography</a></li>
+<li><a href="/design/color.html">Colour</a></li>
+<li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
+<li><a href="/design/motion.html">Motion</a></li>
+</ul>
+<h2>Architecture</h2>
+<ul>
+<li><a href="/architecture.html">Architecture</a></li>
+<li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
+<li><a href="/adr/">ADR index</a></li>
+<li><a href="/adr/0001-mcp-over-stdio.html">0001 · MCP over stdio</a></li>
+<li><a href="/adr/0002-playwright-over-puppeteer.html">0002 · Playwright</a></li>
+<li><a href="/adr/0003-ssrf-allowlist-not-denylist.html">0003 · SSRF allowlist</a></li>
+<li><a href="/adr/0004-single-tool-not-many.html">0004 · One tool</a></li>
+<li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
+<li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
+</ul>
+<h2>Project</h2>
+<ul>
+<li><a href="/contributing.html">Contributing</a></li>
+<li><a href="/security.html">Security</a></li>
+<li><a href="/support.html">Support</a></li>
+<li><a href="/changelog.html">Changelog</a></li>
+<li><a href="/release.html">Releasing</a></li>
+<li><a href="/code-of-conduct.html">Code of conduct</a></li>
+</ul>
+  </nav>
+  <main class="main" id="content">
+        <div class="with-toc">
+          <article class="prose">
+            <h1>Design knowledge base</h1>
+            <p>Reference material for building and reviewing a frontend that reads as designed
+rather than generated. The plugin&#39;s skills stay short and link here when they
+need depth.</p>
+<h2 id="who-reads-this">Who reads this<a class="heading-anchor" href="#who-reads-this" aria-label="Link to this section">#</a></h2>
+<p>An AI agent, mid-task. You have either just been asked to build UI, or you have
+captured a page with <code>inspect_localhost_ui</code> and now have to judge it.</p>
+<p>These files exist because &quot;make it look good&quot; is not actionable, and because a
+model writing CSS from memory reaches for the same defaults every time — the
+ones that make output recognisable as machine-written. The corrections here are
+specific enough to apply without further interpretation.</p>
+<h2 id="how-to-use-it">How to use it<a class="heading-anchor" href="#how-to-use-it" aria-label="Link to this section">#</a></h2>
+<p>Read the file that matches the decision in front of you. Do not read all five
+before starting; that spends context you will need for the code.</p>
+<div class="table-wrap"><table><thead><tr><th>Situation</th><th>Read</th></tr></thead><tbody>
+<tr><td>Reviewing a capture, looking for what is wrong</td><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a></td></tr>
+<tr><td>Setting up a project&#39;s visual foundation from nothing</td><td>COLOR, then TYPOGRAPHY, then SPACING-LAYOUT</td></tr>
+<tr><td>One specific decision (a size, a colour, a duration)</td><td>that file&#39;s table only</td></tr>
+<tr><td>Adding or auditing animation</td><td><a href="./MOTION.md">MOTION.md</a></td></tr>
+<tr><td>Deciding whether a section should be a card grid</td><td>ANTI-SLOP §10, then SPACING-LAYOUT</td></tr>
+</tbody></table></div>
+<h2 id="the-files">The files<a class="heading-anchor" href="#the-files" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>File</th><th>Contents</th><th>Use when</th></tr></thead><tbody>
+<tr><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a></td><td>The recognisable tells of machine-generated UI, why each reads that way, and the concrete correction</td><td>Reviewing any page, or before writing the first line of a new component</td></tr>
+<tr><td><a href="./TYPOGRAPHY.md">TYPOGRAPHY.md</a></td><td>Modular type scale, line-height and measure, letter-spacing, font pairing, variable fonts, loading mechanics, OpenType features, <code>text-wrap</code></td><td>Text looks flat or uniform, lines run too wide, or the page shifts on font load</td></tr>
+<tr><td><a href="./COLOR.md">COLOR.md</a></td><td>Deriving a palette from one accent, OKLCH ramps, tinted neutrals, semantic tokens over primitives, WCAG contrast, dark mode as a mapping</td><td>Choosing any colour, or checking contrast</td></tr>
+<tr><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td><td>4px spacing scale, proximity, optical alignment, grid vs flex, container queries, <code>min()</code>/<code>clamp()</code>/<code>aspect-ratio</code>/<code>gap</code>, density, named z-index</td><td>Spacing is arbitrary or uniform, or layout defaults to a card grid</td></tr>
+<tr><td><a href="./MOTION.md">MOTION.md</a></td><td>Duration bands, easing by intent, compositor-safe properties, <code>prefers-reduced-motion</code>, stagger, view transitions, what never to animate</td><td>Adding animation, or a transition feels slow, floaty or gratuitous</td></tr>
+</tbody></table></div>
+<h2 id="ground-rules-that-apply-across-all-five">Ground rules that apply across all five<a class="heading-anchor" href="#ground-rules-that-apply-across-all-five" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><strong>Decide with a system, not per element.</strong> Every size, colour, space and
+duration comes from a named scale. A value that appears once and belongs to no
+scale is the signal that a decision was improvised.</li>
+<li><strong>Uniformity is not consistency.</strong> Consistency means the same decision in the
+same situation. Uniformity — one radius, one padding, one shadow, one text
+size everywhere — removes the hierarchy a reader navigates by.</li>
+<li><strong>Contrast is a requirement, not a preference.</strong> WCAG 2.2 AA: 4.5:1 for body
+text, 3:1 for large text (18.66px bold or 24px regular and above) and for UI
+component boundaries and focus indicators. Check it; do not estimate it.</li>
+<li><strong>Every interactive element needs four states.</strong> Rest, hover,
+<code>:focus-visible</code>, disabled — plus active where the element commits an action.
+Missing focus styling is an accessibility failure, not a polish item.</li>
+<li><strong>Every data-driven surface needs four states.</strong> Loading, empty, error,
+populated. A component that renders only the happy path is unfinished.</li>
+<li><strong>Prefer the platform.</strong> <code>oklch()</code>, container queries, <code>text-wrap: balance</code>,
+<code>aspect-ratio</code>, <code>gap</code>, <code>:focus-visible</code>, <code>color-mix()</code> and view transitions
+are CSS features, not libraries. Add a dependency only when the platform
+genuinely lacks the capability.</li>
+<li><strong>Respect user preferences.</strong> <code>prefers-reduced-motion</code> and
+<code>prefers-color-scheme</code> are inputs to the design, not edge cases.</li>
+<li><strong>Verify with a capture.</strong> Reasoning about rendered output without looking at
+it is how the original problem started. Change, re-capture, compare.</li>
+</ol>
+<h2 id="working-order-for-a-new-project">Working order for a new project<a class="heading-anchor" href="#working-order-for-a-new-project" aria-label="Link to this section">#</a></h2>
+<p>Foundations first: later decisions depend on earlier ones, and retrofitting a
+scale after components exist means touching every file.</p>
+<div class="table-wrap"><table><thead><tr><th>Step</th><th>Decision</th><th>File</th></tr></thead><tbody>
+<tr><td>1</td><td>One accent hue, neutral tint, semantic token names</td><td><a href="./COLOR.md">COLOR.md</a></td></tr>
+<tr><td>2</td><td>Font stack and the ratio for the type scale</td><td><a href="./TYPOGRAPHY.md">TYPOGRAPHY.md</a></td></tr>
+<tr><td>3</td><td>Spacing base, radius scale, container widths, z-index names</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
+<tr><td>4</td><td>Named durations and easings</td><td><a href="./MOTION.md">MOTION.md</a></td></tr>
+<tr><td>5</td><td>Build components using only tokens from 1–4</td><td>—</td></tr>
+<tr><td>6</td><td>Review against the fast pass</td><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a></td></tr>
+</tbody></table></div>
+<p>If the project already has a design system, tokens or a component library, use
+it. Do not introduce a second scale alongside an existing one — read the existing
+tokens first and extend them.</p>
+<h2 id="reviewing-rather-than-building">Reviewing rather than building<a class="heading-anchor" href="#reviewing-rather-than-building" aria-label="Link to this section">#</a></h2>
+<p>When you have a capture and the task is judgement, not construction:</p>
+<ol>
+<li>Run the fast review pass in <a href="/design/anti-slop.html">ANTI-SLOP.md</a> against the
+screenshot before reading any code.</li>
+<li>Check <code>consoleLogs</code> and <code>failedRequests</code> — an empty box is usually a 404, not
+a styling problem.</li>
+<li>Use <code>simplifiedDOM</code> for real selectors. Never name a class you have not seen
+in the tree.</li>
+<li>Report defects with the evidence that shows them, and cite the file and
+section that defines the correction.</li>
+<li>Distinguish a defect (fails contrast, no focus ring, overflows) from a
+preference (a hue you would have chosen differently). Report the first as a
+problem and the second as an option, if at all.</li>
+</ol>
+<h2 id="token-vocabulary">Token vocabulary<a class="heading-anchor" href="#token-vocabulary" aria-label="Link to this section">#</a></h2>
+<p>The five files assume one shared naming convention so a token written in one
+place is recognisable in another. If the project already names things
+differently, follow the project.</p>
+<div class="table-wrap"><table><thead><tr><th>Prefix</th><th>Holds</th><th>Defined in</th></tr></thead><tbody>
+<tr><td><code>--surface-*</code>, <code>--text-*</code>, <code>--border-*</code></td><td>Semantic colour roles</td><td><a href="./COLOR.md">COLOR.md</a></td></tr>
+<tr><td><code>--accent*</code>, <code>--success*</code>, <code>--warning*</code>, <code>--danger*</code></td><td>Accent and status colour</td><td><a href="./COLOR.md">COLOR.md</a></td></tr>
+<tr><td><code>--text-&lt;size&gt;</code></td><td>Type scale steps</td><td><a href="./TYPOGRAPHY.md">TYPOGRAPHY.md</a></td></tr>
+<tr><td><code>--space-&lt;n&gt;</code></td><td>Spacing scale steps</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
+<tr><td><code>--radius-*</code></td><td>Radius scale</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
+<tr><td><code>--z-*</code></td><td>Named stacking levels</td><td><a href="./SPACING-LAYOUT.md">SPACING-LAYOUT.md</a></td></tr>
+<tr><td><code>--dur-*</code>, <code>--ease-*</code></td><td>Motion durations and curves</td><td><a href="./MOTION.md">MOTION.md</a></td></tr>
+<tr><td><code>--elev-*</code></td><td>Layered shadows</td><td><a href="./ANTI-SLOP.md">ANTI-SLOP.md</a> §7</td></tr>
+</tbody></table></div>
+<p>Two rules about tokens. A component reads semantic tokens, never primitives — so
+a theme change is a token remap rather than a component edit. And a hard-coded
+value in a component is a bug report about the scale: either the scale is missing
+a step, or the value should not exist.</p>
+<h2 id="scope">Scope<a class="heading-anchor" href="#scope" aria-label="Link to this section">#</a></h2>
+<p>These files cover visual and interaction craft. They do not cover component API
+design, state management, framework choice, or full accessibility conformance —
+the contrast, focus, motion-preference and tap-target guidance here is a floor,
+not an audit. For accessibility work beyond that floor, test with a keyboard and
+a screen reader, and consult WCAG directly.</p>
+<p>Everything asserted here is a CSS feature, a WCAG threshold, or a stated design
+rationale. There are no benchmarks or measurements in these files; if you need a
+number about your own app, measure it.</p>
+
+            <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/plugin.html"><small>Previous</small><strong>Skills &amp; agents</strong></a><a class="next" href="/design/anti-slop.html"><small>Next</small><strong>Anti-slop</strong></a></nav>
+          </article>
+          <nav class="toc" aria-label="On this page"><p>On this page</p><ul>
+<li class="lvl-2"><a href="#who-reads-this">Who reads this</a></li>
+<li class="lvl-2"><a href="#how-to-use-it">How to use it</a></li>
+<li class="lvl-2"><a href="#the-files">The files</a></li>
+<li class="lvl-2"><a href="#ground-rules-that-apply-across-all-five">Ground rules that apply across all five</a></li>
+<li class="lvl-2"><a href="#working-order-for-a-new-project">Working order for a new project</a></li>
+<li class="lvl-2"><a href="#reviewing-rather-than-building">Reviewing rather than building</a></li>
+<li class="lvl-2"><a href="#token-vocabulary">Token vocabulary</a></li>
+<li class="lvl-2"><a href="#scope">Scope</a></li>
+</ul></nav>
+        </div>
+      </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Free and MIT licensed. No paid tier, no account, no telemetry.</p>
+    <div class="footer-links">
+      <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.npmjs.com/package/mcp-vibelens" target="_blank" rel="noopener noreferrer">npm</a>
+      <a href="/changelog.html">Changelog</a>
+      <a href="/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js" defer></script>
+
+</body>
+</html>
