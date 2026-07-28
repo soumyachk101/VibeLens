@@ -1,5 +1,5 @@
 {
-  "name": "vibelens-mcp",
+  "name": "mcp-vibelens",
   "version": "1.0.0",
   "description": "VibeLens — an MCP server that gives AI coding assistants eyes on localhost: screenshots, console errors, and a token-optimized DOM snapshot.",
   "keywords": [
@@ -9,16 +9,30 @@
     "ui-debugging",
     "screenshot",
     "claude",
+    "claude-code",
     "cursor",
+    "codex",
     "antigravity",
     "vibe-coding"
   ],
   "license": "MIT",
+  "author": {
+    "name": "Soumya Chakraborty",
+    "url": "https://github.com/soumyachk101"
+  },
+  "homepage": "https://github.com/soumyachk101/VibeLens#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soumyachk101/VibeLens.git"
+  },
+  "bugs": {
+    "url": "https://github.com/soumyachk101/VibeLens/issues"
+  },
   "type": "module",
   "main": "./dist/server.js",
   "types": "./dist/server.d.ts",
   "bin": {
-    "vibelens-mcp": "./dist/index.js"
+    "mcp-vibelens": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -37,6 +51,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "install:browser": "playwright install chromium",
+    "validate:plugin": "claude plugin validate .",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

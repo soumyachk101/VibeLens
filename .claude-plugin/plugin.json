@@ -1,0 +1,22 @@
+{
+  "name": "vibelens",
+  "displayName": "VibeLens",
+  "description": "Gives Claude eyes on localhost. Captures a screenshot, console/network errors and a token-optimized DOM snapshot of your dev server so UI bugs get fixed from evidence instead of guesswork.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Soumya Chakraborty",
+    "url": "https://github.com/soumyachk101"
+  },
+  "homepage": "https://github.com/soumyachk101/VibeLens#readme",
+  "repository": "https://github.com/soumyachk101/VibeLens",
+  "license": "MIT",
+  "keywords": [
+    "ui",
+    "frontend",
+    "debugging",
+    "screenshot",
+    "playwright",
+    "localhost",
+    "responsive"
+  ]
+}

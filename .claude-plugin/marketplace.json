@@ -1,0 +1,17 @@
+{
+  "name": "vibelens",
+  "description": "VibeLens — visual debugging tools that let AI coding assistants see your localhost.",
+  "owner": {
+    "name": "Soumya Chakraborty",
+    "url": "https://github.com/soumyachk101"
+  },
+  "plugins": [
+    {
+      "name": "vibelens",
+      "source": "./",
+      "description": "Gives Claude eyes on localhost: screenshot + console/network errors + token-optimized DOM snapshot of your dev server.",
+      "category": "development",
+      "tags": ["ui", "frontend", "debugging", "screenshot", "playwright", "responsive"]
+    }
+  ]
+}
