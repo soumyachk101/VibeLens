@@ -424,12 +424,11 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
 <link rel="icon" type="image/svg+xml" href="${BASE}/assets/logo.svg">
 <link rel="stylesheet" href="${BASE}/styles.css">
 <script>
-  /* Applied before first paint so the stored theme does not flash. */
+  /* Dark is default. Light is applied only if explicitly stored by user toggle. */
   try {
     var stored = localStorage.getItem("vibelens-theme");
     if (stored) document.documentElement.dataset.theme = stored;
-    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
-      document.documentElement.dataset.theme = "light";
+    else document.documentElement.dataset.theme = "dark";
   } catch (e) {}
 </script>
 </head>
