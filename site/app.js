@@ -339,12 +339,64 @@
     });
 
     // Show the right shortcut hint: Ctrl on anything that is not a Mac.
+    // Show the right shortcut hint: Ctrl on anything that is not a Mac.
     if (!/Mac|iP(hone|ad)/.test(navigator.platform ?? navigator.userAgent)) {
       for (const kbd of document.querySelectorAll(".search-trigger kbd")) kbd.textContent = "Ctrl K";
     }
   } else {
-    // No dialog support, or no script-driven search: the trigger would be a
-    // dead control, so send it to the sidebar instead of leaving it broken.
     for (const trigger of triggers) trigger.hidden = true;
+  }
+
+  // --- interactive demo simulator --------------------------------------------
+  const demoTabs = document.querySelectorAll(".demo-tab");
+  const demoPanes = document.querySelectorAll(".demo-pane");
+  const runDemoBtn = document.querySelector("#run-demo-btn");
+
+  if (demoTabs.length && demoPanes.length) {
+    let isRunning = false;
+
+    const switchTab = (tabName) => {
+      demoTabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === tabName));
+      demoPanes.forEach((p) => p.classList.toggle("active", p.id === `pane-${tabName}`));
+    };
+
+    demoTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        if (!isRunning) switchTab(tab.dataset.tab);
+      });
+    });
+
+    if (runDemoBtn) {
+      const stages = [
+        { id: "screenshot", label: "📸 Capturing 1280x800 Viewport Screenshot..." },
+        { id: "console", label: "🚨 Triaging 1 Console Error & 404 API Endpoint..." },
+        { id: "dom", label: "🌳 Extracting Token-Reduced DOM Tree (95.4% saved)..." },
+        { id: "ai-fix", label: "✨ Claude Code verifies fix with 2nd VibeLens capture!" },
+      ];
+
+      runDemoBtn.addEventListener("click", () => {
+        if (isRunning) return;
+        isRunning = true;
+        runDemoBtn.disabled = true;
+        const originalHtml = runDemoBtn.innerHTML;
+
+        stages.forEach((stage, idx) => {
+          setTimeout(() => {
+            switchTab(stage.id);
+            runDemoBtn.innerHTML = `⏳ Step ${idx + 1}/4: ${stage.id.toUpperCase()}`;
+            if (typeof showToast === "function") {
+              showToast(stage.label);
+            }
+            if (idx === stages.length - 1) {
+              setTimeout(() => {
+                isRunning = false;
+                runDemoBtn.disabled = false;
+                runDemoBtn.innerHTML = originalHtml;
+              }, 1200);
+            }
+          }, idx * 1200);
+        });
+      });
+    }
   }
 })();

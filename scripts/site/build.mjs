@@ -420,7 +420,7 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="${BASE}/assets/logo.svg">
 <link rel="stylesheet" href="${BASE}/styles.css">
 <script>
@@ -428,13 +428,12 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
   try {
     var stored = localStorage.getItem("vibelens-theme");
     if (stored) document.documentElement.dataset.theme = stored;
-    else if (window.matchMedia("(prefers-color-scheme: light)").matches)
-      document.documentElement.dataset.theme = "dark";
-    else document.documentElement.dataset.theme = "dark";
+    else document.documentElement.dataset.theme = "light";
   } catch (e) {}
 </script>
 </head>
 <body>
+<div class="paper-grain" aria-hidden="true"></div>
 <a class="skip-link" href="#content">Skip to content</a>
 
 <header class="site-header">
@@ -534,20 +533,31 @@ function homePage(page) {
 <main class="home" id="content">
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow"><span class="pulse-dot"></span> <b>Free & Open Source</b> · MIT · No Telemetry</p>
-      <h1>Your AI writes the UI.<br><em>VibeLens lets it see it.</em></h1>
-      <p class="lede">
+      <div class="hero-eyebrow">
+        <span class="botanical-leaf">🌿</span>
+        <b>VibeLens v1.0.0</b>
+        <span class="eyebrow-sep">·</span>
+        <span>Botanical Open Source MCP Engine</span>
+      </div>
+
+      <h1 class="hero-title">
+        Your AI writes the UI.<br>
+        <em class="serif-italic">VibeLens lets it see it.</em>
+      </h1>
+
+      <p class="hero-lede">
         One MCP tool call returns a desktop, tablet or mobile screenshot, console & network diagnostics,
         and a token-optimized DOM snapshot preserving real IDs and Tailwind classes. Stop guessing selectors.
       </p>
+
       <div class="cta-row">
         <a class="button button-primary" href="${url("install.html")}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18" stroke-width="2.2"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Install in one command
+          INSTALL IN ONE COMMAND
         </a>
         <a class="button button-secondary" href="${SITE.repo}" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
-          View on GitHub
+          VIEW ON GITHUB
         </a>
       </div>
 
@@ -563,6 +573,117 @@ function homePage(page) {
         <div class="terminal-body">
           <span class="prompt">$</span>
           <code>claude plugin marketplace add soumyachk101/VibeLens</code>
+        </div>
+      </div>
+  </section>
+
+  <section class="section interactive-demo-section" id="demo-simulator">
+    <div class="section-head text-center" style="max-width: 720px; margin: 0 auto 36px; text-align: center;">
+      <span class="hero-eyebrow" style="margin-bottom: 16px;"><span class="botanical-leaf">✨</span> <b>Live Interactive Demo</b> <span class="eyebrow-sep">·</span> <span>Simulator</span></span>
+      <h2>Experience VibeLens in Action</h2>
+      <p>Click the 4 signal tabs below or hit <b>"SIMULATE MCP CAPTURE"</b> to see how VibeLens diagnoses and verifies UI fixes on localhost in real time.</p>
+    </div>
+
+    <div class="demo-card-container">
+      <div class="demo-toolbar">
+        <div class="demo-url-bar">
+          <span class="demo-status-dot"></span>
+          <span class="demo-url-prefix">GET http://localhost:3000</span>
+          <input type="text" class="demo-url-input" value="/checkout?cart_id=8921" readonly />
+        </div>
+        <button class="button button-primary demo-run-btn" id="run-demo-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          SIMULATE MCP CAPTURE
+        </button>
+      </div>
+
+      <div class="demo-tabs">
+        <button class="demo-tab active" data-tab="screenshot">
+          <span class="tab-icon">📸</span> 1. Viewport Screenshot
+        </button>
+        <button class="demo-tab" data-tab="console">
+          <span class="tab-icon">🚨</span> 2. Console & Network Triage
+        </button>
+        <button class="demo-tab" data-tab="dom">
+          <span class="tab-icon">🌳</span> 3. Token-Reduced DOM Tree
+        </button>
+        <button class="demo-tab" data-tab="ai-fix">
+          <span class="tab-icon">✨</span> 4. AI Verified Result
+        </button>
+      </div>
+
+      <div class="demo-content-view">
+        <!-- Tab 1: Screenshot View -->
+        <div class="demo-pane active" id="pane-screenshot">
+          <div class="mock-browser-window">
+            <div class="mock-browser-bar">
+              <span class="m-dot m-red"></span><span class="m-dot m-yellow"></span><span class="m-dot m-green"></span>
+              <span class="mock-title">Localhost Viewport (Desktop 1280x800)</span>
+            </div>
+            <div class="mock-page-body">
+              <div class="mock-checkout-card">
+                <h3>Shopping Cart Checkout</h3>
+                <div class="mock-cart-item">
+                  <span>Botanical Ceramic Planter</span>
+                  <b>$48.00</b>
+                </div>
+                <div class="mock-cart-item">
+                  <span>Sage Leaf Extract Tea</span>
+                  <b>$18.00</b>
+                </div>
+                <div class="mock-error-callout">
+                  ⚠️ Button overflow detected: Pay button overlaps order summary footer!
+                </div>
+                <button class="mock-btn-overflow" id="checkout-btn">Complete Purchase Now ($66.00)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Console & Network View -->
+        <div class="demo-pane" id="pane-console">
+          <div class="mock-terminal-window">
+            <div class="console-line error">
+              <span class="c-tag">ERR</span> <code>Hydration Mismatch: &lt;button id="checkout-btn"&gt; server render did not match client text.</code>
+            </div>
+            <div class="console-line fail">
+              <span class="c-tag">404</span> <code>POST http://localhost:3000/api/checkout/validate - 404 (Not Found)</code>
+            </div>
+            <div class="console-line warn">
+              <span class="c-tag">WARN</span> <code>[DOM Budget] 193.5 KB raw HTML reduced to 8.8 KB clean tokens (95.4% saved).</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: DOM View -->
+        <div class="demo-pane" id="pane-dom">
+          <pre class="dom-code-view"><code>&lt;div class="checkout-card p-8 rounded-3xl bg-surface"&gt;
+  &lt;h3 class="font-serif text-xl"&gt;Shopping Cart Checkout&lt;/h3&gt;
+  &lt;div class="cart-item flex justify-between"&gt;...&lt;/div&gt;
+  
+  <span class="highlight-dom">&lt;!-- VibeLens pinpoints exact offending element --&gt;
+  &lt;button id="checkout-btn" class="bg-terracotta w-full overflow-visible -mb-12"&gt;
+    Complete Purchase Now ($66.00)
+  &lt;/button&gt;</span>
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <!-- Tab 4: AI Fix View -->
+        <div class="demo-pane" id="pane-ai-fix">
+          <div class="ai-fix-card">
+            <div class="ai-fix-header">
+              <span class="ai-icon">🤖</span>
+              <b>Claude Code / Cursor Assistant Reasoning:</b>
+            </div>
+            <p class="ai-fix-text">
+              "Based on VibeLens screenshot and simplified DOM evidence: <code>#checkout-btn</code> has <code>-mb-12</code> causing card overflow. Removing negative margin and fixing 404 endpoint route in <code>server.ts</code>."
+            </p>
+            <div class="diff-preview">
+              <div class="diff-line del">- &lt;button id="checkout-btn" class="bg-terracotta w-full overflow-visible -mb-12"&gt;</div>
+              <div class="diff-line add">+ &lt;button id="checkout-btn" class="bg-terracotta w-full rounded-full py-3 mt-4"&gt;</div>
+            </div>
+            <div class="verified-badge">✓ Verified Fix with 2nd VibeLens Re-capture!</div>
+          </div>
         </div>
       </div>
     </div>
@@ -584,15 +705,15 @@ function homePage(page) {
     </div>
     <div class="payload-grid">
       <article class="card">
-        <h3><span class="tag" style="background: var(--accent)"></span>Screenshot</h3>
+        <h3><span class="tag" style="background: #93c5fd"></span>Screenshot</h3>
         <p>Base64 JPEG at desktop, tablet or mobile. The model sees layout, spacing, colour, overflow and hierarchy for itself.</p>
       </article>
       <article class="card">
-        <h3><span class="tag" style="background: var(--danger)"></span>Console and network</h3>
+        <h3><span class="tag" style="background: #fde68a"></span>Console and network</h3>
         <p>Console errors and warnings, uncaught exceptions, and requests that failed — including 4xx and 5xx responses a screenshot cannot show.</p>
       </article>
       <article class="card">
-        <h3><span class="tag" style="background: var(--violet)"></span>Sanitized DOM</h3>
+        <h3><span class="tag" style="background: #c4b5fd"></span>Sanitized DOM</h3>
         <p>Structure, ids, classes, ARIA and test hooks. Scripts, styles, base64 blobs and SVG path data are stripped in the browser, before the payload is built.</p>
       </article>
     </div>
@@ -609,7 +730,7 @@ function homePage(page) {
     </div>
     <div class="skill-groups">
       <div class="skill-group">
-        <h3 style="color: var(--accent)">Debugging</h3>
+        <h3 style="color: #93c5fd">Debugging</h3>
         <dl>
           <dt>check-ui</dt><dd>Capture, read the evidence, locate the source, fix, re-capture.</dd>
           <dt>console-triage</dt><dd>Group failures by root cause and fix by severity.</dd>
@@ -618,7 +739,7 @@ function homePage(page) {
         </dl>
       </div>
       <div class="skill-group">
-        <h3 style="color: var(--violet)">Design craft</h3>
+        <h3 style="color: #c4b5fd">Design craft</h3>
         <dl>
           <dt>design-review</dt><dd>Does the page read as designed, or as generated?</dd>
           <dt>type-system</dt><dd>Scale, measure, leading, tracking, numerals.</dd>
@@ -630,7 +751,7 @@ function homePage(page) {
         </dl>
       </div>
       <div class="skill-group">
-        <h3 style="color: var(--success)">Verification</h3>
+        <h3 style="color: #a7f3d0">Verification</h3>
         <dl>
           <dt>before-after</dt><dd>Identical parameters before and after, then a concrete diff.</dd>
         </dl>
