@@ -96,9 +96,10 @@ This repo is three things at once. Changing one usually means changing another:
 | `.claude-plugin/marketplace.json` | one-plugin marketplace catalog, `source: "./plugin"` |
 | `plugin/.mcp.json` | how the plugin launches the server (`npx -y mcp-vibelens@1`) |
 | `.mcp.json` | identical copy, for anyone who clones this repo |
-| `plugin/skills/*/SKILL.md` | five skills: check-ui, responsive-audit, a11y-audit, console-triage, before-after |
-| `plugin/agents/*.md` | two subagents: ui-debugger, ui-reviewer |
-| `plugin/hooks/hooks.json` | PostToolUse reminder that a frontend edit is unverified |
+| `plugin/skills/*/SKILL.md` | twelve skills: 4 debugging, 7 design craft, 1 verification |
+| `plugin/agents/*.md` | four subagents: ui-debugger, ui-reviewer, design-reviewer, frontend-builder |
+| `plugin/hooks/hooks.json` | two advisory PostToolUse hooks: unverified change, raw values |
+| `docs/design/*.md` | the design knowledge base the craft skills cite instead of restating |
 
 Rules:
 
@@ -125,6 +126,17 @@ Rules:
 - Release steps live in `RELEASE.md`. npm publishes before the plugin, because
   the plugin only launches the published package.
 
+- **Hooks stay advisory.** Every hook command must end with an explicit `exit 0`,
+  use only `jq`/`grep`/`echo`/`sed`, never write a file, and print nothing when
+  there is nothing to report. The validator asserts the `exit 0`. A hook that can
+  block a tool call turns a helpful nudge into a broken session.
+- **A design skill must cite `docs/design/`, not restate it.** If a rule needs
+  changing, change it in the knowledge base so all twelve skills inherit the fix.
+  The validator asserts all six design documents exist.
+- The demo fixture in `scripts/assets/` is deliberately not a pricing page: a
+  pricing table in the README screenshot reads as VibeLens's own pricing, and
+  this project is free with no paid tier.
+
 ## Documentation map
 
 Keep these in sync when behaviour changes — the validator checks that every
@@ -135,6 +147,7 @@ README link resolves, but not that the prose is still true.
 | `README.md` | landing page: install, IDE config, tool reference, security |
 | `docs/ARCHITECTURE.md` | modules, request lifecycle, resource and token model |
 | `docs/adr/` | six ADRs recording why each significant choice was made |
+| `docs/design/` | ANTI-SLOP, TYPOGRAPHY, COLOR, SPACING-LAYOUT, MOTION — cited by the design skills |
 | `docs/PRD-TRD.md` | product and technical requirements |
 | `docs/TROUBLESHOOTING.md` | every error code, per-IDE diagnosis |
 | `docs/FAQ.md` | honest answers, including the limitations |

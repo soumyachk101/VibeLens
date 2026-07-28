@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Seven design-craft skills for the Claude Code plugin: `design-review`,
+  `type-system`, `color-system`, `layout-audit`, `motion-system`,
+  `micro-interactions` and `polish-pass`. They target UI that works but looks
+  machine-generated, which a screenshot alone does not fix.
+- Two subagents: `design-reviewer` (verdict with evidence, does not edit) and
+  `frontend-builder` (tokens before components, full state matrix, captures
+  every screen it ships).
+- A design knowledge base at `docs/design/`: `ANTI-SLOP.md`, `TYPOGRAPHY.md`,
+  `COLOR.md`, `SPACING-LAYOUT.md` and `MOTION.md`. The skills cite it rather
+  than restating the rules.
+- A second advisory `PostToolUse` hook that flags hardcoded colour literals and
+  arbitrary bracket utilities in an edited frontend file.
+- `assets/skills.svg` and an expanded README, plus `npm run` shortcuts for the
+  smoke test, manifest validation and asset regeneration.
+
+### Changed
+
+- The README demo animation now shows a service-health dashboard instead of a
+  pricing page, so the screenshot cannot be misread as VibeLens's own pricing.
+  VibeLens is free with no paid tier.
+- `scripts/validate-manifests.mjs` now asserts the twelve skill directories,
+  four agents, the six design documents, that every hook command ends in
+  `exit 0`, and that every README link resolves.
+
 Nothing yet.
 
 ## [1.0.0] - 2026-07-28
