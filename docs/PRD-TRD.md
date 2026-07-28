@@ -226,9 +226,12 @@ Two channels, one codebase:
 1. **npm** — published as `mcp-vibelens` with a `bin` entry, so every IDE config
    is `npx -y mcp-vibelens@1`. (`vibelens-mcp` and `vibelens` were already taken
    on npm by unrelated packages.)
-2. **Claude Code plugin** — the repository root doubles as a plugin
-   (`.claude-plugin/plugin.json` + `.mcp.json`) and as its own marketplace
-   (`.claude-plugin/marketplace.json`), so `claude plugin marketplace add
+2. **Claude Code plugin** — `.claude-plugin/marketplace.json` at the repo root
+   catalogs a single plugin whose source is `./plugin`. That directory holds
+   `plugin.json`, `.mcp.json` and the two skills, and deliberately contains no
+   `package.json`: Claude Code runs `npm install` inside a plugin directory that
+   has one, which measured 112 MB of devDependencies in the plugin cache when the
+   source pointed at the repo root. `claude plugin marketplace add
    soumyachk101/VibeLens` followed by `claude plugin install vibelens@vibelens`
    installs the MCP server plus the `check-ui` and `responsive-audit` skills.
    The plugin's `.mcp.json` launches the npm package, so npm remains the single
