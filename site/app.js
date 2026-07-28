@@ -339,7 +339,6 @@
     });
 
     // Show the right shortcut hint: Ctrl on anything that is not a Mac.
-    // Show the right shortcut hint: Ctrl on anything that is not a Mac.
     if (!/Mac|iP(hone|ad)/.test(navigator.platform ?? navigator.userAgent)) {
       for (const kbd of document.querySelectorAll(".search-trigger kbd")) kbd.textContent = "Ctrl K";
     }
@@ -351,12 +350,17 @@
   const demoTabs = document.querySelectorAll(".demo-tab");
   const demoPanes = document.querySelectorAll(".demo-pane");
   const runDemoBtn = document.querySelector("#run-demo-btn");
+  const demoSection = document.querySelector("#demo-simulator");
 
   if (demoTabs.length && demoPanes.length) {
     let isRunning = false;
 
     const switchTab = (tabName) => {
-      demoTabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === tabName));
+      demoTabs.forEach((t) => {
+        const match = t.dataset.tab === tabName;
+        t.classList.toggle("active", match);
+        if (match) t.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      });
       demoPanes.forEach((p) => p.classList.toggle("active", p.id === `pane-${tabName}`));
     };
 
@@ -368,35 +372,46 @@
 
     if (runDemoBtn) {
       const stages = [
-        { id: "screenshot", label: "📸 Capturing 1280x800 Viewport Screenshot..." },
-        { id: "console", label: "🚨 Triaging 1 Console Error & 404 API Endpoint..." },
-        { id: "dom", label: "🌳 Extracting Token-Reduced DOM Tree (95.4% saved)..." },
-        { id: "ai-fix", label: "✨ Claude Code verifies fix with 2nd VibeLens capture!" },
+        { id: "screenshot", label: "📸 Capturing viewport screenshot…" },
+        { id: "console",    label: "🚨 Reading console errors & network…" },
+        { id: "dom",        label: "🌳 Extracting token-reduced DOM…" },
+        { id: "ai-fix",     label: "✨ AI verifies the fix — done!" },
       ];
+      const STEP_MS = 2200;
 
       runDemoBtn.addEventListener("click", () => {
         if (isRunning) return;
         isRunning = true;
-        runDemoBtn.disabled = true;
-        const originalHtml = runDemoBtn.innerHTML;
 
-        stages.forEach((stage, idx) => {
-          setTimeout(() => {
-            switchTab(stage.id);
-            runDemoBtn.innerHTML = `⏳ Step ${idx + 1}/4: ${stage.id.toUpperCase()}`;
-            if (typeof showToast === "function") {
-              showToast(stage.label);
-            }
-            if (idx === stages.length - 1) {
-              setTimeout(() => {
-                isRunning = false;
-                runDemoBtn.disabled = false;
-                runDemoBtn.innerHTML = originalHtml;
-              }, 1200);
-            }
-          }, idx * 1200);
-        });
+        // Scroll the demo section into view so the user can actually see it
+        if (demoSection) {
+          demoSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        runDemoBtn.disabled = true;
+        runDemoBtn.style.opacity = "0.7";
+        const originalText = runDemoBtn.textContent;
+
+        let step = 0;
+        const advance = () => {
+          if (step >= stages.length) {
+            // Done — reset
+            runDemoBtn.textContent = originalText;
+            runDemoBtn.disabled = false;
+            runDemoBtn.style.opacity = "";
+            isRunning = false;
+            return;
+          }
+          const s = stages[step];
+          switchTab(s.id);
+          runDemoBtn.textContent = `Step ${step + 1}/4 · ${s.label}`;
+          showToast(s.label);
+          step++;
+          setTimeout(advance, STEP_MS);
+        };
+        advance();
       });
     }
   }
 })();
+

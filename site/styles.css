@@ -1539,8 +1539,13 @@ h3:hover > .heading-anchor,
   height: 8px;
   border-radius: 50%;
   background: var(--terracotta);
-  box-shadow: 0 0 8px var(--terracotta);
-  animation: pulse-glow 2s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.demo-run-btn[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  font-size: var(--text-xs);
 }
 
 .demo-url-prefix {
@@ -1660,7 +1665,7 @@ h3:hover > .heading-anchor,
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px stroke var(--border);
+  border-bottom: 1px solid var(--border);
   font-size: 14px;
 }
 
@@ -1676,14 +1681,17 @@ h3:hover > .heading-anchor,
 }
 
 .mock-btn-overflow {
-  width: 100%;
+  width: calc(100% + 40px);
+  margin-left: -20px;
+  margin-bottom: -16px;
   padding: 12px;
   border-radius: 999px;
   background: var(--terracotta);
   color: #fff;
   border: none;
   font-weight: 700;
-  cursor: pointer;
+  cursor: default;
+  position: relative;
 }
 
 .mock-terminal-window {

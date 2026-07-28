@@ -23,30 +23,13 @@
     .m { font: 500 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #C27B66; }
     .t { font: 700 11.5px -apple-system, BlinkMacSystemFont, 'Source Sans 3', sans-serif; letter-spacing: .12em; fill: #8C9A84; }
 
-    /* SVG Animations */
     @keyframes flowDash {
       to { stroke-dashoffset: -44; }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.9; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 6px rgba(194, 123, 102, 0.4)); }
     }
 
     .loop-path {
       stroke-dasharray: 8 6;
       animation: flowDash 2.5s linear infinite;
-    }
-    .pulse-node {
-      transform-origin: center;
-      animation: pulseGlow 3s ease-in-out infinite;
-    }
-    .card-border {
-      transition: all 0.3s ease;
-    }
-    .card-border:hover {
-      stroke: #C27B66;
-      stroke-opacity: 0.8;
-      filter: drop-shadow(0 4px 12px rgba(45, 58, 49, 0.08));
     }
   </style>
 
@@ -54,19 +37,19 @@
 
   <!-- step 1: prompt -->
   <g transform="translate(40 56)">
-    <rect class="card-border" width="238" height="130" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
-    <circle class="pulse-node" cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">1</text>
+    <rect width="238" height="130" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
+    <circle cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">1</text>
     <text x="44" y="31" class="h">You ask</text>
-    <text x="20" y="60" class="s">“the Pro button looks wrong</text>
-    <text x="20" y="78" class="s">on localhost:3000/pricing”</text>
+    <text x="20" y="60" class="s">"the Pro button looks wrong</text>
+    <text x="20" y="78" class="s">on localhost:3000/pricing"</text>
     <text x="20" y="103" class="s">No coordinates, no hand-written</text>
     <text x="20" y="121" class="s">bug description.</text>
   </g>
 
   <!-- step 2: tool call -->
   <g transform="translate(318 56)">
-    <rect class="card-border" width="238" height="118" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
-    <circle class="pulse-node" cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">2</text>
+    <rect width="238" height="118" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
+    <circle cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">2</text>
     <text x="44" y="31" class="h">Model calls the tool</text>
     <text x="20" y="60" class="m">inspect_localhost_ui</text>
     <text x="20" y="82" class="s">url · viewport · delay · fullPage</text>
@@ -75,8 +58,8 @@
 
   <!-- step 3: headless capture -->
   <g transform="translate(596 56)">
-    <rect class="card-border" width="238" height="118" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
-    <circle class="pulse-node" cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">3</text>
+    <rect width="238" height="118" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
+    <circle cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">3</text>
     <text x="44" y="31" class="h">Headless Chromium</text>
     <text x="20" y="60" class="s">Listeners attach, then navigate,</text>
     <text x="20" y="78" class="s">settle, wait out hydration.</text>
@@ -85,8 +68,8 @@
 
   <!-- step 4: the payload, three parts -->
   <g transform="translate(874 56)">
-    <rect class="card-border" width="286" height="118" rx="18" fill="#FFFFFF" stroke="#C27B66" stroke-width="1.5"/>
-    <circle class="pulse-node" cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">4</text>
+    <rect width="286" height="118" rx="18" fill="#FFFFFF" stroke="#C27B66" stroke-width="1.5"/>
+    <circle cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">4</text>
     <text x="44" y="31" class="h">One payload, three signals</text>
     <g transform="translate(20 46)">
       <rect width="8" height="8" rx="2" fill="#8C9A84"/><text x="18" y="8" class="s">image — JPEG of the render</text>
@@ -103,8 +86,8 @@
 
   <!-- bottom row: reason, fix, verify -->
   <g transform="translate(40 240)">
-    <rect class="card-border" width="516" height="140" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
-    <circle class="pulse-node" cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">5</text>
+    <rect width="516" height="140" rx="18" fill="#FFFFFF" stroke="#DCCFC2" stroke-width="1"/>
+    <circle cx="24" cy="26" r="10" fill="url(#wac)"/><text x="20.5" y="30" class="n">5</text>
     <text x="44" y="31" class="h">Model reasons from evidence, not memory</text>
     <text x="20" y="60" class="s">Sees the overflow in the image. Reads the element in the DOM.</text>
     <text x="20" y="80" class="m">&lt;button id="cta-pro" class="cta"&gt;  width: 300px; margin-left: -22px</text>
@@ -113,11 +96,11 @@
   </g>
 
   <g transform="translate(596 240)">
-    <rect class="card-border" width="564" height="140" rx="18" fill="#FFFFFF" stroke="#8C9A84" stroke-width="1.5"/>
-    <circle class="pulse-node" cx="24" cy="26" r="10" fill="#8C9A84"/><text x="20.5" y="30" class="n">6</text>
+    <rect width="564" height="140" rx="18" fill="#FFFFFF" stroke="#8C9A84" stroke-width="1.5"/>
+    <circle cx="24" cy="26" r="10" fill="#8C9A84"/><text x="20.5" y="30" class="n">6</text>
     <text x="44" y="31" class="h">Re-captures to verify</text>
     <text x="20" y="60" class="s">Same url, same viewport, same delay. The fix is confirmed by a second</text>
-    <text x="20" y="78" class="s">capture, so “done” means observed — not assumed.</text>
+    <text x="20" y="78" class="s">capture, so "done" means observed — not assumed.</text>
     <g transform="translate(20 96)">
       <rect width="180" height="28" rx="14" fill="#8C9A84" fill-opacity="0.15" stroke="#8C9A84" stroke-width="1"/>
       <text x="16" y="19" class="s" fill="#2D3A31" font-weight="700">aligned · console clean</text>
@@ -125,7 +108,7 @@
     <text x="216" y="115" class="s">otherwise: read the DOM again, do not re-guess</text>
   </g>
 
-  <!-- the loop back -->
+  <!-- the loop back — only animation: dashed line flowing -->
   <g fill="none" stroke="#C27B66" stroke-width="2" class="loop-path" marker-end="url(#arwc)">
     <path d="M1160 310 H1178 Q1190 310 1190 298 V30 Q1190 18 1178 18 H120 Q108 18 108 30 V50"/>
   </g>
