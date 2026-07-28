@@ -63,31 +63,61 @@
     });
   }
 
-  // --- copy buttons ---------------------------------------------------------
+  // --- Toast Notification Handler ---------------------------------------------
+  let toastTimer = null;
+  const showToast = (text = "Copied to clipboard!") => {
+    let toast = document.querySelector(".site-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.className = "site-toast";
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>${text}</span>`;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2200);
+  };
+
+  // --- Click-to-Copy for Code Blocks ------------------------------------------
   for (const block of document.querySelectorAll(".code-block")) {
     const code = block.querySelector("code");
     const header = block.querySelector(".code-header");
     if (!code || !navigator.clipboard) continue;
+
+    const copyText = async (e) => {
+      // Don't trigger if user is selecting text manually
+      const selection = window.getSelection();
+      if (selection && selection.toString().length > 0) return;
+
+      const text = code.innerText.trim();
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("Copied command to clipboard!");
+        
+        const btn = block.querySelector(".copy-button");
+        if (btn) {
+          btn.innerHTML = `<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Copied!</span>`;
+          btn.dataset.state = "done";
+          setTimeout(() => {
+            btn.innerHTML = `<svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>`;
+            delete btn.dataset.state;
+          }, 1800);
+        }
+      } catch (err) {}
+    };
+
+    block.style.cursor = "pointer";
+    block.setAttribute("title", "Click anywhere to copy code");
+    block.addEventListener("click", copyText);
 
     const button = document.createElement("button");
     button.type = "button";
     button.className = "copy-button";
     button.innerHTML = `<svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>`;
     button.setAttribute("aria-label", "Copy code to clipboard");
-
-    button.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(code.innerText);
-        button.innerHTML = `<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Copied!</span>`;
-        button.dataset.state = "done";
-      } catch {
-        button.textContent = "Press Ctrl+C";
-      }
-      window.setTimeout(() => {
-        button.innerHTML = `<svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>`;
-        delete button.dataset.state;
-      }, 1600);
-    });
 
     if (header) {
       header.append(button);
@@ -96,18 +126,21 @@
     }
   }
 
-  // --- install command line copy handler -------------------------------------
-  const installLines = document.querySelectorAll("[data-copy-cmd]");
+  // --- Click-to-Copy for Install Lines ----------------------------------------
+  const installLines = document.querySelectorAll("[data-copy-cmd], .install-line");
   for (const line of installLines) {
-    const textToCopy = line.getAttribute("data-copy-cmd");
-    const copyBtn = line.querySelector(".copy-cmd-btn");
-    const txtSpan = line.querySelector(".copy-txt");
+    const textToCopy = line.getAttribute("data-copy-cmd") || line.innerText.replace(/^\$\s*/, "").trim();
     if (!textToCopy) continue;
+
+    line.style.cursor = "pointer";
+    line.setAttribute("title", "Click to copy command");
 
     const doCopy = async (e) => {
       e.preventDefault();
       try {
         await navigator.clipboard.writeText(textToCopy);
+        showToast("Copied install command!");
+        const txtSpan = line.querySelector(".copy-txt");
         if (txtSpan) txtSpan.textContent = "Copied!";
         line.classList.add("copied");
         setTimeout(() => {
@@ -118,6 +151,25 @@
     };
 
     line.addEventListener("click", doCopy);
+  }
+
+  // --- Click-to-Copy for Inline Command Badges -------------------------------
+  for (const inlineCode of document.querySelectorAll(".prose p code, .prose li code")) {
+    const text = inlineCode.innerText.trim();
+    if (/^(claude|npx|npm|git|codex|vibelens|playwright)/i.test(text) && text.length > 3) {
+      inlineCode.style.cursor = "pointer";
+      inlineCode.setAttribute("title", "Click to copy command");
+      inlineCode.classList.add("clickable-cmd");
+      inlineCode.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast(`Copied "${text}"`);
+          inlineCode.classList.add("copied-pulse");
+          setTimeout(() => inlineCode.classList.remove("copied-pulse"), 800);
+        } catch (err) {}
+      });
+    }
   }
 
   // --- table of contents highlight ------------------------------------------
