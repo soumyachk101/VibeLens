@@ -39,15 +39,26 @@ const { port } = fixture.address();
 const url = `http://127.0.0.1:${port}/`;
 
 const client = new Client({ name: "vibelens-smoke", version: "1.0.0" });
+
+// By default we exercise the local build. Set VIBELENS_SMOKE_CMD/ARGS to point at
+// something else — e.g. a packed tarball via `npx -y ./mcp-vibelens-1.0.0.tgz` —
+// to verify the exact path a published install takes.
+const command = process.env.VIBELENS_SMOKE_CMD ?? process.execPath;
+const args = process.env.VIBELENS_SMOKE_ARGS
+  ? process.env.VIBELENS_SMOKE_ARGS.split(" ").filter(Boolean)
+  : ["dist/index.js"];
+
+console.log(`launching: ${command} ${args.join(" ")}\n`);
+
 const transport = new StdioClientTransport({
-  command: process.execPath,
-  args: ["dist/index.js"],
+  command,
+  args,
   stderr: "pipe",
 });
 
 try {
   await client.connect(transport);
-  assert(true, "connected to dist/index.js over stdio");
+  assert(true, `connected to "${command} ${args.join(" ")}" over stdio`);
 
   const { tools } = await client.listTools();
   assert(tools.length === 1, "exposes exactly one tool");
