@@ -74,7 +74,7 @@
 
   <!-- column 3: subagents -->
   <g transform="translate(800 238)">
-    <rect width="360" height="234" rx="13" fill="#0D1526" stroke="#94A3B8" stroke-opacity="0.16"/>
+    <rect width="360" height="246" rx="13" fill="#0D1526" stroke="#94A3B8" stroke-opacity="0.16"/>
     <text x="20" y="30" class="grp" fill="#94A3B8">SUBAGENTS</text>
     <g transform="translate(20 52)">
       <text y="14" class="ag">ui-debugger</text><text y="32" class="ds">evidence-driven bug fixing</text>

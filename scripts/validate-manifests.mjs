@@ -111,8 +111,15 @@ if (pkg && plugin && marketplace && mcp && rootMcp) {
     "a11y-audit",
     "before-after",
     "check-ui",
+    "color-system",
     "console-triage",
+    "design-review",
+    "layout-audit",
+    "micro-interactions",
+    "motion-system",
+    "polish-pass",
     "responsive-audit",
+    "type-system",
   ];
   const skillDirs = existsSync("plugin/skills")
     ? readdirSync("plugin/skills").sort()
@@ -135,7 +142,7 @@ if (pkg && plugin && marketplace && mcp && rootMcp) {
     }
   }
 
-  for (const agent of ["ui-debugger", "ui-reviewer"]) {
+  for (const agent of ["design-reviewer", "frontend-builder", "ui-debugger", "ui-reviewer"]) {
     const file = `plugin/agents/${agent}.md`;
     if (!existsSync(file)) {
       fail(`${file} is missing`);
@@ -146,12 +153,45 @@ if (pkg && plugin && marketplace && mcp && rootMcp) {
       }
     }
   }
+  ok("4 agents present");
+
   if (!existsSync("plugin/hooks/hooks.json")) {
     fail("plugin/hooks/hooks.json is missing");
   } else {
     const hooks = readJson("plugin/hooks/hooks.json");
-    if (!hooks?.hooks?.PostToolUse) fail("hooks.json has no PostToolUse entry");
+    const entries = hooks?.hooks?.PostToolUse;
+    if (!Array.isArray(entries) || entries.length === 0) {
+      fail("hooks.json has no PostToolUse entry");
+    } else {
+      // Every hook is advisory: it must not be able to block a tool call.
+      const commands = entries.flatMap((entry) => (entry.hooks ?? []).map((h) => h.command ?? ""));
+      const notSafe = commands.filter((c) => !c.includes("exit 0"));
+      if (notSafe.length > 0) {
+        fail(`${notSafe.length} hook command(s) do not end with an explicit exit 0`);
+      } else {
+        ok(`${commands.length} advisory hook command(s), all exit 0`);
+      }
+    }
   }
+
+  // --- design knowledge base ---
+  // The design skills link here instead of restating the rules; a dead link
+  // makes them useless.
+  const designDocs = [
+    "README.md",
+    "ANTI-SLOP.md",
+    "TYPOGRAPHY.md",
+    "COLOR.md",
+    "SPACING-LAYOUT.md",
+    "MOTION.md",
+  ];
+  const missingDesign = designDocs.filter((f) => !existsSync(`docs/design/${f}`));
+  if (missingDesign.length > 0) {
+    fail(`docs/design is missing: ${missingDesign.join(", ")}`);
+  } else {
+    ok(`design knowledge base complete (${designDocs.length} files)`);
+  }
+
   // The whole reason the plugin lives in a subdirectory.
   if (existsSync("plugin/package.json")) {
     fail("plugin/package.json exists — Claude Code would npm install into the plugin cache");

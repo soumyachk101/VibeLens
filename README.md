@@ -5,21 +5,25 @@
 <p>
   <a href="https://github.com/soumyachk101/VibeLens/actions/workflows/ci.yml"><img src="https://github.com/soumyachk101/VibeLens/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://www.npmjs.com/package/mcp-vibelens"><img src="https://img.shields.io/npm/v/mcp-vibelens?color=22d3ee&label=npm" alt="npm version"></a>
-  <a href="https://www.npmjs.com/package/mcp-vibelens"><img src="https://img.shields.io/npm/dm/mcp-vibelens?color=a78bfa&label=downloads" alt="npm downloads"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-3b82f6" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/price-free%20forever-34d399" alt="Free forever">
   <img src="https://img.shields.io/badge/node-%E2%89%A520-339933?logo=node.js&logoColor=white" alt="Node 20+">
   <img src="https://img.shields.io/badge/MCP-stdio-7dd3fc" alt="Model Context Protocol">
-  <img src="https://img.shields.io/badge/tests-63%20passing-34d399" alt="63 tests">
+  <img src="https://img.shields.io/badge/tests-63%20passing-a78bfa" alt="63 tests">
+</p>
+
+<p>
+  <b>Free and MIT-licensed. No paid tier, no account, no telemetry, no network calls beyond your own localhost.</b>
 </p>
 
 <p>
   <a href="#install"><b>Install</b></a> ·
   <a href="#configure-your-ide"><b>IDE setup</b></a> ·
-  <a href="#the-tool"><b>Tool reference</b></a> ·
-  <a href="#the-claude-code-plugin"><b>Plugin</b></a> ·
+  <a href="#the-tool"><b>Tool</b></a> ·
+  <a href="#what-the-plugin-adds"><b>Skills</b></a> ·
+  <a href="./docs/design/ANTI-SLOP.md"><b>Anti-slop guide</b></a> ·
   <a href="./docs/ARCHITECTURE.md"><b>Architecture</b></a> ·
-  <a href="./docs/FAQ.md"><b>FAQ</b></a> ·
-  <a href="./CONTRIBUTING.md"><b>Contribute</b></a>
+  <a href="./docs/FAQ.md"><b>FAQ</b></a>
 </p>
 
 </div>
@@ -33,33 +37,38 @@ rendered. So you become the framebuffer: you open the page, spot the bug, and
 describe it in prose — *"the button is overflowing the card"*, *"spacing looks
 off on mobile"* — and the model guesses which selector you mean.
 
-Two failure modes dominate that loop:
+Three failure modes dominate that loop:
 
-- **Invisible errors.** A React hydration mismatch or a 404 hero image lives in
-  the console, not in your description.
+- **Invisible errors.** A hydration mismatch or a 404 asset lives in the console,
+  not in your description.
 - **Selector hallucination.** The model edits `.btn-primary` when the element
   actually carries `.cta-button`, because it is recalling its own earlier output
   instead of reading the DOM.
+- **Generated-looking UI.** Untouched framework accent, one radius on everything,
+  no type scale, no empty or focus states. It works, and it looks like nobody
+  made it.
 
 ## The fix
 
 VibeLens is an MCP server that closes the loop. One tool call returns a
 screenshot, the console and network diagnostics, and a token-optimized DOM
-snapshot — so the model reasons from evidence instead of memory.
+snapshot — so the model reasons from evidence instead of memory. The Claude Code
+plugin adds twelve skills on top, including a design-craft set aimed squarely at
+the third problem.
 
 <div align="center">
 
-<img src="./assets/demo.gif" alt="VibeLens catching a CTA that overflows its card, then verifying the fix with a second capture" width="100%">
+<img src="./assets/demo.gif" alt="VibeLens catching a button that overflows its card, then verifying the fix with a second capture" width="100%">
 
-<sub><b>Every frame above is real output.</b> The screenshots are the tool's own JPEG
-payload and the console/DOM lines are its own text payload —
-regenerate them with <code>node scripts/assets/capture-demo.mjs</code>.</sub>
+<sub><b>Every frame is real output.</b> The screenshots are the tool's own JPEG payload
+and the console and DOM lines are its own text payload — regenerate them with
+<code>npm run assets:gif</code>.</sub>
 
 </div>
 
 | What comes back | Why it matters |
 | --- | --- |
-| **Screenshot** (JPEG) | The model can *see* layout, spacing, colour and overflow. |
+| **Screenshot** (JPEG) | The model can *see* layout, spacing, colour, overflow and hierarchy. |
 | **Console + network errors** | Catches hydration errors, uncaught exceptions and 404 assets a screenshot cannot show. |
 | **Sanitized DOM snapshot** | Real ids and Tailwind/CSS classes, so fixes target selectors that exist. |
 
@@ -75,8 +84,8 @@ regenerate them with <code>node scripts/assets/capture-demo.mjs</code>.</sub>
 
 ## Install
 
-**Claude Code** — install the plugin and you get the MCP server *plus* five
-skills and two subagents:
+**Claude Code** — install the plugin and you get the MCP server *plus* twelve
+skills, four subagents and two advisory hooks:
 
 ```bash
 claude plugin marketplace add soumyachk101/VibeLens
@@ -105,7 +114,7 @@ npm install
 npx playwright install chromium
 npm run build                      # emits dist/
 npm test                           # 63 tests, includes real browser captures
-node scripts/smoke.mjs             # end-to-end check over real stdio
+npm run smoke                      # end-to-end check over real stdio
 ```
 
 Then point your IDE at `node /absolute/path/to/VibeLens/dist/index.js`.
@@ -131,7 +140,7 @@ VibeLens speaks MCP over stdio, so every MCP-capable client takes the same shape
 <details open>
 <summary><b>Claude Code</b></summary>
 
-As a plugin (recommended — bundles the skills, agents and hook):
+As a plugin (recommended — bundles the skills, agents and hooks):
 
 ```bash
 claude plugin marketplace add soumyachk101/VibeLens
@@ -235,12 +244,12 @@ block containing JSON:
 ```json
 {
   "summary": {
-    "url": "http://localhost:3000/pricing",
-    "pageTitle": "Pricing",
-    "viewport": "mobile (390x844)",
+    "url": "http://localhost:3000/health",
+    "pageTitle": "Service health",
+    "viewport": "desktop (1920x1080)",
     "fullPage": false,
     "waitedMs": 1000,
-    "captureMs": 1172,
+    "captureMs": 1253,
     "consoleErrors": 1,
     "consoleWarnings": 0,
     "uncaughtPageErrors": 0,
@@ -252,50 +261,106 @@ block containing JSON:
   ],
   "uncaughtPageErrors": ["TypeError: Cannot read properties of undefined"],
   "failedRequests": [
-    { "url": "http://localhost:3000/hero.png", "method": "GET", "failure": "HTTP 404", "status": 404 }
+    { "url": "http://localhost:3000/avatar.png", "method": "GET", "failure": "HTTP 404", "status": 404 }
   ],
   "simplifiedDOM": "<body class=\"...\">...</body>"
 }
 ```
 
+**It is read-only and local-only.** It observes a page; it cannot click, hover,
+type, scroll, or reach a public host. That constraint shapes every skill below —
+hover and `:focus-visible` styles are read from the source, not observed.
+
 ### Prompts that work well
 
 ```
 Check localhost:3000 on mobile and tell me what breaks.
-Look at localhost:5173/pricing — the cards aren't aligned. Fix it.
-Screenshot localhost:3000 with fullPage, then fix any spacing inconsistencies.
-Are there any console errors on localhost:3000/checkout?
+Look at localhost:5173/settings — the cards aren't aligned. Fix it.
+Does localhost:3000/checkout throw anything in the console?
+This page looks AI-generated. Tell me why, then fix the worst of it.
+The accent is just default Tailwind blue — give me a real palette.
 Compare localhost:3000 on desktop vs mobile and make the nav responsive.
 ```
 
 ---
 
-## The Claude Code plugin
+## What the plugin adds
 
-Installing via the plugin adds a workflow layer on top of the raw tool, so you do
-not have to describe the process every time. Every skill is also **model-invoked**
-— saying *"the pricing page looks broken on mobile"* is enough to trigger one.
+The raw tool gives the model eyes. The plugin gives it a **method** — and a set
+of skills aimed at the thing screenshots alone do not fix: UI that works but
+looks like nobody designed it.
+
+<div align="center">
+<img src="./assets/skills.svg" alt="Twelve skills grouped into debugging, design craft and verification, plus four subagents, two advisories and the design knowledge base" width="100%">
+</div>
+
+### Debugging
 
 | Skill | What it does |
 | --- | --- |
 | `/vibelens:check-ui` | Capture → read the DOM and diagnostics → locate the source → fix → **re-capture to verify**. |
-| `/vibelens:responsive-audit` | Captures mobile, tablet and desktop; reports only real breakage; fixes the narrowest breakpoint first. |
-| `/vibelens:a11y-audit` | Heuristic accessibility pass from the screenshot and DOM: missing alt, unnamed controls, contrast, heading order, tap targets. |
 | `/vibelens:console-triage` | Groups console and network failures by root cause, maps them to source files, fixes by severity. |
-| `/vibelens:before-after` | Verification discipline: capture before, change, capture after with identical parameters, report a concrete diff. |
+| `/vibelens:responsive-audit` | Captures mobile, tablet and desktop; reports only real breakage; fixes the narrowest breakpoint first. |
+| `/vibelens:a11y-audit` | Heuristic pass: missing alt, unnamed controls, unlabelled inputs, heading order, contrast, tap targets. |
 
-| Subagent | Role |
+### Design craft — the anti-slop set
+
+| Skill | What it does |
 | --- | --- |
-| `ui-debugger` | Evidence-driven frontend debugging. Never proposes a fix for a page it has not seen. |
-| `ui-reviewer` | Independent pre-merge UI review across three viewports. Reports defects with evidence; does not edit code. |
+| `/vibelens:design-review` | The flagship. Judges whether the page reads as *designed*, then fixes what gives it away: no type scale, untouched framework accent, one radius everywhere, uniform spacing, missing empty and loading states, invisible focus, pure black and white, filler copy. |
+| `/vibelens:type-system` | How many sizes and weights are actually in use, whether they form a scale, measure, line height, tracking at display sizes, tabular numerals, font-loading shift. |
+| `/vibelens:color-system` | Is the accent still the framework default; hardcoded hex instead of tokens; pure black and white; a flat neutral ramp; weak contrast; colour as the only signal of state. |
+| `/vibelens:layout-audit` | Spacing-scale consistency, whether spacing groups related content, container width and measure, optical alignment, grid versus flex misuse, magic z-index, overflow. |
+| `/vibelens:motion-system` | Durations against distance travelled, easing by intent, which properties are animated, reduced-motion handling, missing exit transitions — then a named token set. |
+| `/vibelens:micro-interactions` | The state matrix for every control: hover, active, focus-visible, disabled, loading, selected, error — plus feedback timing, validation timing and touch targets. |
+| `/vibelens:polish-pass` | The last 10%: focus rings, selection colour, scroll behaviour, skeletons that match final layout, empty and error states, cursors, icon optical sizing, favicon and title, 404 and offline. |
 
-Plus a **PostToolUse hook** that flags any edit to `.tsx/.jsx/.vue/.svelte/.css/.scss`
-as unverified until the page is captured again.
+### Verification
 
-> The plugin ships from the [`plugin/`](./plugin) subdirectory rather than the repo
-> root on purpose. Claude Code runs `npm install` inside any plugin directory
-> containing a `package.json`, which pushed 113 MB of devDependencies into the
-> plugin cache before this was fixed. It is now 20 KB.
+| Skill | What it does |
+| --- | --- |
+| `/vibelens:before-after` | Capture before, change, capture after with **identical** parameters, report a concrete diff. Different parameters make the comparison meaningless. |
+
+### Subagents
+
+| Subagent | Delegate when |
+| --- | --- |
+| `ui-debugger` | A UI bug needs diagnosing from what the browser actually rendered. Never proposes a fix for a page it has not seen. |
+| `ui-reviewer` | You want an independent pre-merge look across three viewports. Reports defects with evidence; does not edit code. |
+| `design-reviewer` | You want a verdict on whether the UI looks deliberately designed, ranked by perceived-quality impact, with the proving class quoted. |
+| `frontend-builder` | You are building new UI. Establishes tokens before components, builds the full state matrix, never ships a screen it has not captured. |
+
+### Advisory hooks
+
+Both are `PostToolUse`, both are advisory only — they print one line and always
+exit 0, so they can never block a tool call or edit a file.
+
+| Hook | Fires when |
+| --- | --- |
+| Unverified change | A `.tsx/.jsx/.vue/.svelte/.css/.scss` file is written or edited — the change is unverified until the page is captured again. |
+| Raw values | That file contains a six-digit hex, `rgb()`/`rgba()`, or arbitrary bracket utilities like `text-[13px]` — suggesting a token or a step on the scale instead. |
+
+Every skill is **model-invoked as well as slash-invoked**. Saying *"this looks
+AI-generated"* reaches `design-review`; *"the modal just snaps open"* reaches
+`motion-system`; *"prove that fix worked"* reaches `before-after`.
+
+---
+
+## The design knowledge base
+
+The design skills stay short by citing a shared reference instead of restating
+it. It is written for an agent mid-task: tables, thresholds and code, no essays.
+
+| Document | Contents |
+| --- | --- |
+| **[ANTI-SLOP.md](./docs/design/ANTI-SLOP.md)** | 17 recognisable tells of machine-generated UI — the tell, why it reads as generated, and the concrete correction. |
+| [TYPOGRAPHY.md](./docs/design/TYPOGRAPHY.md) | Modular scales, line height by size, measure in `ch`, tracking rules, variable fonts, `font-display`, metric-compatible fallbacks, `tabular-nums`, `text-wrap: balance`. |
+| [COLOR.md](./docs/design/COLOR.md) | Deriving a palette instead of picking colours, why `oklch()` beats HSL for even ramps, semantic over primitive tokens, WCAG 4.5:1 and 3:1, dark mode as a remap. |
+| [SPACING-LAYOUT.md](./docs/design/SPACING-LAYOUT.md) | A 4px scale, spacing as a proximity signal, optical vs mathematical alignment, grid vs flex, container queries, `min()`/`clamp()`, a named z-index scale. |
+| [MOTION.md](./docs/design/MOTION.md) | Duration bands by distance, easing by intent, compositor-safe properties, `prefers-reduced-motion` that degrades rather than removes meaning, FLIP and view transitions, what never to animate. |
+
+Start at **[docs/design/README.md](./docs/design/README.md)** for the index and
+the working order.
 
 ---
 
@@ -308,7 +373,7 @@ sanitizes it *inside the browser*, before it ever reaches the model.
 <img src="./assets/dom-budget.svg" alt="Measured: 193,520 raw characters reduce to 8,890 after sanitization, a 95.4 percent reduction, with every utility class preserved" width="100%">
 </div>
 
-Reproduce that measurement yourself with `node scripts/assets/measure-dom.mjs`.
+Reproduce that measurement yourself with `npm run assets:measure`.
 
 - **Removed:** `<script>`, `<style>`, `<noscript>`, `<template>`, `<link>`,
   `<meta>`, `<base>`, `<title>` and HTML comments.
@@ -332,7 +397,7 @@ Reproduce that measurement yourself with `node scripts/assets/measure-dom.mjs`.
 <img src="./assets/architecture.svg" alt="VibeLens architecture: MCP hosts talk over stdio to the Node process, whose security guard runs before the capture engine launches Chromium against your dev server" width="100%">
 </div>
 
-Full module-by-module detail, the request lifecycle and the resource model live in
+Module-by-module detail, the request lifecycle and the resource model live in
 **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)**. The reasoning behind each
 significant choice is recorded as an ADR in **[docs/adr/](./docs/adr/)**:
 
@@ -377,8 +442,6 @@ Two further points worth knowing:
 
 To report a vulnerability, see **[SECURITY.md](./SECURITY.md)**.
 
-### Resource management
-
 Each call launches an ephemeral Chromium and closes it in a `finally` block, so a
 failed capture cannot leave a zombie browser behind. This matters on Apple
 Silicon laptops where every stray Chromium costs hundreds of MB of RSS.
@@ -406,14 +469,15 @@ answered in **[docs/FAQ.md](./docs/FAQ.md)**.
 ## Development
 
 ```bash
-npm run dev                          # run the server from source over stdio
-npm run typecheck                    # tsc --noEmit
-npm test                             # vitest: security, DOM, capture e2e, MCP protocol
-npm run build                        # emit dist/
-node scripts/smoke.mjs               # spawn dist/ and exercise it over real stdio
-node scripts/validate-manifests.mjs  # plugin/marketplace/npm manifest consistency
-npm run validate:plugin              # claude plugin validate .
-node scripts/assets/measure-dom.mjs  # reproduce the DOM-reduction figure
+npm run dev                  # run the server from source over stdio
+npm run typecheck            # tsc --noEmit
+npm test                     # vitest: security, DOM, capture e2e, MCP protocol
+npm run build                # emit dist/
+npm run smoke                # spawn dist/ and exercise it over real stdio
+npm run validate:manifests   # npm + plugin + marketplace + docs consistency
+npm run validate:plugin      # claude plugin validate for both manifests
+npm run assets:measure       # reproduce the DOM-reduction figure
+npm run assets:gif           # regenerate the README animation from real captures
 ```
 
 ### Repository map
@@ -437,21 +501,22 @@ tests/              vitest suites, incl. real Chromium captures
 plugin/             what Claude Code installs — no package.json, on purpose
 ├── .claude-plugin/plugin.json
 ├── .mcp.json       launches npx -y mcp-vibelens@1
-├── skills/         check-ui · responsive-audit · a11y-audit · console-triage · before-after
-├── agents/         ui-debugger · ui-reviewer
-└── hooks/          post-edit "this is unverified" reminder
+├── skills/         12 skills: 4 debugging · 7 design craft · 1 verification
+├── agents/         ui-debugger · ui-reviewer · design-reviewer · frontend-builder
+└── hooks/          two advisory PostToolUse reminders
 
 docs/
 ├── ARCHITECTURE.md         modules, lifecycle, resource and token model
+├── design/                 the anti-slop, type, colour, layout and motion rules
+├── adr/                    six architecture decision records
 ├── PRD-TRD.md              product + technical requirements
 ├── TROUBLESHOOTING.md      every error code, per-IDE diagnosis
-├── FAQ.md                  honest answers, including the limitations
-└── adr/                    six architecture decision records
+└── FAQ.md                  honest answers, including the limitations
 
 scripts/
 ├── smoke.mjs               spawns dist/ and drives it over real stdio
-├── validate-manifests.mjs  keeps npm + plugin + marketplace in sync
-└── assets/                 regenerates the README GIF and measurements
+├── validate-manifests.mjs  keeps npm + plugin + marketplace + docs in sync
+└── assets/                 regenerates the README animation and measurements
 
 .claude-plugin/marketplace.json   one-plugin marketplace catalog
 .github/                          CI, tag-driven release, issue forms, CODEOWNERS
@@ -466,14 +531,15 @@ guidance for AI agents working in this repo lives in
 **[CLAUDE.md](./CLAUDE.md)**.
 
 Release process: **[RELEASE.md](./RELEASE.md)**. Version history:
-**[CHANGELOG.md](./CHANGELOG.md)**.
+**[CHANGELOG.md](./CHANGELOG.md)**. Conduct: **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)**.
 
 ---
 
 ## Roadmap
 
 - [ ] Element-scoped capture (`selector: "#navbar"`)
-- [ ] Interaction before capture (click, hover, fill, scroll)
+- [ ] Interaction before capture (click, hover, fill, scroll) — would let the
+      state-matrix skills *observe* hover and focus instead of reading them
 - [ ] Multi-viewport diffing in a single call
 - [ ] Full network waterfall for failed API calls
 - [ ] Accessibility-tree output alongside the DOM
@@ -485,7 +551,8 @@ or a [feature request](https://github.com/soumyachk101/VibeLens/issues/new?templ
 
 <div align="center">
 
-**MIT licensed** — see [LICENSE](./LICENSE).
+**Free forever, MIT licensed** — see [LICENSE](./LICENSE).
+No paid tier, no hosted service, no telemetry.
 
 <sub>If VibeLens saved you a round of "no, the <i>other</i> button", a star helps other people find it.</sub>
 
