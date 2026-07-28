@@ -11,6 +11,9 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="/assets/banner.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
 <link rel="stylesheet" href="/styles.css">
 <script>
@@ -168,7 +171,7 @@ from <code>src/browser.ts</code> and <code>src/server.ts</code>.</p>
 <p>A failed capture is a <em>tool</em> error, not a transport error: the server returns
 <code>isError: true</code> with text and stays connected. The text always has three parts,
 produced by <code>buildErrorPayload()</code>:</p>
-<div class="code-block"><pre class="shiki"><code>VibeLens could not inspect the page (CONNECTION_REFUSED).
+<div class="code-block" data-lang=""><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div></div><pre class="shiki"><code>VibeLens could not inspect the page (CONNECTION_REFUSED).
 
 Problem: Connection refused at http://localhost:3000/.
 Next step: The dev server does not appear to be running (or is on a different
@@ -209,7 +212,7 @@ responding&quot;) because they usually mean &quot;compiling&quot; or &quot;crash
 started&quot;.</p>
 <p><strong>Fix.</strong> Start the dev server and confirm the port it printed. Check the terminal
 where it runs for a compile error. Confirm the port is actually listening:</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">curl</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -I</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> http://localhost:3000</span></span></code></pre></div>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">curl</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -I</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> http://localhost:3000</span></span></code></pre></div>
 <p>If the server binds only to a specific interface, use the address it reports. A
 server bound to <code>127.0.0.1</code> will refuse <code>http://192.168.1.20:3000</code> even though
 both are allowed by the validator.</p>
@@ -253,11 +256,11 @@ libraries on a slim Linux image; no sandbox permissions in a container; a machin
 so loaded that launch times out; or a Playwright install that does not match the
 installed browser revision.</p>
 <p><strong>Fix.</strong></p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">          # re-download the matching build</span></span>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">          # re-download the matching build</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install-deps</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">     # Linux only: system libraries</span></span></code></pre></div>
 <p>On Linux verify the message names a missing <code>.so</code>; if so, <code>install-deps</code> is the
 answer. Confirm the browser works independently of VibeLens:</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">node</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -e</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> "import('playwright').then(p=>p.chromium.launch().then(b=>b.close()).then(()=>console.log('launch ok')))"</span></span></code></pre></div>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">node</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -e</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> "import('playwright').then(p=>p.chromium.launch().then(b=>b.close()).then(()=>console.log('launch ok')))"</span></span></code></pre></div>
 <p>If that fails, the problem is the Playwright installation, not VibeLens.</p>
 <h3 id="unknown"><code>UNKNOWN</code><a class="heading-anchor" href="#unknown" aria-label="Link to this section">#</a></h3>
 <p><strong>Raised by</strong> <code>toCaptureError()</code> for anything unclassified, and by
@@ -304,7 +307,7 @@ requiring a session renders as logged-out.</p>
 system Chrome. Installing the npm package does not download a browser; that is a
 separate, one-time step of roughly 95 MB.</p>
 <p><strong>Fix.</strong></p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span></span></code></pre></div>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span></span></code></pre></div>
 <p>Points that catch people out:</p>
 <ul>
 <li><strong>Do this once per machine, not once per project.</strong> Browsers live in a shared
@@ -327,7 +330,7 @@ config&#39;s <code>env</code> block.</li>
 starting and failing. Almost always it is a config path or a JSON syntax error,
 not a code problem.</p>
 <p>Config shape is the same everywhere:</p>
-<div class="code-block" data-lang="json"><span class="code-lang">json</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
+<div class="code-block" data-lang="json"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">json</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "mcpServers"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: {</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "vibelens"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: { </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"command"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"npx"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"args"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: [</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"-y"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"mcp-vibelens@1"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">] }</span></span>
 <span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  }</span></span>
@@ -362,7 +365,7 @@ them. If <code>command: &quot;npx&quot;</code> fails, use an absolute path
 declares <code>engines.node &gt;= 20.0.0</code>.</p>
 </li>
 <li><p><strong>Prove the server itself runs</strong>, independently of any IDE:</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -y</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp-vibelens@1</span></span></code></pre></div>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -y</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp-vibelens@1</span></span></code></pre></div>
 <p>It should print <code>[vibelens] vibelens v&lt;version&gt; ready on stdio</code> to stderr and
 then wait. If it does, the server is fine and the problem is host config.</p>
 </li>
@@ -471,7 +474,7 @@ image. The CSS viewport is still 390 wide, which is what breakpoints respond to.
 <hr>
 <h2 id="collecting-diagnostics">Collecting diagnostics<a class="heading-anchor" href="#collecting-diagnostics" aria-label="Link to this section">#</a></h2>
 <p>If you need to file an issue, this is the useful set:</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">node</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -v</span></span>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">node</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -v</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> view</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp-vibelens</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> version</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> --version</span></span></code></pre></div>
 <p>Plus:</p>

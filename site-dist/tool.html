@@ -11,6 +11,9 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="/assets/banner.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
 <link rel="stylesheet" href="/styles.css">
 <script>
@@ -159,7 +162,7 @@ in <a href="/adr/0004-single-tool-not-many.html">ADR 0004</a>.</p>
 <h2 id="what-it-returns">What it returns<a class="heading-anchor" href="#what-it-returns" aria-label="Link to this section">#</a></h2>
 <p>Two MCP content blocks. First an <code>image</code> block containing a base64 JPEG at
 quality 75, then a <code>text</code> block containing JSON:</p>
-<div class="code-block" data-lang="json"><span class="code-lang">json</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
+<div class="code-block" data-lang="json"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">json</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "summary"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: {</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "url"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"http://localhost:3000/health"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "pageTitle"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Service health"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
@@ -207,7 +210,7 @@ a stack trace: <code>INVALID_URL</code>, <code>CONNECTION_REFUSED</code>, <code>
 <code>UNKNOWN</code>. Each one is documented with its cause and fix in
 <a href="/troubleshooting.html">Troubleshooting</a>.</p>
 <h2 id="prompts-that-work-well">Prompts that work well<a class="heading-anchor" href="#prompts-that-work-well" aria-label="Link to this section">#</a></h2>
-<div class="code-block" data-lang="text"><span class="code-lang">text</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span>Check localhost:3000 on mobile and tell me what breaks.</span></span>
+<div class="code-block" data-lang="text"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">text</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span>Check localhost:3000 on mobile and tell me what breaks.</span></span>
 <span class="line"><span>Look at localhost:5173/settings - the cards aren't aligned. Fix it.</span></span>
 <span class="line"><span>Does localhost:3000/checkout throw anything in the console?</span></span>
 <span class="line"><span>This page looks AI-generated. Tell me why, then fix the worst of it.</span></span>

@@ -11,6 +11,9 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="/assets/banner.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
 <link rel="stylesheet" href="/styles.css">
 <script>
@@ -153,11 +156,11 @@
 <a href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">VibeLens</a>, the MCP server that gives an
 AI coding assistant vision into a locally running web app.</p>
 <h2 id="install">Install<a class="heading-anchor" href="#install" aria-label="Link to this section">#</a></h2>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">claude</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> plugin</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> marketplace</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> add</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> soumyachk101/VibeLens</span></span>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">claude</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> plugin</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> marketplace</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> add</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> soumyachk101/VibeLens</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">claude</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> plugin</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> vibelens@vibelens</span></span></code></pre></div>
 <p>Then run <code>/mcp</code> inside a session; <code>vibelens</code> should be listed as connected. The
 first capture also needs Chromium once:</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span></span></code></pre></div>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span></span></code></pre></div>
 <h2 id="what-gets-installed">What gets installed<a class="heading-anchor" href="#what-gets-installed" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Component</th><th>Count</th><th>Detail</th></tr></thead><tbody>
 <tr><td>MCP server</td><td>1</td><td><code>inspect_localhost_ui</code>, launched from <code>.mcp.json</code> via <code>npx -y mcp-vibelens@1</code></td></tr>
@@ -226,7 +229,7 @@ always exit 0.</p>
 <tr><td>Raw-value check</td><td>The same file types, and the file contains a six-digit hex, an <code>rgb()</code>/<code>rgba()</code> call, or an arbitrary Tailwind bracket value such as <code>text-[13px]</code></td><td>One line noting raw values were found, suggesting a semantic colour token or a step on the type/spacing scale.</td></tr>
 </tbody></table></div>
 <h2 id="layout">Layout<a class="heading-anchor" href="#layout" aria-label="Link to this section">#</a></h2>
-<div class="code-block"><pre class="shiki"><code>plugin/
+<div class="code-block" data-lang=""><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div></div><pre class="shiki"><code>plugin/
 ├── .claude-plugin/plugin.json   manifest (name, version, metadata)
 ├── .mcp.json                    launches npx -y mcp-vibelens@1
 ├── agents/                      ui-debugger, ui-reviewer, design-reviewer, frontend-builder

@@ -66,29 +66,58 @@
   // --- copy buttons ---------------------------------------------------------
   for (const block of document.querySelectorAll(".code-block")) {
     const code = block.querySelector("code");
+    const header = block.querySelector(".code-header");
     if (!code || !navigator.clipboard) continue;
 
     const button = document.createElement("button");
     button.type = "button";
     button.className = "copy-button";
-    button.textContent = "Copy";
+    button.innerHTML = `<svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>`;
     button.setAttribute("aria-label", "Copy code to clipboard");
 
     button.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(code.innerText);
-        button.textContent = "Copied";
+        button.innerHTML = `<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Copied!</span>`;
         button.dataset.state = "done";
       } catch {
         button.textContent = "Press Ctrl+C";
       }
       window.setTimeout(() => {
-        button.textContent = "Copy";
+        button.innerHTML = `<svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="13" height="13" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>`;
         delete button.dataset.state;
       }, 1600);
     });
 
-    block.append(button);
+    if (header) {
+      header.append(button);
+    } else {
+      block.append(button);
+    }
+  }
+
+  // --- install command line copy handler -------------------------------------
+  const installLines = document.querySelectorAll("[data-copy-cmd]");
+  for (const line of installLines) {
+    const textToCopy = line.getAttribute("data-copy-cmd");
+    const copyBtn = line.querySelector(".copy-cmd-btn");
+    const txtSpan = line.querySelector(".copy-txt");
+    if (!textToCopy) continue;
+
+    const doCopy = async (e) => {
+      e.preventDefault();
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        if (txtSpan) txtSpan.textContent = "Copied!";
+        line.classList.add("copied");
+        setTimeout(() => {
+          if (txtSpan) txtSpan.textContent = "Copy";
+          line.classList.remove("copied");
+        }, 1800);
+      } catch (err) {}
+    };
+
+    line.addEventListener("click", doCopy);
   }
 
   // --- table of contents highlight ------------------------------------------

@@ -182,6 +182,7 @@ function renderMarkdown(markdown, sourcePath) {
 
     const resolvedLang = LANG_ALIASES[requested] ?? requested;
     const langTag = requested ? `<span class="code-lang">${escapeHtml(requested)}</span>` : "";
+    const dotsHeader = `<div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>${langTag}</div>`;
 
     if (LANGS.includes(resolvedLang)) {
       const highlighted = highlighter.codeToHtml(text, {
@@ -191,10 +192,21 @@ function renderMarkdown(markdown, sourcePath) {
         // baking one in, which is what lets the theme toggle work instantly.
         defaultColor: false,
       });
-      return `<div class="code-block" data-lang="${escapeHtml(requested)}">${langTag}${highlighted}</div>\n`;
+      return `<div class="code-block" data-lang="${escapeHtml(requested)}">${dotsHeader}${highlighted}</div>\n`;
     }
 
-    return `<div class="code-block">${langTag}<pre class="shiki"><code>${escapeHtml(text)}</code></pre></div>\n`;
+    return `<div class="code-block" data-lang="${escapeHtml(requested)}">${dotsHeader}<pre class="shiki"><code>${escapeHtml(text)}</code></pre></div>\n`;
+  };
+
+  renderer.blockquote = function (token) {
+    const text = this.parser.parse(token.tokens);
+    const alertMatch = text.match(/^<p>\s*\[\!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]\s*<br\s*\/?>?/i);
+    if (alertMatch) {
+      const type = alertMatch[1].toUpperCase();
+      const cleanContent = text.replace(/^<p>\s*\[\!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]\s*<br\s*\/?>?/i, "<p>");
+      return `<div class="callout callout-${type.toLowerCase()}"><div class="callout-header"><span class="callout-icon"></span><strong class="callout-title">${type}</strong></div><div class="callout-body">${cleanContent}</div></div>\n`;
+    }
+    return `<blockquote>${text}</blockquote>\n`;
   };
 
   renderer.table = function (token) {
@@ -406,6 +418,9 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
 <meta property="og:type" content="website">
 <meta property="og:image" content="${BASE}/assets/banner.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="${BASE}/assets/logo.svg">
 <link rel="stylesheet" href="${BASE}/styles.css">
 <script>
@@ -518,7 +533,7 @@ function homePage(page) {
 <main class="home" id="content">
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow"><b>Free</b> · MIT · no telemetry</p>
+      <p class="eyebrow"><span class="pulse-dot"></span> <b>Free</b> · MIT · no telemetry</p>
       <h1>Your AI writes the UI. <em>VibeLens lets it see it.</em></h1>
       <p class="lede">
         One MCP tool call returns a screenshot of your running page, the console and
@@ -527,10 +542,23 @@ function homePage(page) {
         reading them.
       </p>
       <div class="cta-row">
-        <a class="button button-primary" href="${url("install.html")}">Install in one command</a>
-        <a class="button button-secondary" href="${SITE.repo}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        <a class="button button-primary" href="${url("install.html")}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18" stroke-width="2.2"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Install in one command
+        </a>
+        <a class="button button-secondary" href="${SITE.repo}" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+          View on GitHub
+        </a>
       </div>
-      <div class="install-line"><span class="prompt">$</span> claude plugin marketplace add soumyachk101/VibeLens</div>
+      <div class="install-line" data-copy-cmd="claude plugin marketplace add soumyachk101/VibeLens" title="Click to copy">
+        <span class="prompt">$</span>
+        <code>claude plugin marketplace add soumyachk101/VibeLens</code>
+        <button type="button" class="copy-cmd-btn" aria-label="Copy install command">
+          <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" width="15" height="15" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span class="copy-txt">Copy</span>
+        </button>
+      </div>
     </div>
   </section>
 

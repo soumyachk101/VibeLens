@@ -11,6 +11,9 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="/assets/banner.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
 <link rel="stylesheet" href="/styles.css">
 <script>
@@ -171,12 +174,12 @@ document is the process layer on top of it.</p>
 <p>You need <strong>Node.js 20 or newer</strong>. Playwright 1.62 requires &gt;=20 and vitest 4
 supports <code>^20 || ^22 || &gt;=24</code>, so 20 is the floor for the whole toolchain. CI
 runs the suite on 20, 22 and 24.</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">git</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> clone</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> https://github.com/soumyachk101/VibeLens.git</span></span>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">git</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> clone</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> https://github.com/soumyachk101/VibeLens.git</span></span>
 <span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">cd</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> VibeLens</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">   # one-time, ~95 MB, required for the tests</span></span></code></pre></div>
 <p>Then confirm the checkout is healthy before changing anything:</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> typecheck</span></span>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> typecheck</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> test</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">          # 63 tests; several launch a real Chromium</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> build</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">node</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> scripts/smoke.mjs</span></span></code></pre></div>
@@ -201,7 +204,7 @@ on Playwright semantics.</p>
 <p>Run all of these locally before you open a pull request, and paste the outcome
 into the PR description. CI runs the same things, but finding a failure locally
 is a minute instead of ten.</p>
-<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> typecheck</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">                    # 1. strict TypeScript, no emit</span></span>
+<div class="code-block" data-lang="bash"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">bash</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> typecheck</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">                    # 1. strict TypeScript, no emit</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> test</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">                             # 2. full vitest run, real Chromium</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> build</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">                        # 3. dist/ compiles</span></span>
 <span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">node</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> scripts/smoke.mjs</span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">               # 4. the built server answers over stdio</span></span>
@@ -271,7 +274,7 @@ update when <code>plugin.json</code>&#39;s version string changes, and the manif
 validator fails the build when the two drift.</li>
 </ol>
 <h2 id="where-each-kind-of-change-goes">Where each kind of change goes<a class="heading-anchor" href="#where-each-kind-of-change-goes" aria-label="Link to this section">#</a></h2>
-<div class="code-block"><pre class="shiki"><code>src/index.ts     Executable entrypoint. Stdio wiring only — keep it thin.
+<div class="code-block" data-lang=""><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div></div><pre class="shiki"><code>src/index.ts     Executable entrypoint. Stdio wiring only — keep it thin.
 src/server.ts    MCP server: tool schema, description, response assembly,
                  error formatting. No side effects on import.
 src/browser.ts   Playwright capture engine: launch -&gt; observe -&gt; capture -&gt; close.
@@ -332,7 +335,7 @@ existing capture over launching another browser.</li>
 </ul>
 <h2 id="commit-messages">Commit messages<a class="heading-anchor" href="#commit-messages" aria-label="Link to this section">#</a></h2>
 <p>We use <a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank" rel="noopener noreferrer">Conventional Commits</a>:</p>
-<div class="code-block"><pre class="shiki"><code>&lt;type&gt;(&lt;optional scope&gt;): &lt;imperative summary&gt;
+<div class="code-block" data-lang=""><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div></div><pre class="shiki"><code>&lt;type&gt;(&lt;optional scope&gt;): &lt;imperative summary&gt;
 
 &lt;optional body explaining the why&gt;
 
@@ -352,7 +355,7 @@ existing capture over launching another browser.</li>
 </tbody></table></div>
 <p>Useful scopes: <code>server</code>, <code>browser</code>, <code>dom</code>, <code>security</code>, <code>plugin</code>, <code>skills</code>,
 <code>docs</code>, <code>deps</code>. Examples:</p>
-<div class="code-block"><pre class="shiki"><code>feat(server): add a selector parameter for element-scoped capture
+<div class="code-block" data-lang=""><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div></div><pre class="shiki"><code>feat(server): add a selector parameter for element-scoped capture
 fix(browser): close the context when networkidle times out
 security(security): block IPv4-mapped IPv6 metadata addresses
 docs(adr): record why hostnames are refused instead of resolved</code></pre></div>

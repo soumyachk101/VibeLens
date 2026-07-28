@@ -11,6 +11,9 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="/assets/banner.svg">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
 <link rel="stylesheet" href="/styles.css">
 <script>
@@ -226,7 +229,7 @@ yields well under 1 KB of DOM text.</li>
 <tr><td>Tests</td><td><code>vitest</code></td><td>Fast, ESM-native.</td></tr>
 </tbody></table></div>
 <h2 id="22-architecture">2.2 Architecture<a class="heading-anchor" href="#22-architecture" aria-label="Link to this section">#</a></h2>
-<div class="code-block"><pre class="shiki"><code>IDE (MCP host)
+<div class="code-block" data-lang=""><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div></div><pre class="shiki"><code>IDE (MCP host)
    │  stdio, JSON-RPC
    ▼
 src/index.ts ── StdioServerTransport
@@ -245,7 +248,7 @@ src/browser.ts ── captureUIState()
    ▼
 { image block, text block }</code></pre></div>
 <h2 id="23-tool-contract">2.3 Tool contract<a class="heading-anchor" href="#23-tool-contract" aria-label="Link to this section">#</a></h2>
-<div class="code-block" data-lang="jsonc"><span class="code-lang">jsonc</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
+<div class="code-block" data-lang="jsonc"><div class="code-header"><div class="code-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div><span class="code-lang">jsonc</span></div><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "name"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"inspect_localhost_ui"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "annotations"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: { </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"readOnlyHint"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">true</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"openWorldHint"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">false</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> },</span></span>
 <span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "inputSchema"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: {</span></span>
