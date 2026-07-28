@@ -1,5 +1,9 @@
 # VibeLens
 
+[![CI](https://github.com/soumyachk101/VibeLens/actions/workflows/ci.yml/badge.svg)](https://github.com/soumyachk101/VibeLens/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/mcp-vibelens)](https://www.npmjs.com/package/mcp-vibelens)
+[![license](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+
 **Give your AI coding assistant eyes on localhost.**
 
 AI assistants write frontend code well but cannot see what the browser actually
