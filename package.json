@@ -1,0 +1,53 @@
+{
+  "name": "vibelens-mcp",
+  "version": "1.0.0",
+  "description": "VibeLens — an MCP server that gives AI coding assistants eyes on localhost: screenshots, console errors, and a token-optimized DOM snapshot.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "playwright",
+    "ui-debugging",
+    "screenshot",
+    "claude",
+    "cursor",
+    "antigravity",
+    "vibe-coding"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/server.js",
+  "types": "./dist/server.d.ts",
+  "bin": {
+    "vibelens-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CLAUDE.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "install:browser": "playwright install chromium",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "playwright": "1.62.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.2",
+    "tsx": "4.23.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10"
+  }
+}
