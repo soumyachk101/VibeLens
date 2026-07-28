@@ -55,9 +55,6 @@
     "validate:plugin": "claude plugin validate . && claude plugin validate ./plugin",
     "assets:measure": "node scripts/assets/measure-dom.mjs",
     "assets:gif": "node scripts/assets/capture-demo.mjs && node scripts/assets/build-gif.mjs",
-    "site:build": "node scripts/site/build.mjs",
-    "site:check": "node scripts/site/check.mjs",
-    "site:pages": "node scripts/site/build.mjs --base /VibeLens",
     "install:browser": "playwright install chromium",
     "prepublishOnly": "npm run build"
   },
@@ -68,8 +65,6 @@
   },
   "devDependencies": {
     "@types/node": "22.19.2",
-    "marked": "18.0.7",
-    "shiki": "4.3.1",
     "tsx": "4.23.1",
     "typescript": "5.9.3",
     "vitest": "4.1.10"
