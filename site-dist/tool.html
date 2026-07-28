@@ -27,43 +27,79 @@
 <a class="skip-link" href="#content">Skip to content</a>
 
 <header class="site-header">
-  <a class="brand" href="/">
-    <img src="/assets/logo.svg" alt="" width="26" height="26">
-    <!-- No whitespace between the two halves of the wordmark, or the browser
-         renders "Vibe Lens" with a gap. -->
-    <b>Vibe<span>Lens</span></b>
-  </a>
-  <nav class="header-nav" aria-label="Site">
-    <a class="desktop-only" href="/install.html">Install</a>
-    <a class="desktop-only" href="/plugin.html">Skills</a>
-    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
-    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+  <div class="header-inner">
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open documentation navigation">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
     </button>
-  </nav>
+
+    <a class="brand" href="/">
+      <img src="/assets/logo.svg" alt="" width="28" height="28">
+      <!-- No whitespace between the two halves of the wordmark, or the browser
+           renders "Vibe Lens" with a gap. -->
+      <b>Vibe<span>Lens</span></b>
+      <span class="version">v1.0.0</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Sections">
+      <a href="/install.html" aria-current="true">Docs</a>
+<a href="/plugin.html">Skills</a>
+<a href="/design/">Design</a>
+<a href="/architecture.html">Architecture</a>
+<a href="/contributing.html">Project</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-trigger" type="button" data-search-open aria-label="Search documentation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+        <span>Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      <a class="icon-button" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer" aria-label="VibeLens on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+      </a>
+
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
 </header>
+
+<dialog class="search-dialog" data-search-dialog aria-label="Search documentation">
+  <form class="search-box" method="dialog" onsubmit="return false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+    <input type="search" data-search-input placeholder="Search the documentation" autocomplete="off" spellcheck="false" aria-label="Search query">
+    <kbd>Esc</kbd>
+  </form>
+  <div class="search-results" data-search-results role="listbox" aria-label="Search results"></div>
+  <p class="search-hint">Enter to open · arrow keys to move · results come from a build-time index, no network calls</p>
+</dialog>
+
+<div class="nav-backdrop" data-nav-backdrop hidden></div>
 
 <div class="shell">
   <nav class="sidebar" aria-label="Documentation">
-    <h2>Overview</h2>
-<ul>
+    <details class="nav-group" open>
+      <summary><span>Overview</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/">Introduction</a></li>
 <li><a href="/install.html">Install &amp; IDE setup</a></li>
 <li><a href="/tool.html" aria-current="page">Tool reference</a></li>
 <li><a href="/faq.html">FAQ</a></li>
 <li><a href="/troubleshooting.html">Troubleshooting</a></li>
 </ul>
-<h2>Claude Code plugin</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Claude Code plugin</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/plugin.html">Skills &amp; agents</a></li>
 </ul>
-<h2>Design system</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Design system</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/design/">Overview</a></li>
 <li><a href="/design/anti-slop.html">Anti-slop</a></li>
 <li><a href="/design/typography.html">Typography</a></li>
@@ -71,8 +107,10 @@
 <li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
 <li><a href="/design/motion.html">Motion</a></li>
 </ul>
-<h2>Architecture</h2>
-<ul>
+    </details>
+<details class="nav-group">
+      <summary><span>Architecture</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/architecture.html">Architecture</a></li>
 <li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
 <li><a href="/adr/">ADR index</a></li>
@@ -83,8 +121,10 @@
 <li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
 <li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
 </ul>
-<h2>Project</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Project</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/contributing.html">Contributing</a></li>
 <li><a href="/security.html">Security</a></li>
 <li><a href="/support.html">Support</a></li>
@@ -92,11 +132,20 @@
 <li><a href="/release.html">Releasing</a></li>
 <li><a href="/code-of-conduct.html">Code of conduct</a></li>
 </ul>
+    </details>
   </nav>
   <main class="main" id="content">
         <div class="with-toc">
           <article class="prose">
-            <h1>The inspect_localhost_ui tool</h1>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Docs</a>
+    <span aria-hidden="true">/</span>
+    <span>Overview</span>
+  </nav>
+            <div class="page-head">
+              <h1>The inspect_localhost_ui tool</h1>
+              
+            </div>
             <p>VibeLens exposes exactly one tool. One tool with a small, bounded schema is
 called correctly far more often than a family of narrow ones — the reasoning is
 in <a href="/adr/0004-single-tool-not-many.html">ADR 0004</a>.</p>
@@ -110,29 +159,29 @@ in <a href="/adr/0004-single-tool-not-many.html">ADR 0004</a>.</p>
 <h2 id="what-it-returns">What it returns<a class="heading-anchor" href="#what-it-returns" aria-label="Link to this section">#</a></h2>
 <p>Two MCP content blocks. First an <code>image</code> block containing a base64 JPEG at
 quality 75, then a <code>text</code> block containing JSON:</p>
-<div class="code-block"><span class="code-lang">json</span><pre><code>{
-  &quot;summary&quot;: {
-    &quot;url&quot;: &quot;http://localhost:3000/health&quot;,
-    &quot;pageTitle&quot;: &quot;Service health&quot;,
-    &quot;viewport&quot;: &quot;desktop (1920x1080)&quot;,
-    &quot;fullPage&quot;: false,
-    &quot;waitedMs&quot;: 1000,
-    &quot;captureMs&quot;: 1253,
-    &quot;consoleErrors&quot;: 1,
-    &quot;consoleWarnings&quot;: 0,
-    &quot;uncaughtPageErrors&quot;: 0,
-    &quot;failedRequests&quot;: 1,
-    &quot;domTruncated&quot;: false
-  },
-  &quot;consoleLogs&quot;: [
-    { &quot;level&quot;: &quot;error&quot;, &quot;text&quot;: &quot;Hydration failed...&quot;, &quot;location&quot;: &quot;http://localhost:3000/app.js:42:13&quot; }
-  ],
-  &quot;uncaughtPageErrors&quot;: [&quot;TypeError: Cannot read properties of undefined&quot;],
-  &quot;failedRequests&quot;: [
-    { &quot;url&quot;: &quot;http://localhost:3000/avatar.png&quot;, &quot;method&quot;: &quot;GET&quot;, &quot;failure&quot;: &quot;HTTP 404&quot;, &quot;status&quot;: 404 }
-  ],
-  &quot;simplifiedDOM&quot;: &quot;&lt;body class=\&quot;...\&quot;&gt;...&lt;/body&gt;&quot;
-}</code></pre></div>
+<div class="code-block" data-lang="json"><span class="code-lang">json</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "summary"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: {</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "url"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"http://localhost:3000/health"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "pageTitle"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Service health"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "viewport"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"desktop (1920x1080)"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "fullPage"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">false</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "waitedMs"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1000</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "captureMs"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1253</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "consoleErrors"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "consoleWarnings"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">0</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "uncaughtPageErrors"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">0</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "failedRequests"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "domTruncated"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">false</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  },</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "consoleLogs"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: [</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">    { </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"level"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"error"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"text"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Hydration failed..."</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"location"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"http://localhost:3000/app.js:42:13"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> }</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  ],</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "uncaughtPageErrors"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: [</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"TypeError: Cannot read properties of undefined"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">],</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "failedRequests"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: [</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">    { </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"url"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"http://localhost:3000/avatar.png"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"method"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"GET"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"failure"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"HTTP 404"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"status"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">404</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> }</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  ],</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "simplifiedDOM"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"&#x3C;body class=</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">\"</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">...</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">\"</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">>...&#x3C;/body>"</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">}</span></span></code></pre></div>
 <p>The DOM snapshot comes last because it is by far the largest field: putting the
 diagnostics first means they survive any client-side truncation.</p>
 <h2 id="limits-it-enforces">Limits it enforces<a class="heading-anchor" href="#limits-it-enforces" aria-label="Link to this section">#</a></h2>
@@ -158,12 +207,12 @@ a stack trace: <code>INVALID_URL</code>, <code>CONNECTION_REFUSED</code>, <code>
 <code>UNKNOWN</code>. Each one is documented with its cause and fix in
 <a href="/troubleshooting.html">Troubleshooting</a>.</p>
 <h2 id="prompts-that-work-well">Prompts that work well<a class="heading-anchor" href="#prompts-that-work-well" aria-label="Link to this section">#</a></h2>
-<div class="code-block"><span class="code-lang">text</span><pre><code>Check localhost:3000 on mobile and tell me what breaks.
-Look at localhost:5173/settings - the cards aren't aligned. Fix it.
-Does localhost:3000/checkout throw anything in the console?
-This page looks AI-generated. Tell me why, then fix the worst of it.
-The accent is just default Tailwind blue - give me a real palette.
-Compare localhost:3000 on desktop vs mobile and make the nav responsive.</code></pre></div>
+<div class="code-block" data-lang="text"><span class="code-lang">text</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span>Check localhost:3000 on mobile and tell me what breaks.</span></span>
+<span class="line"><span>Look at localhost:5173/settings - the cards aren't aligned. Fix it.</span></span>
+<span class="line"><span>Does localhost:3000/checkout throw anything in the console?</span></span>
+<span class="line"><span>This page looks AI-generated. Tell me why, then fix the worst of it.</span></span>
+<span class="line"><span>The accent is just default Tailwind blue - give me a real palette.</span></span>
+<span class="line"><span>Compare localhost:3000 on desktop vs mobile and make the nav responsive.</span></span></code></pre></div>
 
             <nav class="page-nav" aria-label="Pagination"><a class="prev" href="/install.html"><small>Previous</small><strong>Install &amp; IDE setup</strong></a><a class="next" href="/faq.html"><small>Next</small><strong>FAQ</strong></a></nav>
           </article>
@@ -191,6 +240,7 @@ Compare localhost:3000 on desktop vs mobile and make the nav responsive.</code><
   </div>
 </footer>
 
+<script>window.VIBELENS_BASE = "";</script>
 <script src="/app.js" defer></script>
 
 </body>

@@ -18,6 +18,7 @@ import { dirname, join, posix, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { marked } from "marked";
+import { createHighlighter } from "shiki";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "..", "..");
@@ -26,6 +27,21 @@ const outDir = join(repoRoot, "site-dist");
 /** GitHub Pages serves a project site under /<repo>/, so links need a prefix. */
 const baseArgIndex = process.argv.indexOf("--base");
 const BASE = baseArgIndex === -1 ? "" : (process.argv[baseArgIndex + 1] ?? "").replace(/\/$/, "");
+
+const { version: VERSION } = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
+
+/**
+ * Syntax highlighting happens at build time, not in the browser: the output is
+ * plain spans carrying CSS variables for both themes, so there is no runtime
+ * cost and no flash of unhighlighted code when the theme is switched.
+ */
+const LANGS = ["bash", "shell", "json", "jsonc", "toml", "yaml", "typescript", "javascript",
+  "tsx", "jsx", "css", "html", "diff", "ini", "markdown", "text"];
+const highlighter = await createHighlighter({
+  themes: ["github-light-default", "github-dark-default"],
+  langs: LANGS,
+});
+const LANG_ALIASES = { js: "javascript", ts: "typescript", sh: "bash", md: "markdown", jsonc: "json", plaintext: "text" };
 
 const SITE = {
   title: "VibeLens",
@@ -158,13 +174,27 @@ function renderMarkdown(markdown, sourcePath) {
   };
 
   renderer.code = function ({ text, lang }) {
-    if ((lang ?? "").trim() === "mermaid") {
+    const requested = (lang ?? "").trim().split(/\s+/)[0] ?? "";
+    if (requested === "mermaid") {
       hasMermaid = true;
       return `<pre class="mermaid">${escapeHtml(text)}</pre>\n`;
     }
-    const label = (lang ?? "").split(/\s+/)[0] ?? "";
-    const langTag = label ? `<span class="code-lang">${escapeHtml(label)}</span>` : "";
-    return `<div class="code-block">${langTag}<pre><code>${escapeHtml(text)}</code></pre></div>\n`;
+
+    const resolvedLang = LANG_ALIASES[requested] ?? requested;
+    const langTag = requested ? `<span class="code-lang">${escapeHtml(requested)}</span>` : "";
+
+    if (LANGS.includes(resolvedLang)) {
+      const highlighted = highlighter.codeToHtml(text, {
+        lang: resolvedLang,
+        themes: { light: "github-light-default", dark: "github-dark-default" },
+        // defaultColor: false emits both themes as CSS variables instead of
+        // baking one in, which is what lets the theme toggle work instantly.
+        defaultColor: false,
+      });
+      return `<div class="code-block" data-lang="${escapeHtml(requested)}">${langTag}${highlighted}</div>\n`;
+    }
+
+    return `<div class="code-block">${langTag}<pre class="shiki"><code>${escapeHtml(text)}</code></pre></div>\n`;
   };
 
   renderer.table = function (token) {
@@ -258,14 +288,63 @@ function resolveLink(href, sourcePath) {
 
 function sidebarHtml(currentOut) {
   return NAV.map((section) => {
+    const holdsCurrent = section.pages.some((page) => page.out === currentOut);
+    // Long groups (the ADR list) start closed unless you are inside them, so the
+    // sidebar stays scannable instead of becoming a wall of links.
+    const collapsible = section.pages.length > 6;
+    const open = holdsCurrent || !collapsible;
+
     const items = section.pages
       .map((page) => {
         const current = page.out === currentOut ? ' aria-current="page"' : "";
         return `<li><a href="${url(page.out)}"${current}>${escapeHtml(page.nav)}</a></li>`;
       })
       .join("\n");
-    return `<h2>${escapeHtml(section.group)}</h2>\n<ul>\n${items}\n</ul>`;
+
+    return `<details class="nav-group"${open ? " open" : ""}>
+      <summary><span>${escapeHtml(section.group)}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>\n${items}\n</ul>
+    </details>`;
   }).join("\n");
+}
+
+/** The top-level nav maps a group to one primary link. */
+const PRIMARY_NAV = [
+  { label: "Docs", out: "install.html", groups: ["Overview"] },
+  { label: "Skills", out: "plugin.html", groups: ["Claude Code plugin"] },
+  { label: "Design", out: "design/index.html", groups: ["Design system"] },
+  { label: "Architecture", out: "architecture.html", groups: ["Architecture"] },
+  { label: "Project", out: "contributing.html", groups: ["Project"] },
+];
+
+function groupOf(out) {
+  return NAV.find((section) => section.pages.some((page) => page.out === out))?.group ?? "";
+}
+
+function primaryNavHtml(currentOut) {
+  const group = groupOf(currentOut);
+  return PRIMARY_NAV.map((item) => {
+    const active = item.groups.includes(group) ? ' aria-current="true"' : "";
+    return `<a href="${url(item.out)}"${active}>${escapeHtml(item.label)}</a>`;
+  }).join("\n");
+}
+
+function breadcrumbHtml(page) {
+  const group = groupOf(page.out);
+  if (!group || page.out === "index.html") return "";
+  return `<nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="${url("index.html")}">Docs</a>
+    <span aria-hidden="true">/</span>
+    <span>${escapeHtml(group)}</span>
+  </nav>`;
+}
+
+function editLinkHtml(page) {
+  if (!page.src) return "";
+  return `<a class="edit-link" href="${SITE.repo}/blob/main/${page.src}" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Edit this page
+  </a>`;
 }
 
 function tocHtml(outline) {
@@ -302,7 +381,11 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
     : `<main class="main" id="content">
         <div class="${toc ? "with-toc" : ""}">
           <article class="prose">
-            <h1>${escapeHtml(page.title)}</h1>
+            ${breadcrumbHtml(page)}
+            <div class="page-head">
+              <h1>${escapeHtml(page.title)}</h1>
+              ${editLinkHtml(page)}
+            </div>
             ${body}
             ${pageNavHtml(page.out)}
           </article>
@@ -339,26 +422,53 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
 <a class="skip-link" href="#content">Skip to content</a>
 
 <header class="site-header">
-  <a class="brand" href="${url("index.html")}">
-    <img src="${BASE}/assets/logo.svg" alt="" width="26" height="26">
-    <!-- No whitespace between the two halves of the wordmark, or the browser
-         renders "Vibe Lens" with a gap. -->
-    <b>Vibe<span>Lens</span></b>
-  </a>
-  <nav class="header-nav" aria-label="Site">
-    <a class="desktop-only" href="${url("install.html")}">Install</a>
-    <a class="desktop-only" href="${url("plugin.html")}">Skills</a>
-    <a class="desktop-only" href="${url("design/anti-slop.html")}">Anti-slop</a>
-    <a class="desktop-only" href="${SITE.repo}" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+  <div class="header-inner">
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open documentation navigation">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
     </button>
-  </nav>
+
+    <a class="brand" href="${url("index.html")}">
+      <img src="${BASE}/assets/logo.svg" alt="" width="28" height="28">
+      <!-- No whitespace between the two halves of the wordmark, or the browser
+           renders "Vibe Lens" with a gap. -->
+      <b>Vibe<span>Lens</span></b>
+      <span class="version">v${VERSION}</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Sections">
+      ${primaryNavHtml(page.out)}
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-trigger" type="button" data-search-open aria-label="Search documentation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+        <span>Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      <a class="icon-button" href="${SITE.repo}" target="_blank" rel="noopener noreferrer" aria-label="VibeLens on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+      </a>
+
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
 </header>
+
+<dialog class="search-dialog" data-search-dialog aria-label="Search documentation">
+  <form class="search-box" method="dialog" onsubmit="return false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+    <input type="search" data-search-input placeholder="Search the documentation" autocomplete="off" spellcheck="false" aria-label="Search query">
+    <kbd>Esc</kbd>
+  </form>
+  <div class="search-results" data-search-results role="listbox" aria-label="Search results"></div>
+  <p class="search-hint">Enter to open · arrow keys to move · results come from a build-time index, no network calls</p>
+</dialog>
+
+<div class="nav-backdrop" data-nav-backdrop hidden></div>
 
 <div class="shell">
   <nav class="sidebar" aria-label="Documentation">
@@ -379,6 +489,7 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
   </div>
 </footer>
 
+<script>window.VIBELENS_BASE = "${BASE}";</script>
 <script src="${BASE}/app.js" defer></script>
 ${hasMermaid ? mermaidScript() : ""}
 </body>
@@ -766,6 +877,19 @@ cpSync(join(repoRoot, "assets"), join(outDir, "assets"), { recursive: true });
 writeFileSync(join(outDir, ".nojekyll"), "");
 
 let built = 0;
+/** Records for the client-side search: built here, so there is no runtime crawl. */
+const searchIndex = [];
+
+/** Strips tags and collapses whitespace so the index stores readable text. */
+function toPlainText(html) {
+  return html
+    .replace(/<pre[\s\S]*?<\/pre>/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&[a-z]+;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 for (const page of allPages) {
   let html;
 
@@ -778,6 +902,13 @@ for (const page of allPages) {
     const source = page.kind === "install" ? INSTALL_MD : TOOL_MD;
     const { html: bodyHtml, outline } = renderMarkdown(source, "docs/_.md");
     html = shell({ page, body: bodyHtml, outline });
+    searchIndex.push({
+      u: url(page.out),
+      t: page.title,
+      g: groupOf(page.out),
+      h: outline.map((entry) => ({ i: entry.id, t: entry.text })),
+      b: toPlainText(bodyHtml).slice(0, 1600),
+    });
   } else {
     const markdown = readFileSync(join(repoRoot, page.src), "utf8");
     // The h1 comes from the page title in the shell, so drop the document's own
@@ -785,6 +916,13 @@ for (const page of allPages) {
     const withoutTitle = markdown.replace(/^#\s+.*\n+/, "");
     const { html: bodyHtml, outline, hasMermaid } = renderMarkdown(withoutTitle, page.src);
     html = shell({ page, body: bodyHtml, outline, hasMermaid });
+    searchIndex.push({
+      u: url(page.out),
+      t: page.title,
+      g: groupOf(page.out),
+      h: outline.map((entry) => ({ i: entry.id, t: entry.text })),
+      b: toPlainText(bodyHtml).slice(0, 1600),
+    });
   }
 
   const target = join(outDir, page.out);
@@ -792,6 +930,9 @@ for (const page of allPages) {
   writeFileSync(target, html);
   built += 1;
 }
+
+writeFileSync(join(outDir, "search-index.json"), JSON.stringify(searchIndex));
+console.log(`search index: ${searchIndex.length} pages, ${(JSON.stringify(searchIndex).length / 1024).toFixed(0)} kB`);
 
 // A 404 that keeps the reader inside the site.
 writeFileSync(

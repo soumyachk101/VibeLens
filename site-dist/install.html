@@ -27,43 +27,79 @@
 <a class="skip-link" href="#content">Skip to content</a>
 
 <header class="site-header">
-  <a class="brand" href="/">
-    <img src="/assets/logo.svg" alt="" width="26" height="26">
-    <!-- No whitespace between the two halves of the wordmark, or the browser
-         renders "Vibe Lens" with a gap. -->
-    <b>Vibe<span>Lens</span></b>
-  </a>
-  <nav class="header-nav" aria-label="Site">
-    <a class="desktop-only" href="/install.html">Install</a>
-    <a class="desktop-only" href="/plugin.html">Skills</a>
-    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
-    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+  <div class="header-inner">
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open documentation navigation">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
     </button>
-  </nav>
+
+    <a class="brand" href="/">
+      <img src="/assets/logo.svg" alt="" width="28" height="28">
+      <!-- No whitespace between the two halves of the wordmark, or the browser
+           renders "Vibe Lens" with a gap. -->
+      <b>Vibe<span>Lens</span></b>
+      <span class="version">v1.0.0</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Sections">
+      <a href="/install.html" aria-current="true">Docs</a>
+<a href="/plugin.html">Skills</a>
+<a href="/design/">Design</a>
+<a href="/architecture.html">Architecture</a>
+<a href="/contributing.html">Project</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-trigger" type="button" data-search-open aria-label="Search documentation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+        <span>Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      <a class="icon-button" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer" aria-label="VibeLens on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+      </a>
+
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
 </header>
+
+<dialog class="search-dialog" data-search-dialog aria-label="Search documentation">
+  <form class="search-box" method="dialog" onsubmit="return false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+    <input type="search" data-search-input placeholder="Search the documentation" autocomplete="off" spellcheck="false" aria-label="Search query">
+    <kbd>Esc</kbd>
+  </form>
+  <div class="search-results" data-search-results role="listbox" aria-label="Search results"></div>
+  <p class="search-hint">Enter to open · arrow keys to move · results come from a build-time index, no network calls</p>
+</dialog>
+
+<div class="nav-backdrop" data-nav-backdrop hidden></div>
 
 <div class="shell">
   <nav class="sidebar" aria-label="Documentation">
-    <h2>Overview</h2>
-<ul>
+    <details class="nav-group" open>
+      <summary><span>Overview</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/">Introduction</a></li>
 <li><a href="/install.html" aria-current="page">Install &amp; IDE setup</a></li>
 <li><a href="/tool.html">Tool reference</a></li>
 <li><a href="/faq.html">FAQ</a></li>
 <li><a href="/troubleshooting.html">Troubleshooting</a></li>
 </ul>
-<h2>Claude Code plugin</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Claude Code plugin</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/plugin.html">Skills &amp; agents</a></li>
 </ul>
-<h2>Design system</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Design system</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/design/">Overview</a></li>
 <li><a href="/design/anti-slop.html">Anti-slop</a></li>
 <li><a href="/design/typography.html">Typography</a></li>
@@ -71,8 +107,10 @@
 <li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
 <li><a href="/design/motion.html">Motion</a></li>
 </ul>
-<h2>Architecture</h2>
-<ul>
+    </details>
+<details class="nav-group">
+      <summary><span>Architecture</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/architecture.html">Architecture</a></li>
 <li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
 <li><a href="/adr/">ADR index</a></li>
@@ -83,8 +121,10 @@
 <li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
 <li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
 </ul>
-<h2>Project</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Project</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/contributing.html">Contributing</a></li>
 <li><a href="/security.html">Security</a></li>
 <li><a href="/support.html">Support</a></li>
@@ -92,11 +132,20 @@
 <li><a href="/release.html">Releasing</a></li>
 <li><a href="/code-of-conduct.html">Code of conduct</a></li>
 </ul>
+    </details>
   </nav>
   <main class="main" id="content">
         <div class="with-toc">
           <article class="prose">
-            <h1>Install and IDE setup</h1>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Docs</a>
+    <span aria-hidden="true">/</span>
+    <span>Overview</span>
+  </nav>
+            <div class="page-head">
+              <h1>Install and IDE setup</h1>
+              
+            </div>
             <p>VibeLens is a plain MCP server over stdio, so every MCP-capable client takes the
 same shape. Claude Code additionally gets a plugin that bundles the skills,
 subagents and hooks.</p>
@@ -105,40 +154,40 @@ subagents and hooks.</p>
 <li>Node.js 20 or newer. Playwright 1.62 requires it.</li>
 <li>Chromium for Playwright, installed once:</li>
 </ul>
-<div class="code-block"><span class="code-lang">bash</span><pre><code>npx playwright install chromium</code></pre></div>
+<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span></span></code></pre></div>
 <p>There is no global install step for the server itself: <code>npx</code> fetches it on
 first run.</p>
 <h2 id="claude-code">Claude Code<a class="heading-anchor" href="#claude-code" aria-label="Link to this section">#</a></h2>
 <p>Install as a plugin. This is the recommended path because it also installs the
 twelve skills, four subagents and two advisory hooks:</p>
-<div class="code-block"><span class="code-lang">bash</span><pre><code>claude plugin marketplace add soumyachk101/VibeLens
-claude plugin install vibelens@vibelens</code></pre></div>
+<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">claude</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> plugin</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> marketplace</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> add</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> soumyachk101/VibeLens</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">claude</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> plugin</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> vibelens@vibelens</span></span></code></pre></div>
 <p>Or add it as a bare MCP server:</p>
-<div class="code-block"><span class="code-lang">bash</span><pre><code>claude mcp add vibelens --scope user -- npx -y mcp-vibelens@1
-claude mcp add vibelens --scope project -- npx -y mcp-vibelens@1</code></pre></div>
+<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">claude</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> add</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> vibelens</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> --scope</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> user</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> --</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> npx</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -y</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp-vibelens@1</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">claude</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> add</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> vibelens</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> --scope</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> project</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> --</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> npx</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -y</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp-vibelens@1</span></span></code></pre></div>
 <p><code>--scope user</code> makes it available in every project; <code>--scope project</code> writes a
 <code>.mcp.json</code> you can commit for your team. Verify with <code>/mcp</code> in a session:
 <code>vibelens</code> should be listed as connected.</p>
 <h2 id="openai-codex">OpenAI Codex<a class="heading-anchor" href="#openai-codex" aria-label="Link to this section">#</a></h2>
-<div class="code-block"><span class="code-lang">bash</span><pre><code>codex mcp add vibelens -- npx -y mcp-vibelens@1</code></pre></div>
+<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">codex</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> add</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> vibelens</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> --</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> npx</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> -y</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> mcp-vibelens@1</span></span></code></pre></div>
 <p>Codex shares this configuration between the CLI and the IDE extension, so it
 only needs doing once. To edit it by hand, add this to <code>~/.codex/config.toml</code>:</p>
-<div class="code-block"><span class="code-lang">toml</span><pre><code>[mcp_servers.vibelens]
-command = &quot;npx&quot;
-args = [&quot;-y&quot;, &quot;mcp-vibelens@1&quot;]</code></pre></div>
+<div class="code-block" data-lang="toml"><span class="code-lang">toml</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">[</span><span style="--shiki-light:#953800;--shiki-dark:#FFA657">mcp_servers</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">.</span><span style="--shiki-light:#953800;--shiki-dark:#FFA657">vibelens</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">]</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">command = </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"npx"</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">args = [</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"-y"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"mcp-vibelens@1"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">]</span></span></code></pre></div>
 <p>Check with <code>codex mcp list</code>. Codex supports local stdio servers only, which is
 exactly what VibeLens is.</p>
 <h2 id="cursor">Cursor<a class="heading-anchor" href="#cursor" aria-label="Link to this section">#</a></h2>
 <p>Create <code>.cursor/mcp.json</code> in your project, or <code>~/.cursor/mcp.json</code> for every
 project:</p>
-<div class="code-block"><span class="code-lang">json</span><pre><code>{
-  &quot;mcpServers&quot;: {
-    &quot;vibelens&quot;: {
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [&quot;-y&quot;, &quot;mcp-vibelens@1&quot;]
-    }
-  }
-}</code></pre></div>
+<div class="code-block" data-lang="json"><span class="code-lang">json</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "mcpServers"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: {</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "vibelens"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: {</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">      "command"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"npx"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">      "args"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: [</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"-y"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"mcp-vibelens@1"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">]</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">    }</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  }</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">}</span></span></code></pre></div>
 <p>Then enable <strong>vibelens</strong> under Settings, MCP.</p>
 <h2 id="google-antigravity">Google Antigravity<a class="heading-anchor" href="#google-antigravity" aria-label="Link to this section">#</a></h2>
 <p>Open the MCP configuration from the UI — the three-dot menu in chat, then MCP
@@ -154,22 +203,22 @@ at one of:</p>
 <p><code>~/.codeium/windsurf/mcp_config.json</code>, same JSON block as Cursor.</p>
 <h2 id="vs-code-github-copilot-agent-mode">VS Code, GitHub Copilot agent mode<a class="heading-anchor" href="#vs-code-github-copilot-agent-mode" aria-label="Link to this section">#</a></h2>
 <p><code>.vscode/mcp.json</code> uses <code>servers</code> rather than <code>mcpServers</code>:</p>
-<div class="code-block"><span class="code-lang">json</span><pre><code>{
-  &quot;servers&quot;: {
-    &quot;vibelens&quot;: { &quot;command&quot;: &quot;npx&quot;, &quot;args&quot;: [&quot;-y&quot;, &quot;mcp-vibelens@1&quot;] }
-  }
-}</code></pre></div>
+<div class="code-block" data-lang="json"><span class="code-lang">json</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">  "servers"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: {</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">    "vibelens"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: { </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"command"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"npx"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">"args"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: [</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"-y"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"mcp-vibelens@1"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">] }</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  }</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">}</span></span></code></pre></div>
 <h2 id="claude-desktop">Claude Desktop<a class="heading-anchor" href="#claude-desktop" aria-label="Link to this section">#</a></h2>
 <p><code>~/Library/Application Support/Claude/claude_desktop_config.json</code> on macOS, same
 JSON block as Cursor. Restart the app afterwards.</p>
 <h2 id="from-source">From source<a class="heading-anchor" href="#from-source" aria-label="Link to this section">#</a></h2>
-<div class="code-block"><span class="code-lang">bash</span><pre><code>git clone https://github.com/soumyachk101/VibeLens.git
-cd VibeLens
-npm install
-npx playwright install chromium
-npm run build
-npm test
-npm run smoke</code></pre></div>
+<div class="code-block" data-lang="bash"><span class="code-lang">bash</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">git</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> clone</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> https://github.com/soumyachk101/VibeLens.git</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">cd</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> VibeLens</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npx</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> playwright</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> install</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> chromium</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> build</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> test</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">npm</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> run</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF"> smoke</span></span></code></pre></div>
 <p>Then point your IDE at <code>node /absolute/path/to/VibeLens/dist/index.js</code>.</p>
 <h2 id="it-is-not-connecting">It is not connecting<a class="heading-anchor" href="#it-is-not-connecting" aria-label="Link to this section">#</a></h2>
 <p>Start with <a href="/troubleshooting.html">Troubleshooting</a>; it covers the per-IDE
@@ -205,6 +254,7 @@ diagnosis and every error code the tool can return.</p>
   </div>
 </footer>
 
+<script>window.VIBELENS_BASE = "";</script>
 <script src="/app.js" defer></script>
 
 </body>

@@ -27,43 +27,79 @@
 <a class="skip-link" href="#content">Skip to content</a>
 
 <header class="site-header">
-  <a class="brand" href="/">
-    <img src="/assets/logo.svg" alt="" width="26" height="26">
-    <!-- No whitespace between the two halves of the wordmark, or the browser
-         renders "Vibe Lens" with a gap. -->
-    <b>Vibe<span>Lens</span></b>
-  </a>
-  <nav class="header-nav" aria-label="Site">
-    <a class="desktop-only" href="/install.html">Install</a>
-    <a class="desktop-only" href="/plugin.html">Skills</a>
-    <a class="desktop-only" href="/design/anti-slop.html">Anti-slop</a>
-    <a class="desktop-only" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Toggle documentation navigation">
+  <div class="header-inner">
+    <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Open documentation navigation">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
     </button>
-  </nav>
+
+    <a class="brand" href="/">
+      <img src="/assets/logo.svg" alt="" width="28" height="28">
+      <!-- No whitespace between the two halves of the wordmark, or the browser
+           renders "Vibe Lens" with a gap. -->
+      <b>Vibe<span>Lens</span></b>
+      <span class="version">v1.0.0</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Sections">
+      <a href="/install.html">Docs</a>
+<a href="/plugin.html">Skills</a>
+<a href="/design/" aria-current="true">Design</a>
+<a href="/architecture.html">Architecture</a>
+<a href="/contributing.html">Project</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-trigger" type="button" data-search-open aria-label="Search documentation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+        <span>Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      <a class="icon-button" href="https://github.com/soumyachk101/VibeLens" target="_blank" rel="noopener noreferrer" aria-label="VibeLens on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+      </a>
+
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Switch theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
 </header>
+
+<dialog class="search-dialog" data-search-dialog aria-label="Search documentation">
+  <form class="search-box" method="dialog" onsubmit="return false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>
+    <input type="search" data-search-input placeholder="Search the documentation" autocomplete="off" spellcheck="false" aria-label="Search query">
+    <kbd>Esc</kbd>
+  </form>
+  <div class="search-results" data-search-results role="listbox" aria-label="Search results"></div>
+  <p class="search-hint">Enter to open · arrow keys to move · results come from a build-time index, no network calls</p>
+</dialog>
+
+<div class="nav-backdrop" data-nav-backdrop hidden></div>
 
 <div class="shell">
   <nav class="sidebar" aria-label="Documentation">
-    <h2>Overview</h2>
-<ul>
+    <details class="nav-group" open>
+      <summary><span>Overview</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/">Introduction</a></li>
 <li><a href="/install.html">Install &amp; IDE setup</a></li>
 <li><a href="/tool.html">Tool reference</a></li>
 <li><a href="/faq.html">FAQ</a></li>
 <li><a href="/troubleshooting.html">Troubleshooting</a></li>
 </ul>
-<h2>Claude Code plugin</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Claude Code plugin</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/plugin.html">Skills &amp; agents</a></li>
 </ul>
-<h2>Design system</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Design system</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/design/">Overview</a></li>
 <li><a href="/design/anti-slop.html">Anti-slop</a></li>
 <li><a href="/design/typography.html" aria-current="page">Typography</a></li>
@@ -71,8 +107,10 @@
 <li><a href="/design/spacing-layout.html">Spacing &amp; layout</a></li>
 <li><a href="/design/motion.html">Motion</a></li>
 </ul>
-<h2>Architecture</h2>
-<ul>
+    </details>
+<details class="nav-group">
+      <summary><span>Architecture</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/architecture.html">Architecture</a></li>
 <li><a href="/prd-trd.html">PRD &amp; TRD</a></li>
 <li><a href="/adr/">ADR index</a></li>
@@ -83,8 +121,10 @@
 <li><a href="/adr/0005-plugin-ships-from-subdirectory.html">0005 · Plugin subdirectory</a></li>
 <li><a href="/adr/0006-jpeg-screenshots-and-dom-truncation.html">0006 · JPEG and truncation</a></li>
 </ul>
-<h2>Project</h2>
-<ul>
+    </details>
+<details class="nav-group" open>
+      <summary><span>Project</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <ul>
 <li><a href="/contributing.html">Contributing</a></li>
 <li><a href="/security.html">Security</a></li>
 <li><a href="/support.html">Support</a></li>
@@ -92,11 +132,23 @@
 <li><a href="/release.html">Releasing</a></li>
 <li><a href="/code-of-conduct.html">Code of conduct</a></li>
 </ul>
+    </details>
   </nav>
   <main class="main" id="content">
         <div class="with-toc">
           <article class="prose">
-            <h1>Typography</h1>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Docs</a>
+    <span aria-hidden="true">/</span>
+    <span>Design system</span>
+  </nav>
+            <div class="page-head">
+              <h1>Typography</h1>
+              <a class="edit-link" href="https://github.com/soumyachk101/VibeLens/blob/main/docs/design/TYPOGRAPHY.md" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Edit this page
+  </a>
+            </div>
             <p>Type carries most of the hierarchy in an interface. Get the scale, the measure
 and the loading right and a page reads as designed even with a plain font.</p>
 <h2 id="the-scale">The scale<a class="heading-anchor" href="#the-scale" aria-label="Link to this section">#</a></h2>
@@ -112,16 +164,16 @@ page has one rhythm instead of a per-component decision.</p>
 <tr><td>1.500</td><td>Perfect fifth</td><td>Loud; large jumps, few levels</td></tr>
 </tbody></table></div>
 <p>A ratio of 1.25 from a 16px base:</p>
-<div class="code-block"><span class="code-lang">css</span><pre><code>:root {
-  --text-xs:   0.64rem;  /* 10.24px - legal, dense table meta */
-  --text-sm:   0.8rem;   /* 12.8px  - captions, labels */
-  --text-base: 1rem;     /* 16px    - body */
-  --text-lg:   1.25rem;  /* 20px    - lead paragraph, card title */
-  --text-xl:   1.563rem; /* 25px    - h3 */
-  --text-2xl:  1.953rem; /* 31.25px - h2 */
-  --text-3xl:  2.441rem; /* 39px    - h1 */
-  --text-4xl:  3.052rem; /* 48.8px  - display */
-}</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">:root</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> {</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-xs</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">:   </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">0.64</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;  </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 10.24px - legal, dense table meta */</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-sm</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">:   </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">0.8</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;   </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 12.8px  - captions, labels */</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-base</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;     </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 16px    - body */</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-lg</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">:   </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1.25</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;  </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 20px    - lead paragraph, card title */</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-xl</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">:   </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1.563</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 25px    - h3 */</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-2xl</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">:  </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1.953</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 31.25px - h2 */</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-3xl</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">:  </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">2.441</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 39px    - h1 */</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --text-4xl</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">:  </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">3.052</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* 48.8px  - display */</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">}</span></span></code></pre></div>
 <p>Rules for using it:</p>
 <ul>
 <li>Use <code>rem</code> for type so a user&#39;s browser font-size setting is honoured. Never set
@@ -135,7 +187,7 @@ colour change was the real intent.</li>
 </ul>
 <p>For display sizes that must respond to viewport, interpolate with <code>clamp()</code>
 rather than adding breakpoint overrides:</p>
-<div class="code-block"><span class="code-lang">css</span><pre><code>h1 { font-size: clamp(2rem, 1.5rem + 2.5vw, 3.052rem); }</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">h1</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">font-size</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">clamp</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">(</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">2</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1.5</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#953800;--shiki-dark:#FFA657"> +</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> 2.5</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">vw</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">3.052</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">rem</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">); }</span></span></code></pre></div>
 <p>Include a <code>rem</code> term in the middle argument so the value still scales when the
 user changes their browser font size — a pure <code>vw</code> middle argument breaks zoom.</p>
 <h2 id="line-height-and-measure">Line-height and measure<a class="heading-anchor" href="#line-height-and-measure" aria-label="Link to this section">#</a></h2>
@@ -152,10 +204,10 @@ finding the next line&#39;s start.</p>
 <p>Set it unitless so it scales with inherited font-size. Measure — the line length
 — belongs in <code>ch</code>, which is relative to the font&#39;s <code>0</code> width and therefore tracks
 the actual character count.</p>
-<div class="code-block"><span class="code-lang">css</span><pre><code>body    { line-height: 1.55; }
-.prose  { max-inline-size: 68ch; }   /* ~45-75 characters reads comfortably */
-h1, h2  { line-height: 1.15; text-wrap: balance; }
-.caption{ max-inline-size: 45ch; }</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">body</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">    { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">line-height</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1.55</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.prose</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">max-inline-size</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">68</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">ch</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }   </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* ~45-75 characters reads comfortably */</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">h1</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">h2</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">  { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">line-height</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">1.15</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">text-wrap</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">balance</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.caption</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">{ </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">max-inline-size</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">45</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">ch</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }</span></span></code></pre></div>
 <p>45–75 characters is the readable band for body copy. Narrower forces too many
 return sweeps; wider loses the line. <code>ch</code> is an approximation of character count
 rather than an exact one, so verify in a capture.</p>
@@ -171,8 +223,8 @@ rather than an exact one, so verify in a capture.</p>
 spaced the pairs, and adding tracking breaks the word shapes readers recognise.
 Always letterspace all-caps, because uppercase glyphs were spaced for use inside
 lowercase words and look cramped in a run of capitals.</p>
-<div class="code-block"><span class="code-lang">css</span><pre><code>.display { letter-spacing: -0.025em; }
-.eyebrow { text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--text-sm); }</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.display</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">letter-spacing</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">-0.025</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">em</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.eyebrow</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">text-transform</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">uppercase</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">letter-spacing</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">0.08</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">em</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">font-size</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">var</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">(</span><span style="--shiki-light:#953800;--shiki-dark:#FFA657">--text-sm</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">); }</span></span></code></pre></div>
 <h2 id="pairing">Pairing<a class="heading-anchor" href="#pairing" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Strategy</th><th>When</th><th>Risk</th></tr></thead><tbody>
 <tr><td>One family, multiple weights</td><td>Default choice. Almost always sufficient</td><td>None; this is the safe option</td></tr>
@@ -191,14 +243,14 @@ contrast against the background and hurt contrast perception.</p>
 <p>A variable font ships one file covering a weight range, so using 400, 500, 600
 and 700 costs one download instead of four. Declare the range in
 <code>font-weight</code> inside <code>@font-face</code>:</p>
-<div class="code-block"><span class="code-lang">css</span><pre><code>@font-face {
-  font-family: &quot;Inter var&quot;;
-  src: url(&quot;/fonts/inter-var.woff2&quot;) format(&quot;woff2-variations&quot;);
-  font-weight: 100 900;          /* the axis range this file covers */
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0000-00FF;    /* subset: latin basic + supplement */
-}</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">@font-face</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> {</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  font-family</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Inter var"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  src</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">url</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">(</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"/fonts/inter-var.woff2"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">) </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">format</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">(</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"woff2-variations"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">);</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  font-weight</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">100</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> 900</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;          </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* the axis range this file covers */</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  font-style</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">normal</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  font-display</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">swap</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  unicode-range</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">U+0000-00FF</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;    </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* subset: latin basic + supplement */</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">}</span></span></code></pre></div>
 <p>Do not synthesise weights the file does not have — the browser will fake bold by
 smearing outlines. If an axis exists, use <code>font-variation-settings</code> only for axes
 with no high-level property (optical size <code>opsz</code>, grade <code>GRAD</code>); use
@@ -213,33 +265,33 @@ the real font replaces the fallback. Address both.</p>
 <tr><td><code>unicode-range</code> subsetting</td><td>Ships only the glyphs needed</td><td>Every self-hosted font</td></tr>
 <tr><td><code>size-adjust</code>, <code>ascent-override</code></td><td>Scales the fallback to match the webfont&#39;s metrics</td><td>Killing the reflow that <code>swap</code> causes</td></tr>
 </tbody></table></div>
-<div class="code-block"><span class="code-lang">html</span><pre><code>&lt;!-- Preload only what renders above the fold; more preloads compete for bandwidth. --&gt;
-&lt;link rel=&quot;preload&quot; href=&quot;/fonts/inter-var.woff2&quot; as=&quot;font&quot; type=&quot;font/woff2&quot; crossorigin&gt;</code></pre></div>
-<div class="code-block"><span class="code-lang">css</span><pre><code>/* Metric-compatible fallback: the local font is scaled so line boxes match,
-   so the swap changes glyph shapes without moving anything. */
-@font-face {
-  font-family: &quot;Inter fallback&quot;;
-  src: local(&quot;Arial&quot;);
-  size-adjust: 107%;
-  ascent-override: 90%;
-  descent-override: 22%;
-  line-gap-override: 0%;
-}
-body { font-family: &quot;Inter var&quot;, &quot;Inter fallback&quot;, sans-serif; }</code></pre></div>
+<div class="code-block" data-lang="html"><span class="code-lang">html</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">&#x3C;!-- Preload only what renders above the fold; more preloads compete for bandwidth. --></span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">&#x3C;</span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">link</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> rel</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">=</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"preload"</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> href</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">=</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"/fonts/inter-var.woff2"</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> as</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">=</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"font"</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> type</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">=</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"font/woff2"</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF"> crossorigin</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">></span></span></code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* Metric-compatible fallback: the local font is scaled so line boxes match,</span></span>
+<span class="line"><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">   so the swap changes glyph shapes without moving anything. */</span></span>
+<span class="line"><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">@font-face</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> {</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  font-family</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Inter fallback"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  src</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">local</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">(</span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Arial"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">);</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  size-adjust</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">107</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">%</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  ascent-override</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">90</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">%</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  descent-override</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">22</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">%</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">  line-gap-override</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">0</span><span style="--shiki-light:#CF222E;--shiki-dark:#FF7B72">%</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">}</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">body</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">font-family</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Inter var"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Inter fallback"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">sans-serif</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }</span></span></code></pre></div>
 <p>Serve <code>woff2</code> only — every browser that matters supports it, and additional
 formats just add bytes. Always set <code>crossorigin</code> on a font preload; without it
 the browser makes a second, non-anonymous request.</p>
 <h2 id="the-system-font-stack">The system font stack<a class="heading-anchor" href="#the-system-font-stack" aria-label="Link to this section">#</a></h2>
 <p>The fastest font is the one already installed. Use this when the brand does not
 require a specific face:</p>
-<div class="code-block"><span class="code-lang">css</span><pre><code>:root {
-  --font-sans: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;,
-               Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;,
-               &quot;Segoe UI Emoji&quot;;
-  --font-mono: ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas,
-               &quot;Liberation Mono&quot;, monospace;
-  --font-serif: ui-serif, Georgia, Cambria, &quot;Times New Roman&quot;, Times, serif;
-}</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">:root</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> {</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --font-sans</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">system-ui</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">-apple-system</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Segoe UI"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, Roboto, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Helvetica Neue"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">               Arial</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Noto Sans"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">sans-serif</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Apple Color Emoji"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">,</span></span>
+<span class="line"><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">               "Segoe UI Emoji"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --font-mono</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">ui-monospace</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, SFMono-Regular, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"SF Mono"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, Menlo, Consolas,</span></span>
+<span class="line"><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">               "Liberation Mono"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">monospace</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#953800;--shiki-dark:#FFA657">  --font-serif</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">ui-serif</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">Georgia</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, Cambria, </span><span style="--shiki-light:#0A3069;--shiki-dark:#A5D6FF">"Times New Roman"</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">Times</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">serif</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">;</span></span>
+<span class="line"><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">}</span></span></code></pre></div>
 <p><code>system-ui</code> resolves to the platform UI face. Keep the explicit fallbacks after
 it: <code>system-ui</code> has historically resolved badly on some Linux configurations, and
 the emoji families at the end stop emoji from falling back to a serif face.</p>
@@ -252,10 +304,10 @@ the emoji families at the end stop emoji from falling back to a serif face.</p>
 <tr><td>Small caps</td><td><code>font-variant-caps: all-small-caps</code></td><td>Abbreviations in prose</td></tr>
 <tr><td>Ligature control</td><td><code>font-variant-ligatures: none</code></td><td>Code, where <code>fi</code>/<code>fl</code> ligatures mislead</td></tr>
 </tbody></table></div>
-<div class="code-block"><span class="code-lang">css</span><pre><code>/* Without tabular-nums, digits have different widths and a column jitters
-   whenever a value changes. */
-td.numeric, .metric { font-variant-numeric: tabular-nums; }
-code, .id           { font-variant-numeric: slashed-zero; font-variant-ligatures: none; }</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* Without tabular-nums, digits have different widths and a column jitters</span></span>
+<span class="line"><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">   whenever a value changes. */</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">td</span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.numeric</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.metric</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">font-variant-numeric</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">tabular-nums</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">code</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.id</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">           { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">font-variant-numeric</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">slashed-zero</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">font-variant-ligatures</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">none</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }</span></span></code></pre></div>
 <h2 id="wrapping-and-hyphenation">Wrapping and hyphenation<a class="heading-anchor" href="#wrapping-and-hyphenation" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table><thead><tr><th>Property</th><th>Effect</th><th>Apply to</th></tr></thead><tbody>
 <tr><td><code>text-wrap: balance</code></td><td>Evens line lengths across a short block</td><td>Headings, blockquotes, card titles — short blocks only</td></tr>
@@ -264,10 +316,10 @@ code, .id           { font-variant-numeric: slashed-zero; font-variant-ligatures
 <tr><td><code>overflow-wrap: anywhere</code></td><td>Breaks unbreakable strings</td><td>URLs, tokens, user-supplied identifiers</td></tr>
 <tr><td><code>text-wrap: nowrap</code></td><td>Prevents any wrap</td><td>Labels, badges, buttons that must stay one line</td></tr>
 </tbody></table></div>
-<div class="code-block"><span class="code-lang">css</span><pre><code>h1, h2, h3, blockquote { text-wrap: balance; }   /* short blocks only */
-p, li                  { text-wrap: pretty; }
-.narrow-column         { hyphens: auto; }        /* requires lang=&quot;...&quot; */
-.token                 { overflow-wrap: anywhere; }</code></pre></div>
+<div class="code-block" data-lang="css"><span class="code-lang">css</span><pre class="shiki shiki-themes github-light-default github-dark-default" style="--shiki-light:#1f2328;--shiki-dark:#e6edf3;--shiki-light-bg:#ffffff;--shiki-dark-bg:#0d1117" tabindex="0"><code><span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">h1</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">h2</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">h3</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">blockquote</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3"> { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">text-wrap</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">balance</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }   </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* short blocks only */</span></span>
+<span class="line"><span style="--shiki-light:#116329;--shiki-dark:#7EE787">p</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="--shiki-light:#116329;--shiki-dark:#7EE787">li</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">                  { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">text-wrap</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: pretty; }</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.narrow-column</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">         { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">hyphens</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">auto</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">; }        </span><span style="--shiki-light:#6E7781;--shiki-dark:#8B949E">/* requires lang="..." */</span></span>
+<span class="line"><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">.token</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">                 { </span><span style="--shiki-light:#0550AE;--shiki-dark:#79C0FF">overflow-wrap</span><span style="--shiki-light:#1F2328;--shiki-dark:#E6EDF3">: anywhere; }</span></span></code></pre></div>
 <p><code>text-wrap: balance</code> applies only up to a limited number of lines, so it is for
 headings, not paragraphs. Hyphenation needs a correct <code>lang</code> attribute to pick
 the right dictionary; without it nothing happens. Both properties degrade
@@ -315,6 +367,7 @@ by reading the CSS.</li>
   </div>
 </footer>
 
+<script>window.VIBELENS_BASE = "";</script>
 <script src="/app.js" defer></script>
 
 </body>
