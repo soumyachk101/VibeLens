@@ -8,3 +8,9 @@ coverage/
 test-results/
 playwright-report/
 *.tsbuildinfo
+
+# npm pack output
+*.tgz
+
+# per-machine Claude Code state (the committed .mcp.json is intentional)
+.claude/settings.local.json
