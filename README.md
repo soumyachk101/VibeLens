@@ -10,6 +10,7 @@
   <img src="https://img.shields.io/badge/node-%E2%89%A520-339933?logo=node.js&logoColor=white" alt="Node 20+">
   <img src="https://img.shields.io/badge/MCP-stdio-7dd3fc" alt="Model Context Protocol">
   <img src="https://img.shields.io/badge/tests-63%20passing-a78bfa" alt="63 tests">
+  <a href="https://soumyachk101.github.io/VibeLens/"><img src="https://img.shields.io/badge/docs-site-22d3ee" alt="Documentation site"></a>
 </p>
 
 <p>
@@ -17,6 +18,7 @@
 </p>
 
 <p>
+  <a href="https://soumyachk101.github.io/VibeLens/"><b>Documentation site</b></a> ·
   <a href="#install"><b>Install</b></a> ·
   <a href="#configure-your-ide"><b>IDE setup</b></a> ·
   <a href="#the-tool"><b>Tool</b></a> ·
@@ -478,6 +480,8 @@ npm run validate:manifests   # npm + plugin + marketplace + docs consistency
 npm run validate:plugin      # claude plugin validate for both manifests
 npm run assets:measure       # reproduce the DOM-reduction figure
 npm run assets:gif           # regenerate the README animation from real captures
+npm run site:build           # build the documentation site into site-dist/
+npm run site:check           # link-check it, then inspect it with VibeLens itself
 ```
 
 ### Repository map
@@ -513,9 +517,14 @@ docs/
 ├── TROUBLESHOOTING.md      every error code, per-IDE diagnosis
 └── FAQ.md                  honest answers, including the limitations
 
+site/                   hand-authored design system for the docs site
+├── styles.css      tokens, type scale, themes; no framework
+└── app.js          theme toggle, copy buttons, TOC highlight
+
 scripts/
 ├── smoke.mjs               spawns dist/ and drives it over real stdio
 ├── validate-manifests.mjs  keeps npm + plugin + marketplace + docs in sync
+├── site/                   static site generator + its own link checker
 └── assets/                 regenerates the README animation and measurements
 
 .claude-plugin/marketplace.json   one-plugin marketplace catalog

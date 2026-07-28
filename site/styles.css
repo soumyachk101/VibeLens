@@ -241,6 +241,7 @@ a:hover { color: var(--accent-hover); text-decoration-color: currentColor; }
 }
 .brand:hover { color: var(--text-strong); }
 .brand img { width: 26px; height: 26px; border-radius: 7px; }
+.brand b { font-weight: inherit; }
 .brand span { color: var(--accent); }
 
 .header-nav {

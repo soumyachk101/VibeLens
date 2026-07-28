@@ -341,7 +341,9 @@ function shell({ page, body, outline = [], hasMermaid = false, wide = false }) {
 <header class="site-header">
   <a class="brand" href="${url("index.html")}">
     <img src="${BASE}/assets/logo.svg" alt="" width="26" height="26">
-    Vibe<span>Lens</span>
+    <!-- No whitespace between the two halves of the wordmark, or the browser
+         renders "Vibe Lens" with a gap. -->
+    <b>Vibe<span>Lens</span></b>
   </a>
   <nav class="header-nav" aria-label="Site">
     <a class="desktop-only" href="${url("install.html")}">Install</a>

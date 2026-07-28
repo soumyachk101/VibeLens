@@ -155,6 +155,27 @@ README link resolves, but not that the prose is still true.
 | `SECURITY.md` | threat model, reporting, residual risks |
 | `RELEASE.md` | the two-artifact release process |
 
+## Documentation site
+
+`scripts/site/build.mjs` generates the site at <https://soumyachk101.github.io/VibeLens/>
+into `site-dist/` (gitignored) and `.github/workflows/pages.yml` deploys it.
+
+- **Markdown stays the single source.** Every reference page is rendered from its
+  `.md` file, and cross-links between those files are rewritten to site URLs by
+  `resolveLink`. Only the landing page, the install guide and the tool reference
+  are authored in the generator. Never duplicate documentation prose into HTML.
+- Adding a page means adding an entry to `NAV` in `build.mjs`; that array is both
+  the sidebar and the page manifest.
+- Renderer methods must use `this.parser.parseInline(tokens)`. Calling
+  `marked.parseInline` with a renderer in the options recurses until the stack
+  overflows, and calling it without one silently bypasses link rewriting.
+- `node scripts/site/check.mjs` is the gate: it link-checks every generated page
+  and then inspects the site with `inspect_localhost_ui`, failing on any console
+  error. Run it after touching the generator or the stylesheet.
+- `site/styles.css` is deliberately framework-free and follows `docs/design/`.
+  It is the project's own dogfood: if the docs site breaks an anti-slop rule, the
+  rule is not credible.
+
 ## README assets
 
 `assets/*.svg` are hand-authored; `assets/demo.gif` is generated from real tool

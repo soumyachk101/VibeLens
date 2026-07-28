@@ -1,0 +1,76 @@
+name: Docs site
+
+on:
+  push:
+    branches: [main]
+    # Only rebuild when something the site is made of changes.
+    paths:
+      - "site/**"
+      - "scripts/site/**"
+      - "assets/**"
+      - "docs/**"
+      - "plugin/README.md"
+      - "*.md"
+      - ".github/workflows/pages.yml"
+      - "package-lock.json"
+  workflow_dispatch:
+
+# One deployment at a time; a newer push supersedes an in-flight run rather than
+# queueing behind it.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build and verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      # check.mjs inspects the built site with VibeLens itself, which needs a
+      # real browser and the compiled capture engine.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build the server
+        run: npm run build
+
+      - name: Verify the site
+        # Builds with no base path, link-checks every page, then captures the
+        # site with inspect_localhost_ui and fails on any console error.
+        run: node scripts/site/check.mjs
+
+      - name: Build the site for Pages
+        # The project site is served from /<repo>/, so the links need the prefix.
+        run: node scripts/site/build.mjs --base /${{ github.event.repository.name }}
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site-dist
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
