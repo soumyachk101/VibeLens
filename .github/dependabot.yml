@@ -1,0 +1,61 @@
+version: 2
+
+updates:
+  # npm dependencies. Everything is pinned exactly, so Dependabot is the only
+  # thing that moves a version here.
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Etc/UTC
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore(deps)
+      prefix-development: chore(deps-dev)
+      include: scope
+    groups:
+      # One PR for the low-risk bumps: CI runs the full suite against real
+      # Chromium, so a single green run is enough to review them together.
+      npm-minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # Playwright majors are handled by hand, never by a bot. The npm package
+      # version is coupled to the downloaded browser binary (contributors and CI
+      # must re-run `playwright install chromium`) and to the Node engines floor
+      # — 1.62 is why this project requires Node >= 20. A major bump can move
+      # that floor, which is a breaking change for users, so it needs a
+      # deliberate release rather than an auto-merged PR.
+      - dependency-name: playwright
+        update-types:
+          - version-update:semver-major
+
+  # GitHub Actions used by ci.yml and release.yml.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Etc/UTC
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: chore(ci)
+      include: scope
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"

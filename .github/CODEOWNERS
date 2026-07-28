@@ -1,0 +1,42 @@
+# Code owners for VibeLens.
+#
+# Later rules win, so the catch-all comes first and the sensitive paths repeat
+# the owner afterwards. The owner is the same for everything today; the explicit
+# entries exist to document which paths get the closest review, and to survive
+# the day this list grows past one person.
+
+# Everything, by default.
+*                           @soumyachk101
+
+# The SSRF allowlist. The only gate between a model-supplied string and a real
+# browser. Changes here need new cases in tests/security.test.ts and a look at
+# SECURITY.md.
+/src/security.ts            @soumyachk101
+/tests/security.test.ts     @soumyachk101
+
+# Verification scripts that CI depends on: the real-stdio smoke test and the
+# manifest/version-sync validator. A weakened check here hides real breakage.
+/scripts/                   @soumyachk101
+
+# CI and release automation. release.yml publishes to npm with provenance and
+# holds the NPM_TOKEN usage, so it is effectively supply-chain code.
+/.github/workflows/         @soumyachk101
+
+# The marketplace catalog. `source` must stay "./plugin" — pointing it at the
+# repo root pushes this package's devDependencies into every user's plugin cache.
+/.claude-plugin/            @soumyachk101
+
+# The distributed plugin: manifest, MCP launch config, skills, agents and hooks.
+# Must never gain a package.json.
+/plugin/                    @soumyachk101
+
+# Governance and the assistant-facing contract.
+/CLAUDE.md                  @soumyachk101
+/SECURITY.md                @soumyachk101
+/CODE_OF_CONDUCT.md         @soumyachk101
+/CONTRIBUTING.md            @soumyachk101
+/LICENSE                    @soumyachk101
+
+# Packaging and dependency pins.
+/package.json               @soumyachk101
+/package-lock.json          @soumyachk101

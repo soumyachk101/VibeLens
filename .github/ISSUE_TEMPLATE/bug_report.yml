@@ -1,0 +1,143 @@
+name: Bug report
+description: Something in VibeLens behaves incorrectly — a bad capture, a wrong error, a tool that will not start.
+title: "bug: "
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. VibeLens drives a real browser, so the details below
+        are usually what makes the difference between a fix and a guess.
+
+        Please do **not** report security vulnerabilities here — see
+        [SECURITY.md](https://github.com/soumyachk101/VibeLens/blob/main/SECURITY.md)
+        for private reporting.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you observe? Include the error text or describe what the screenshot or DOM snapshot looked like.
+      placeholder: |
+        The tool returned a screenshot, but simplifiedDOM was empty and
+        domTruncated was false.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+      placeholder: The DOM snapshot should have contained the rendered <body>.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tool-arguments
+    attributes:
+      label: Exact tool arguments
+      description: The exact arguments passed to `inspect_localhost_ui`, as JSON. Your assistant can show you these.
+      render: json
+      placeholder: |
+        {
+          "url": "http://localhost:3000/pricing",
+          "viewport": "mobile",
+          "delay": 1000,
+          "fullPage": false
+        }
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ide
+    attributes:
+      label: IDE or MCP client
+      options:
+        - Claude Code
+        - OpenAI Codex (CLI or IDE extension)
+        - Cursor
+        - Google Antigravity
+        - Windsurf
+        - VS Code (GitHub Copilot agent mode)
+        - Claude Desktop
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Linux
+        - Windows
+        - Windows (WSL)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+      description: Output of `node --version`. VibeLens requires Node 20 or newer.
+      placeholder: v22.19.0
+    validations:
+      required: true
+
+  - type: input
+    id: package-version
+    attributes:
+      label: VibeLens version
+      description: Output of `npm view mcp-vibelens version` for the version you are running, or the commit SHA if you built from source.
+      placeholder: 1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: dev-server
+    attributes:
+      label: Dev server framework and port
+      description: What is serving the page you inspected?
+      placeholder: Next.js 15 App Router on :3000
+    validations:
+      required: true
+
+  - type: textarea
+    id: stderr
+    attributes:
+      label: Server logs
+      description: |
+        VibeLens logs to stderr, prefixed `[vibelens]`. Paste those lines from your
+        IDE's MCP log panel or terminal. In Claude Code, `/mcp` shows the server
+        output; other clients keep it in their MCP or extension log.
+      render: shell
+      placeholder: |
+        [vibelens] launching chromium (viewport=mobile 390x844)
+        [vibelens] capture failed: net::ERR_CONNECTION_REFUSED
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Optional but very helpful — a minimal page or repo that shows the problem.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Before submitting
+      options:
+        - label: I have run `npx playwright install chromium` on this machine.
+          required: true
+        - label: I searched existing open and closed issues and did not find this.
+          required: true
+        - label: My dev server loads correctly in a normal browser at the same URL.
+          required: true
+        - label: I am on Node.js 20 or newer.
+          required: true

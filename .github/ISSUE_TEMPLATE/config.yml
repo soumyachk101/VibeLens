@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/soumyachk101/VibeLens/discussions
+    about: Setup help, workflow questions and ideas that are not yet a bug or a feature request.
+  - name: Troubleshooting guide
+    url: https://github.com/soumyachk101/VibeLens/blob/main/docs/TROUBLESHOOTING.md
+    about: Every error code the tool returns, blank screenshots, and the tool not appearing in your IDE. Check here before filing a bug.
+  - name: Report a security vulnerability
+    url: https://github.com/soumyachk101/VibeLens/security/advisories/new
+    about: SSRF bypasses, sanitizer leaks and anything else in SECURITY.md — reported privately, never as a public issue.

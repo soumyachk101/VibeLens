@@ -50,8 +50,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "smoke": "node scripts/smoke.mjs",
+    "validate:manifests": "node scripts/validate-manifests.mjs",
+    "validate:plugin": "claude plugin validate . && claude plugin validate ./plugin",
+    "assets:measure": "node scripts/assets/measure-dom.mjs",
+    "assets:gif": "node scripts/assets/capture-demo.mjs && node scripts/assets/build-gif.mjs",
     "install:browser": "playwright install chromium",
-    "validate:plugin": "claude plugin validate .",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

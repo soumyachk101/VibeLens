@@ -8,7 +8,7 @@
  * Run `claude plugin validate .` locally for the full schema check.
  */
 
-import { readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 
 let failed = false;
 
@@ -102,6 +102,76 @@ if (pkg && plugin && marketplace && mcp && rootMcp) {
     fail(".mcp.json and plugin/.mcp.json have drifted apart");
   } else {
     ok(".mcp.json and plugin/.mcp.json match");
+  }
+
+  // --- plugin components ---
+  // Claude Code only loads components from the plugin root, never from inside
+  // .claude-plugin/, so assert they are where they need to be.
+  const expectedSkills = [
+    "a11y-audit",
+    "before-after",
+    "check-ui",
+    "console-triage",
+    "responsive-audit",
+  ];
+  const skillDirs = existsSync("plugin/skills")
+    ? readdirSync("plugin/skills").sort()
+    : [];
+  if (JSON.stringify(skillDirs) !== JSON.stringify(expectedSkills)) {
+    fail(`plugin/skills has ${JSON.stringify(skillDirs)}, expected ${JSON.stringify(expectedSkills)}`);
+  } else {
+    ok(`${skillDirs.length} skills present`);
+  }
+  for (const skill of skillDirs) {
+    const file = `plugin/skills/${skill}/SKILL.md`;
+    if (!existsSync(file)) {
+      fail(`${file} is missing`);
+      continue;
+    }
+    // Without frontmatter carrying a description, the model never invokes it.
+    const head = readFileSync(file, "utf8").slice(0, 400);
+    if (!head.startsWith("---") || !/\ndescription:/.test(head)) {
+      fail(`${file} needs YAML frontmatter with a description`);
+    }
+  }
+
+  for (const agent of ["ui-debugger", "ui-reviewer"]) {
+    const file = `plugin/agents/${agent}.md`;
+    if (!existsSync(file)) {
+      fail(`${file} is missing`);
+    } else {
+      const head = readFileSync(file, "utf8").slice(0, 400);
+      if (!head.startsWith("---") || !/\nname:/.test(head)) {
+        fail(`${file} needs YAML frontmatter with a name`);
+      }
+    }
+  }
+  if (!existsSync("plugin/hooks/hooks.json")) {
+    fail("plugin/hooks/hooks.json is missing");
+  } else {
+    const hooks = readJson("plugin/hooks/hooks.json");
+    if (!hooks?.hooks?.PostToolUse) fail("hooks.json has no PostToolUse entry");
+  }
+  // The whole reason the plugin lives in a subdirectory.
+  if (existsSync("plugin/package.json")) {
+    fail("plugin/package.json exists — Claude Code would npm install into the plugin cache");
+  } else {
+    ok("plugin/ has no package.json");
+  }
+
+  // --- README links and assets ---
+  // A broken image or doc link is the first thing a visitor hits.
+  const readme = readFileSync("README.md", "utf8");
+  const referenced = [
+    ...[...readme.matchAll(/(?:src|href)="\.\/([^"#]+)"/g)].map((m) => m[1]),
+    ...[...readme.matchAll(/\]\(\.\/([^)#]+)\)/g)].map((m) => m[1]),
+  ].map((p) => p.replace(/\/$/, ""));
+  const unique = [...new Set(referenced)];
+  const missing = unique.filter((p) => !existsSync(p));
+  if (missing.length > 0) {
+    fail(`README references missing paths: ${missing.join(", ")}`);
+  } else {
+    ok(`all ${unique.length} README-referenced paths exist`);
   }
 }
 

@@ -1,0 +1,22 @@
+# EditorConfig — https://editorconfig.org
+# Keeps the repo byte-consistent across editors. LF everywhere matters here:
+# src/index.ts ships a shebang, and a CRLF in it makes the binary unexecutable
+# on macOS and Linux.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown uses two trailing spaces as a hard line break, so trimming would
+# silently change rendered output.
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab

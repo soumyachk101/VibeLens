@@ -96,7 +96,9 @@ This repo is three things at once. Changing one usually means changing another:
 | `.claude-plugin/marketplace.json` | one-plugin marketplace catalog, `source: "./plugin"` |
 | `plugin/.mcp.json` | how the plugin launches the server (`npx -y mcp-vibelens@1`) |
 | `.mcp.json` | identical copy, for anyone who clones this repo |
-| `plugin/skills/*/SKILL.md` | the two plugin skills |
+| `plugin/skills/*/SKILL.md` | five skills: check-ui, responsive-audit, a11y-audit, console-triage, before-after |
+| `plugin/agents/*.md` | two subagents: ui-debugger, ui-reviewer |
+| `plugin/hooks/hooks.json` | PostToolUse reminder that a frontend edit is unverified |
 
 Rules:
 
@@ -104,7 +106,12 @@ Rules:
   `package.json`.** Claude Code runs `npm install` inside a plugin directory
   that has one, which put 112 MB of this package's devDependencies into the
   plugin cache when the marketplace source was `"./"`. The manifest validator
-  enforces `source: "./plugin"`.
+  enforces `source: "./plugin"` and fails if a `package.json` appears.
+- **Plugin components live at the plugin root**, never inside
+  `plugin/.claude-plugin/`. Only `plugin.json` goes in there.
+- Every `SKILL.md` needs YAML frontmatter with a `description` written for a
+  model (when to use it), and every agent needs a `name`. The validator checks
+  both, because a skill without a description is never model-invoked.
 - **Version bumps go in `package.json` *and* `plugin/.claude-plugin/plugin.json`.**
   Claude Code only ships an update when `plugin.json`'s `version` string
   changes, and `scripts/validate-manifests.mjs` fails the build if they drift.
@@ -113,10 +120,42 @@ Rules:
 - Renaming the npm package means updating both `.mcp.json` files and every IDE
   snippet in `README.md`. The validator checks the reference and that the two
   `.mcp.json` copies stay identical.
-- `files` in `package.json` is an allowlist: plugin and CI files deliberately do
-  not ship in the npm tarball.
+- `files` in `package.json` is an allowlist: plugin, docs, assets and CI files
+  deliberately do not ship in the npm tarball.
 - Release steps live in `RELEASE.md`. npm publishes before the plugin, because
   the plugin only launches the published package.
+
+## Documentation map
+
+Keep these in sync when behaviour changes — the validator checks that every
+README link resolves, but not that the prose is still true.
+
+| Path | Contents |
+| --- | --- |
+| `README.md` | landing page: install, IDE config, tool reference, security |
+| `docs/ARCHITECTURE.md` | modules, request lifecycle, resource and token model |
+| `docs/adr/` | six ADRs recording why each significant choice was made |
+| `docs/PRD-TRD.md` | product and technical requirements |
+| `docs/TROUBLESHOOTING.md` | every error code, per-IDE diagnosis |
+| `docs/FAQ.md` | honest answers, including the limitations |
+| `CONTRIBUTING.md` | setup, invariants, test conventions, commit style |
+| `SECURITY.md` | threat model, reporting, residual risks |
+| `RELEASE.md` | the two-artifact release process |
+
+## README assets
+
+`assets/*.svg` are hand-authored; `assets/demo.gif` is generated from real tool
+output, not mocked up:
+
+```bash
+npm run build
+node scripts/assets/capture-demo.mjs   # real inspect_localhost_ui captures
+node scripts/assets/build-gif.mjs      # composes frames, ffmpeg assembles the gif
+node scripts/assets/measure-dom.mjs    # reproduces the 95.4% DOM figure
+```
+
+If you change a quoted measurement in the README, re-run the script that
+produces it and paste the real number. Do not estimate.
 
 ## Testing conventions
 

@@ -12,5 +12,9 @@ playwright-report/
 # npm pack output
 *.tgz
 
+# generated intermediates for the README assets; assets/*.svg and assets/demo.gif
+# are committed, the raw frames that build them are not
+scripts/assets/out/
+
 # per-machine Claude Code state (the committed .mcp.json is intentional)
 .claude/settings.local.json

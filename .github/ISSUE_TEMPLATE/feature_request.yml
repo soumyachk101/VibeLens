@@ -1,0 +1,95 @@
+name: Feature request
+description: Suggest a capability, tool parameter, skill or documentation change.
+title: "feat: "
+labels: ["enhancement", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        VibeLens deliberately exposes one small tool, because a small bounded schema
+        is what models call correctly on the first try. Proposals that keep that
+        surface small are the easiest to accept.
+
+        Worth checking first: the Roadmap in
+        [README.md](https://github.com/soumyachk101/VibeLens/blob/main/README.md#roadmap)
+        and the invariants in
+        [CLAUDE.md](https://github.com/soumyachk101/VibeLens/blob/main/CLAUDE.md#invariants--do-not-break-these).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What can you not do today? Describe the situation, not the solution.
+      placeholder: |
+        When a component only breaks after a hover, I cannot capture it — the tool
+        always screenshots the resting state.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Your proposal
+      description: What should VibeLens do? If it is a new tool parameter, give its name, type, default and the description a model would read.
+      placeholder: |
+        Add `selector: string` to inspect_localhost_ui. When set, capture only the
+        bounding box of the first matching element, and scope simplifiedDOM to that
+        subtree. Default: unset (whole viewport).
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Tool parameter
+        - Skill or agent
+        - DOM sanitizer
+        - Security allowlist
+        - Docs
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: invariants
+    attributes:
+      label: Invariants
+      description: |
+        Two invariants are non-negotiable. The tool stays **read-only** (it observes
+        pages; it does not click, type, navigate the app into a mutating state or
+        write files), and `validateLocalUrl()` stays the **only** SSRF gate — no
+        bypass flag, no arbitrary hostname resolution, metadata addresses always
+        blocked.
+      options:
+        - label: This proposal keeps the tool read-only.
+          required: false
+        - label: This proposal keeps the SSRF allowlist intact, with no bypass and no DNS resolution of arbitrary hostnames.
+          required: false
+        - label: This proposal stays within the token budget — it adds no unbounded field to the payload.
+          required: false
+
+  - type: textarea
+    id: invariant-notes
+    attributes:
+      label: If it does break one of those, explain why it is worth it
+      description: Leave blank if all three boxes above are checked. Interaction before capture, for example, changes the read-only invariant on purpose — that needs a deliberate decision, not a silent one.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Other designs, existing workarounds, or other tools that already solve this. Say why they were not enough.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to open a pull request for this.
+          required: false
