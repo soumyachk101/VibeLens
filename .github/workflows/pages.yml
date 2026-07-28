@@ -2,7 +2,7 @@ name: Docs site
 
 on:
   push:
-    branches: [main]
+    branches: [website]
     # Only rebuild when something the site is made of changes.
     paths:
       - "site/**"
