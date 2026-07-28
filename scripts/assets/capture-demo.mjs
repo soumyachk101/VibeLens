@@ -28,7 +28,7 @@ const html = readFileSync(join(here, "demo-page.html"), "utf8");
 // Serves the demo page and deliberately 404s the asset it references, so the
 // capture's `failedRequests` array is populated for real.
 const server = createServer((req, res) => {
-  if ((req.url ?? "").startsWith("/badge-secure.png")) {
+  if ((req.url ?? "").startsWith("/avatar-oncall.png")) {
     res.writeHead(404, { "content-type": "text/plain" });
     res.end("not found");
     return;

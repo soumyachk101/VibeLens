@@ -87,7 +87,7 @@ function frame({ shot, role, title, body, badge }) {
   </div>
   <div class="line"><span class="role ${role === "AI" ? "ai" : ""}">${role}</span><span class="title">${title}</span></div>
   <div class="shot">
-    <div class="bar"><span class="dot" style="background:#f87171"></span><span class="dot" style="background:#fbbf24"></span><span class="dot" style="background:#34d399"></span><span class="u">http://localhost:3000/pricing</span></div>
+    <div class="bar"><span class="dot" style="background:#f87171"></span><span class="dot" style="background:#fbbf24"></span><span class="dot" style="background:#34d399"></span><span class="u">http://localhost:3000/health</span></div>
     <div class="viewport" style="background-image:url(data:image/jpeg;base64,${shot})"></div>
   </div>
   <div class="panel">${body}</div>
@@ -100,9 +100,9 @@ const frames = [
     html: frame({
       shot: before,
       role: "You",
-      title: "“Look at localhost:3000/pricing — the Pro button looks wrong. Fix it.”",
+      title: "“Check localhost:3000/health — the latency card's button looks wrong.”",
       badge: { tone: "", text: "1 tool call" },
-      body: `<b>inspect_localhost_ui</b> { <span class="k">url</span>: "http://localhost:3000/pricing", <span class="k">viewport</span>: "desktop" }`,
+      body: `<b>inspect_localhost_ui</b> { <span class="k">url</span>: "http://localhost:3000/health", <span class="k">viewport</span>: "desktop" }`,
     }),
   },
   {
@@ -110,7 +110,7 @@ const frames = [
     html: frame({
       shot: before,
       role: "AI",
-      title: "Screenshot: the Pro CTA breaks out of its card on the right.",
+      title: "Screenshot: the primary button breaks out of its card on the right.",
       badge: { tone: "bad", text: "1 console error · 1 failed request" },
       body: `<span class="err">console.error</span> ${consoleLine}<br><span class="err">${failedLine}</span>`,
     }),
@@ -122,7 +122,7 @@ const frames = [
       role: "AI",
       title: "The DOM says which element and which classes — no guessing.",
       badge: { tone: "", text: `simplifiedDOM · ${beforePayload.summary.domChars} chars` },
-      body: `&lt;button <span class="k">id</span>="cta-pro" <span class="k">class</span>="cta" <span class="k">data-testid</span>="cta-pro"&gt;<br><span class="del">- width: 300px; margin-left: -22px;</span>  <span style="color:#64748b">/* wider than the 260px card */</span>`,
+      body: `&lt;button <span class="k">id</span>="btn-latency" <span class="k">class</span>="btn" <span class="k">data-testid</span>="btn-latency"&gt;<br><span class="del">- width: 302px; margin-left: -20px;</span>  <span style="color:#64748b">/* wider than the 264px card */</span>`,
     }),
   },
   {

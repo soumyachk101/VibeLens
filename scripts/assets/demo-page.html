@@ -2,109 +2,109 @@
 <!--
   Demo fixture used only to generate the README animation.
 
+  Deliberately NOT a pricing page: VibeLens is free and MIT-licensed, and a
+  pricing table in the README screenshot would read as VibeLens's own pricing.
+
   Append ?fixed=1 to render the corrected layout. The "broken" default is a
-  realistic version of the bug VibeLens exists to catch: a CTA that escapes its
-  card because of a negative margin plus a fixed width, which reads fine in the
-  source and only fails in the browser. It also logs a console error and
-  requests a missing asset so the diagnostics half of the payload is non-empty.
+  realistic version of the bug VibeLens exists to catch: a button that escapes
+  its card because of a fixed width plus a negative margin, which reads fine in
+  the source and only fails in the browser. The page also logs a console error
+  and requests a missing asset, so the diagnostics half of the payload is real.
 -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Acme — Pricing</title>
+    <title>Acme — Service health</title>
     <style>
       :root { color-scheme: light; }
       * { box-sizing: border-box; }
       body {
         margin: 0;
         font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
-        background: #f1f5f9;
-        color: #0f172a;
+        background: #f6f7f9;
+        color: #101828;
         display: flex;
         align-items: center;
         justify-content: center;
         min-height: 100vh;
       }
-      .wrap { display: flex; gap: 28px; padding: 48px 40px; }
+      .wrap { display: flex; gap: 26px; padding: 48px 40px; }
       .card {
-        width: 260px;
+        width: 264px;
         background: #fff;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        padding: 26px 24px 28px;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 12px 28px -18px rgba(15, 23, 42, 0.35);
+        border: 1px solid #e4e7ec;
+        border-radius: 14px;
+        padding: 22px 22px 24px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 12px 26px -18px rgba(16, 24, 40, 0.3);
       }
-      .card h2 { margin: 0 0 4px; font-size: 15px; letter-spacing: 0.02em; color: #64748b; text-transform: uppercase; }
-      .price { margin: 0 0 18px; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; }
-      .price span { font-size: 14px; font-weight: 500; color: #64748b; }
-      ul { margin: 0 0 22px; padding: 0 0 0 18px; color: #475569; }
-      li { margin: 6px 0; }
-      .cta {
+      .label { display: flex; align-items: center; gap: 7px; margin: 0 0 10px; font-size: 13px; font-weight: 600; color: #667085; }
+      .dot { width: 7px; height: 7px; border-radius: 50%; }
+      .metric { margin: 0 0 2px; font-size: 30px; font-weight: 660; letter-spacing: -0.022em; font-variant-numeric: tabular-nums; }
+      .delta { margin: 0 0 18px; font-size: 13px; color: #667085; }
+      .delta b { font-weight: 600; }
+      .up { color: #067647; }
+      .down { color: #b42318; }
+      .spark { display: flex; align-items: flex-end; gap: 3px; height: 34px; margin: 0 0 20px; }
+      .spark i { flex: 1; border-radius: 2px 2px 0 0; background: #e4e7ec; }
+      .btn {
         display: block;
         width: 100%;
-        border: 0;
-        border-radius: 10px;
-        padding: 11px 18px;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        padding: 9px 16px;
         font: inherit;
+        font-size: 14px;
         font-weight: 600;
-        color: #fff;
-        background: #4f46e5;
+        color: #344054;
+        background: #fff;
         cursor: pointer;
       }
-      .card.featured { border-color: #c7d2fe; box-shadow: 0 1px 2px rgba(79, 70, 229, 0.1), 0 18px 34px -20px rgba(79, 70, 229, 0.55); }
+      .card.primary { border-color: #c7d7fe; box-shadow: 0 1px 2px rgba(68, 76, 231, 0.08), 0 16px 30px -20px rgba(68, 76, 231, 0.45); }
+      .card.primary .btn { background: #444ce7; border-color: #444ce7; color: #fff; }
 
-      /* The bug: the featured CTA is pulled outside its padded box and given a
-         width wider than the card, so it overflows on the right. */
-      body:not(.fixed) .card.featured .cta {
-        width: 300px;
-        margin-left: -22px;
-        border-radius: 10px 0 0 10px;
+      /* The bug: the primary card's button is pulled outside its padded box and
+         given a width wider than the card, so it overflows on the right. */
+      body:not(.fixed) .card.primary .btn {
+        width: 302px;
+        margin-left: -20px;
+        border-radius: 8px 0 0 8px;
       }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <div class="card" id="plan-starter">
-        <h2>Starter</h2>
-        <p class="price">$0<span> /mo</span></p>
-        <ul>
-          <li>1 project</li>
-          <li>Community support</li>
-          <li>1k requests</li>
-        </ul>
-        <button class="cta" id="cta-starter" style="background:#e2e8f0;color:#0f172a">Get started</button>
-      </div>
+      <section class="card" id="card-uptime">
+        <p class="label"><span class="dot" style="background:#12b76a"></span>Uptime, 30d</p>
+        <p class="metric">99.98%</p>
+        <p class="delta"><b class="up">+0.04</b> vs last period</p>
+        <div class="spark"><i style="height:52%"></i><i style="height:61%"></i><i style="height:48%"></i><i style="height:72%"></i><i style="height:66%"></i><i style="height:81%"></i><i style="height:74%"></i><i style="height:88%"></i></div>
+        <button class="btn" id="btn-uptime">View incidents</button>
+      </section>
 
-      <div class="card featured" id="plan-pro">
-        <h2>Pro</h2>
-        <p class="price">$29<span> /mo</span></p>
-        <ul>
-          <li>Unlimited projects</li>
-          <li>Priority support</li>
-          <li>1M requests</li>
-        </ul>
-        <button class="cta" id="cta-pro" data-testid="cta-pro">Upgrade to Pro</button>
-      </div>
+      <section class="card primary" id="card-latency">
+        <p class="label"><span class="dot" style="background:#444ce7"></span>p95 latency</p>
+        <p class="metric">218<span style="font-size:15px;font-weight:500;color:#667085"> ms</span></p>
+        <p class="delta"><b class="down">+34 ms</b> vs last period</p>
+        <div class="spark"><i style="height:38%;background:#c7d7fe"></i><i style="height:44%;background:#c7d7fe"></i><i style="height:41%;background:#c7d7fe"></i><i style="height:58%;background:#a4bcfd"></i><i style="height:63%;background:#a4bcfd"></i><i style="height:71%;background:#8098f9"></i><i style="height:79%;background:#8098f9"></i><i style="height:92%;background:#6172f3"></i></div>
+        <button class="btn" id="btn-latency" data-testid="btn-latency">Open trace explorer</button>
+      </section>
 
-      <div class="card" id="plan-team">
-        <h2>Team</h2>
-        <p class="price">$99<span> /mo</span></p>
-        <ul>
-          <li>Everything in Pro</li>
-          <li>SSO and audit log</li>
-          <li>10M requests</li>
-        </ul>
-        <button class="cta" id="cta-team" style="background:#e2e8f0;color:#0f172a">Contact sales</button>
-      </div>
+      <section class="card" id="card-errors">
+        <p class="label"><span class="dot" style="background:#f79009"></span>Error rate</p>
+        <p class="metric">0.42%</p>
+        <p class="delta"><b class="up">-0.11</b> vs last period</p>
+        <div class="spark"><i style="height:84%"></i><i style="height:76%"></i><i style="height:69%"></i><i style="height:72%"></i><i style="height:58%"></i><i style="height:51%"></i><i style="height:44%"></i><i style="height:39%"></i></div>
+        <button class="btn" id="btn-errors">View logs</button>
+      </section>
     </div>
 
-    <img src="/badge-secure.png" alt="" width="1" height="1" />
+    <img src="/avatar-oncall.png" alt="" width="1" height="1" />
 
     <script>
       if (new URLSearchParams(location.search).get("fixed") === "1") {
         document.body.classList.add("fixed");
       } else {
-        console.error("Warning: Prop `className` did not match. Server: 'cta' Client: 'cta w-full'");
+        console.error("Warning: Prop `className` did not match. Server: 'btn' Client: 'btn w-full'");
       }
     </script>
   </body>
