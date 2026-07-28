@@ -172,6 +172,13 @@ into `site-dist/` (gitignored) and `.github/workflows/pages.yml` deploys it.
 - `node scripts/site/check.mjs` is the gate: it link-checks every generated page
   and then inspects the site with `inspect_localhost_ui`, failing on any console
   error. Run it after touching the generator or the stylesheet.
+- **Code is highlighted at build time** by shiki with both themes emitted as CSS
+  variables (`defaultColor: false`). No highlighter ships to the browser and the
+  theme toggle needs no re-highlighting. Add a language to `LANGS` in
+  `build.mjs` before using it in a fence, or it falls back to plain text.
+- **Search is a build-time index** (`search-index.json`, ~56 kB) fetched on first
+  use, not on page load. Ranking is title prefix > title > heading > group > body,
+  and every term must match. There is no search service and no network call.
 - `site/styles.css` is deliberately framework-free and follows `docs/design/`.
   It is the project's own dogfood: if the docs site breaks an anti-slop rule, the
   rule is not credible.

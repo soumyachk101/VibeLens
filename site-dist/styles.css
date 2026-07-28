@@ -359,7 +359,6 @@ kbd {
   border-radius: 2px 2px 0 0;
   background: var(--accent);
 }
-.primary-nav a::after { content: ""; }
 
 .header-actions {
   display: flex;
