@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "vibelens",
-      "source": "./",
+      "source": "./plugin",
       "description": "Gives Claude eyes on localhost: screenshot + console/network errors + token-optimized DOM snapshot of your dev server.",
       "category": "development",
       "tags": ["ui", "frontend", "debugging", "screenshot", "playwright", "responsive"]

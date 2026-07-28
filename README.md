@@ -329,13 +329,20 @@ src/
 ├── security.ts   # SSRF guard (URL allowlist)
 └── types.ts      # shared types, viewport presets, payload limits
 tests/            # vitest suites (incl. real Chromium captures)
-skills/           # Claude Code plugin skills (check-ui, responsive-audit)
+plugin/           # what Claude Code installs — deliberately free of package.json
+├── .claude-plugin/plugin.json
+├── .mcp.json     # launches npx -y mcp-vibelens@1
+└── skills/       # check-ui, responsive-audit
+.claude-plugin/marketplace.json   # one-plugin marketplace catalog
+.mcp.json         # same server, for anyone who clones this repo
 scripts/          # smoke test + manifest validation used by CI
-.claude-plugin/   # plugin.json + marketplace.json
-.mcp.json         # MCP server declaration for the plugin
 docs/PRD-TRD.md   # product + technical requirements
 RELEASE.md        # release checklist
 ```
+
+> The plugin lives in `plugin/` rather than at the repo root on purpose. Claude
+> Code runs `npm install` in a plugin directory that contains a `package.json`,
+> which would push ~112 MB of devDependencies into every user's plugin cache.
 
 ## Roadmap
 

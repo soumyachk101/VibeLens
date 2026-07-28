@@ -31,12 +31,13 @@ function readJson(path) {
 }
 
 const pkg = readJson("package.json");
-const plugin = readJson(".claude-plugin/plugin.json");
+const plugin = readJson("plugin/.claude-plugin/plugin.json");
 const marketplace = readJson(".claude-plugin/marketplace.json");
-const mcp = readJson(".mcp.json");
+const mcp = readJson("plugin/.mcp.json");
+const rootMcp = readJson(".mcp.json");
 
-if (pkg && plugin && marketplace && mcp) {
-  ok("all four manifests parse");
+if (pkg && plugin && marketplace && mcp && rootMcp) {
+  ok("all five manifests parse");
 
   // --- plugin.json ---
   for (const field of ["name", "description", "version"]) {
@@ -67,6 +68,14 @@ if (pkg && plugin && marketplace && mcp) {
     // plugin.json always wins, so a version here is dead config that can mask it.
     fail("marketplace entry should not set `version`; plugin.json is the authority");
   }
+  // The plugin MUST live in its own subdirectory. Pointing `source` at the repo
+  // root makes Claude Code npm-install this package's devDependencies (~112 MB)
+  // into every user's plugin cache, because the root has a package.json.
+  if (entry && entry.source !== "./plugin") {
+    fail(`marketplace source must be "./plugin", not "${entry.source}" — a repo-root source drags package.json into the plugin cache`);
+  } else if (entry) {
+    ok("marketplace source points at the package.json-free ./plugin directory");
+  }
 
   // --- version sync ---
   if (plugin.version !== pkg.version) {
@@ -78,14 +87,21 @@ if (pkg && plugin && marketplace && mcp) {
   // --- .mcp.json ---
   const server = mcp.mcpServers?.vibelens;
   if (!server) {
-    fail(".mcp.json has no `vibelens` server entry");
+    fail("plugin/.mcp.json has no `vibelens` server entry");
   } else {
     const args = (server.args ?? []).join(" ");
     if (!args.includes(pkg.name)) {
-      fail(`.mcp.json args (${args}) do not reference the package name ${pkg.name}`);
+      fail(`plugin/.mcp.json args (${args}) do not reference the package name ${pkg.name}`);
     } else {
-      ok(`.mcp.json launches ${pkg.name}`);
+      ok(`plugin/.mcp.json launches ${pkg.name}`);
     }
+  }
+
+  // The root copy is what people get when they clone the repo; keep them equal.
+  if (JSON.stringify(mcp) !== JSON.stringify(rootMcp)) {
+    fail(".mcp.json and plugin/.mcp.json have drifted apart");
+  } else {
+    ok(".mcp.json and plugin/.mcp.json match");
   }
 }
 

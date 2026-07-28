@@ -5,7 +5,7 @@ Two artifacts ship from this one repository:
 | Artifact | Consumed by | Source of truth |
 | --- | --- | --- |
 | npm package `mcp-vibelens` | every MCP client (`npx -y mcp-vibelens@1`) | `package.json` |
-| Claude Code plugin `vibelens` | `claude plugin install vibelens@vibelens` | `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` + `.mcp.json` |
+| Claude Code plugin `vibelens` | `claude plugin install vibelens@vibelens` | `plugin/.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` + `plugin/.mcp.json` |
 
 The plugin's `.mcp.json` launches the npm package, so **npm must be published
 first**. A plugin release without a matching npm version installs but cannot
@@ -57,7 +57,7 @@ also work; classic "Publish" tokens do not if you have 2FA-on-publish enabled.
 
    ```bash
    npm version 1.0.1 --no-git-tag-version    # package.json
-   # then edit .claude-plugin/plugin.json → "version": "1.0.1"
+   # then edit plugin/.claude-plugin/plugin.json → "version": "1.0.1"
    ```
 
    Claude Code resolves the plugin version from `plugin.json` and only serves an

@@ -91,20 +91,27 @@ This repo is three things at once. Changing one usually means changing another:
 | File | Role |
 | --- | --- |
 | `package.json` | npm package `mcp-vibelens` (the actual server binary) |
-| `.claude-plugin/plugin.json` | Claude Code plugin manifest |
-| `.claude-plugin/marketplace.json` | one-plugin marketplace catalog, `source: "./"` |
-| `.mcp.json` | how the plugin launches the server (`npx -y mcp-vibelens@1`) |
-| `skills/*/SKILL.md` | the two plugin skills |
+| `plugin/.claude-plugin/plugin.json` | Claude Code plugin manifest |
+| `.claude-plugin/marketplace.json` | one-plugin marketplace catalog, `source: "./plugin"` |
+| `plugin/.mcp.json` | how the plugin launches the server (`npx -y mcp-vibelens@1`) |
+| `.mcp.json` | identical copy, for anyone who clones this repo |
+| `plugin/skills/*/SKILL.md` | the two plugin skills |
 
 Rules:
 
-- **Version bumps go in `package.json` *and* `.claude-plugin/plugin.json`.**
+- **The plugin must stay in `plugin/`, and `plugin/` must never contain a
+  `package.json`.** Claude Code runs `npm install` inside a plugin directory
+  that has one, which put 112 MB of this package's devDependencies into the
+  plugin cache when the marketplace source was `"./"`. The manifest validator
+  enforces `source: "./plugin"`.
+- **Version bumps go in `package.json` *and* `plugin/.claude-plugin/plugin.json`.**
   Claude Code only ships an update when `plugin.json`'s `version` string
   changes, and `scripts/validate-manifests.mjs` fails the build if they drift.
 - Never set `version` on the marketplace entry — `plugin.json` silently wins and
   the marketplace value becomes misleading dead config.
-- Renaming the npm package means updating `.mcp.json` args and every IDE snippet
-  in `README.md`. The manifest validator checks the `.mcp.json` reference.
+- Renaming the npm package means updating both `.mcp.json` files and every IDE
+  snippet in `README.md`. The validator checks the reference and that the two
+  `.mcp.json` copies stay identical.
 - `files` in `package.json` is an allowlist: plugin and CI files deliberately do
   not ship in the npm tarball.
 - Release steps live in `RELEASE.md`. npm publishes before the plugin, because

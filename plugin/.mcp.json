@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vibelens": {
+      "command": "npx",
+      "args": ["-y", "mcp-vibelens@1"]
+    }
+  }
+}
